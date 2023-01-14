@@ -18,9 +18,9 @@ const makeSut = (): SutTypes => {
 }
 
 describe('AxiosHttpClient', () => {
-  it('should call axios with correct URL', async () => {
+  it('should call axios with correct URL and verb', async () => {
     const { sut } = makeSut()
     await sut.post({ url: url })
-    expect(mockedAxios).toHaveBeenCalledWith(url)
+    expect(mockedAxios.post).toHaveBeenCalledWith(url)
   })
 })
