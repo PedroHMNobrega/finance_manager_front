@@ -4,4 +4,4 @@ coverage
 dist
 .idea
 package-lock.json
-coverage
+public/js
