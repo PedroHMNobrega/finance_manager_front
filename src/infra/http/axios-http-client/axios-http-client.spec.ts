@@ -1,40 +1,28 @@
 import { AxiosHttpAdapter } from '@/infra/http/axios-http-client/axios-http-adapter'
 import axios from 'axios'
+import { mockAxios, mockAxiosPostResponse } from '@/infra/test'
+import { mockPostRequest } from '@/data/test'
 
 jest.mock('axios')
-const mockedAxios = axios as jest.Mocked<typeof axios>
-
-const mockPostResponse = {
-  data: 'any-data',
-  status: 200
-}
-
-mockedAxios.post.mockResolvedValue(mockPostResponse)
-
-const url = 'any-url'
 
 type SutTypes = {
   sut: AxiosHttpAdapter
+  mockedAxios: jest.Mocked<typeof axios>
 }
 
 const makeSut = (): SutTypes => {
   const sut = new AxiosHttpAdapter()
+  const mockedAxios = mockAxios()
   return {
-    sut
-  }
-}
-
-const mockPostRequest = {
-  url: url,
-  body: {
-    any: 'body'
+    sut,
+    mockedAxios
   }
 }
 
 describe('AxiosHttpClient', () => {
   it('should call axios with correct values', async () => {
     const request = mockPostRequest
-    const { sut } = makeSut()
+    const { sut, mockedAxios } = makeSut()
     await sut.post(request)
     expect(mockedAxios.post).toHaveBeenCalledWith(request.url, request.body)
   })
@@ -43,8 +31,8 @@ describe('AxiosHttpClient', () => {
     const { sut } = makeSut()
     const httpResponse = await sut.post(mockPostRequest)
     expect(httpResponse).toEqual({
-      statusCode: mockPostResponse.status,
-      body: mockPostResponse.data
+      statusCode: mockAxiosPostResponse.status,
+      body: mockAxiosPostResponse.data
     })
   })
 })
