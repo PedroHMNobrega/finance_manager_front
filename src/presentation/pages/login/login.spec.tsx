@@ -1,22 +1,22 @@
 import React from 'react'
 import { cleanup, fireEvent, render, RenderResult } from '@testing-library/react'
 import Login from './login'
-import { ValidationSpy } from '@/presentation/test'
+import { ValidationStub } from '@/presentation/test'
 
 type SutTypes = {
   sut: RenderResult
-  validationSpy: ValidationSpy
+  validationStub: ValidationStub
   errorMessage: string
 }
 
 const makeSut = (): SutTypes => {
-  const validationSpy = new ValidationSpy()
+  const validationStub = new ValidationStub()
   const errorMessage = 'any-error'
-  validationSpy.errorMessage = errorMessage
-  const sut = render(<Login validation={validationSpy}/>)
+  validationStub.errorMessage = errorMessage
+  const sut = render(<Login validation={validationStub}/>)
   return {
     sut,
-    validationSpy,
+    validationStub,
     errorMessage
   }
 }
@@ -43,9 +43,9 @@ describe('Login Component', () => {
   })
 
   it('should show email error if validation fails', () => {
-    const { sut, validationSpy } = makeSut()
+    const { sut, validationStub } = makeSut()
     const errorMessage = 'any-message'
-    validationSpy.errorMessage = errorMessage
+    validationStub.errorMessage = errorMessage
     const emailInput = sut.getByTestId('email')
     fireEvent.input(emailInput, { target: { value: 'wrong-email' } })
     const emailStatus = sut.getByTestId('email-status')
@@ -54,9 +54,9 @@ describe('Login Component', () => {
   })
 
   it('should show password error if validation fails', () => {
-    const { sut, validationSpy } = makeSut()
+    const { sut, validationStub } = makeSut()
     const errorMessage = 'any-message'
-    validationSpy.errorMessage = errorMessage
+    validationStub.errorMessage = errorMessage
     const passwordInput = sut.getByTestId('password')
     fireEvent.input(passwordInput, { target: { value: 'wrong-password' } })
     const passwordStatus = sut.getByTestId('password-status')
@@ -65,8 +65,8 @@ describe('Login Component', () => {
   })
 
   it('should show valid email state if validation succeeds', () => {
-    const { sut, validationSpy } = makeSut()
-    validationSpy.errorMessage = null
+    const { sut, validationStub } = makeSut()
+    validationStub.errorMessage = null
     const emailInput = sut.getByTestId('email')
     fireEvent.input(emailInput, { target: { value: 'any-email' } })
     const emailStatus = sut.getByTestId('email-status')
@@ -75,8 +75,8 @@ describe('Login Component', () => {
   })
 
   it('should show valid password state if validation succeeds', () => {
-    const { sut, validationSpy } = makeSut()
-    validationSpy.errorMessage = null
+    const { sut, validationStub } = makeSut()
+    validationStub.errorMessage = null
     const passwordInput = sut.getByTestId('password')
     fireEvent.input(passwordInput, { target: { value: 'any-password' } })
     const passwordStatus = sut.getByTestId('password-status')
