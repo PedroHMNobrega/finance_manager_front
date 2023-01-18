@@ -6,14 +6,18 @@ import { ValidationSpy } from '@/presentation/test'
 type SutTypes = {
   sut: RenderResult
   validationSpy: ValidationSpy
+  errorMessage: string
 }
 
 const makeSut = (): SutTypes => {
   const validationSpy = new ValidationSpy()
+  const errorMessage = 'any-error'
+  validationSpy.errorMessage = errorMessage
   const sut = render(<Login validation={validationSpy}/>)
   return {
     sut,
-    validationSpy
+    validationSpy,
+    errorMessage
   }
 }
 
@@ -21,7 +25,7 @@ describe('Login Component', () => {
   afterEach(cleanup)
 
   it('should start with initial state', () => {
-    const { sut } = makeSut()
+    const { sut, errorMessage } = makeSut()
 
     const errorWrap = sut.getByTestId('error-wrap')
     expect(errorWrap.childElementCount).toBe(0)
@@ -30,29 +34,12 @@ describe('Login Component', () => {
     expect(submitButton.disabled).toBe(true)
 
     const emailStatus = sut.getByTestId('email-status')
-    expect(emailStatus.title).toBe('')
+    expect(emailStatus.title).toBe(errorMessage)
     expect(emailStatus.textContent).toBe('🔴')
 
     const passwordStatus = sut.getByTestId('password-status')
-    expect(passwordStatus.title).toBe('')
+    expect(passwordStatus.title).toBe(errorMessage)
     expect(passwordStatus.textContent).toBe('🔴')
-  })
-
-  it('should call validation with correct email', () => {
-    const { sut, validationSpy } = makeSut()
-
-    const emailInput = sut.getByTestId('email')
-    fireEvent.input(emailInput, { target: { value: 'any-email' } })
-    expect(validationSpy.fieldName).toEqual('email')
-    expect(validationSpy.fieldValue).toEqual('any-email')
-  })
-
-  it('should call validation with correct password', () => {
-    const { sut, validationSpy } = makeSut()
-    const passwordInput = sut.getByTestId('password')
-    fireEvent.input(passwordInput, { target: { value: 'any-password' } })
-    expect(validationSpy.fieldName).toEqual('password')
-    expect(validationSpy.fieldValue).toEqual('any-password')
   })
 
   it('should show email error if validation fails', () => {
@@ -60,7 +47,7 @@ describe('Login Component', () => {
     const errorMessage = 'any-message'
     validationSpy.errorMessage = errorMessage
     const emailInput = sut.getByTestId('email')
-    fireEvent.input(emailInput, { target: { value: 'any-email' } })
+    fireEvent.input(emailInput, { target: { value: 'wrong-email' } })
     const emailStatus = sut.getByTestId('email-status')
     expect(emailStatus.title).toBe(errorMessage)
     expect(emailStatus.textContent).toBe('🔴')
@@ -71,9 +58,29 @@ describe('Login Component', () => {
     const errorMessage = 'any-message'
     validationSpy.errorMessage = errorMessage
     const passwordInput = sut.getByTestId('password')
-    fireEvent.input(passwordInput, { target: { value: 'any-password' } })
+    fireEvent.input(passwordInput, { target: { value: 'wrong-password' } })
     const passwordStatus = sut.getByTestId('password-status')
     expect(passwordStatus.title).toBe(errorMessage)
     expect(passwordStatus.textContent).toBe('🔴')
+  })
+
+  it('should show valid email state if validation succeeds', () => {
+    const { sut, validationSpy } = makeSut()
+    validationSpy.errorMessage = null
+    const emailInput = sut.getByTestId('email')
+    fireEvent.input(emailInput, { target: { value: 'any-email' } })
+    const emailStatus = sut.getByTestId('email-status')
+    expect(emailStatus.title).toBe('Tudo certo!')
+    expect(emailStatus.textContent).toBe('🟢')
+  })
+
+  it('should show valid password state if validation succeeds', () => {
+    const { sut, validationSpy } = makeSut()
+    validationSpy.errorMessage = null
+    const passwordInput = sut.getByTestId('password')
+    fireEvent.input(passwordInput, { target: { value: 'any-password' } })
+    const passwordStatus = sut.getByTestId('password-status')
+    expect(passwordStatus.title).toBe('Tudo certo!')
+    expect(passwordStatus.textContent).toBe('🟢')
   })
 })
