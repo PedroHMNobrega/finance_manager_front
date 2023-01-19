@@ -7,7 +7,7 @@ type SutTypes = {
 }
 
 const makeSut = (validators: FieldValidation[]): SutTypes => {
-  const sut = new ValidationComposite(validators)
+  const sut = ValidationComposite.build(validators)
   return {
     sut
   }
