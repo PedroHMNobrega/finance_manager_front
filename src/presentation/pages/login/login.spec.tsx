@@ -1,7 +1,8 @@
 import React from 'react'
-import { cleanup, fireEvent, render, RenderResult } from '@testing-library/react'
+import { cleanup, fireEvent, render, RenderResult, waitFor } from '@testing-library/react'
 import Login from './login'
 import { AuthenticationSpy, ValidationStub } from '@/presentation/test'
+import { InvalidCredentialsError } from '@/domain/errors'
 
 type SutTypes = {
   sut: RenderResult
@@ -156,5 +157,21 @@ describe('Login Component', () => {
     const { sut, authenticationSpy } = makeSut({ validationError })
     simulateValidSubmit(sut)
     expect(authenticationSpy.callsCount).toBe(0)
+  })
+
+  it('should present error if authentication fails', async () => {
+    const { sut, authenticationSpy } = makeSut()
+    const error = new InvalidCredentialsError()
+    jest.spyOn(authenticationSpy, 'auth').mockReturnValueOnce(Promise.reject(error))
+
+    simulateValidSubmit(sut)
+
+    await waitFor(() => {
+      const mainError = sut.queryByTestId('main-error')
+      expect(mainError.textContent).toBe(error.message)
+
+      const spinner = sut.queryByTestId('spinner')
+      expect(spinner).toBeNull()
+    })
   })
 })
