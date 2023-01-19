@@ -7,4 +7,10 @@ describe('RequiredFieldValidation', () => {
     const error = sut.validate('')
     expect(error).toEqual(new RequiredFieldError())
   })
+
+  it('should return falsy if field is empty', () => {
+    const sut = new RequiredFieldValidation('email')
+    const error = sut.validate('any-email')
+    expect(error).toBeFalsy()
+  })
 })
