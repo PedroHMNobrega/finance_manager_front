@@ -23,6 +23,33 @@ const makeSut = (params?: SutParams): SutTypes => {
   }
 }
 
+const populateField = (sut: RenderResult, testId, value): HTMLInputElement => {
+  const input = sut.getByTestId(testId) as HTMLInputElement
+  fireEvent.input(input, { target: { value: value } })
+  return input
+}
+
+type ValidSubmitTypes = {
+  emailInput: HTMLInputElement
+  passwordInput: HTMLInputElement
+  form: HTMLFormElement
+}
+
+const simulateValidSubmit = (sut: RenderResult, email = 'any-email', password = 'any-password'): ValidSubmitTypes => {
+  const emailInput = populateField(sut, 'email', email)
+
+  const passwordInput = populateField(sut, 'password', password)
+
+  const form = sut.getByTestId('form') as HTMLFormElement
+  fireEvent.submit(form)
+
+  return {
+    emailInput,
+    passwordInput,
+    form
+  }
+}
+
 describe('Login Component', () => {
   afterEach(cleanup)
 
@@ -49,8 +76,8 @@ describe('Login Component', () => {
     const validationError = 'any-error'
     const { sut } = makeSut({ validationError })
 
-    const emailInput = sut.getByTestId('email')
-    fireEvent.input(emailInput, { target: { value: 'wrong-email' } })
+    populateField(sut, 'email', 'wrong-email')
+
     const emailStatus = sut.getByTestId('email-status')
     expect(emailStatus.title).toBe(validationError)
     expect(emailStatus.textContent).toBe('🔴')
@@ -60,8 +87,8 @@ describe('Login Component', () => {
     const validationError = 'any-error'
     const { sut } = makeSut({ validationError })
 
-    const passwordInput = sut.getByTestId('password')
-    fireEvent.input(passwordInput, { target: { value: 'wrong-password' } })
+    populateField(sut, 'password', 'wrong-password')
+
     const passwordStatus = sut.getByTestId('password-status')
     expect(passwordStatus.title).toBe(validationError)
     expect(passwordStatus.textContent).toBe('🔴')
@@ -69,8 +96,8 @@ describe('Login Component', () => {
 
   it('should show valid email state if validation succeeds', () => {
     const { sut } = makeSut()
-    const emailInput = sut.getByTestId('email')
-    fireEvent.input(emailInput, { target: { value: 'any-email' } })
+    populateField(sut, 'email', 'any-email')
+
     const emailStatus = sut.getByTestId('email-status')
     expect(emailStatus.title).toBe('Tudo certo!')
     expect(emailStatus.textContent).toBe('🟢')
@@ -78,8 +105,7 @@ describe('Login Component', () => {
 
   it('should show valid password state if validation succeeds', () => {
     const { sut } = makeSut()
-    const passwordInput = sut.getByTestId('password')
-    fireEvent.input(passwordInput, { target: { value: 'any-password' } })
+    populateField(sut, 'password', 'any-password')
     const passwordStatus = sut.getByTestId('password-status')
     expect(passwordStatus.title).toBe('Tudo certo!')
     expect(passwordStatus.textContent).toBe('🟢')
@@ -88,11 +114,8 @@ describe('Login Component', () => {
   it('should enable submit button if form is valid', () => {
     const { sut } = makeSut()
 
-    const emailInput = sut.getByTestId('email')
-    fireEvent.input(emailInput, { target: { value: 'any-email' } })
-
-    const passwordInput = sut.getByTestId('password')
-    fireEvent.input(passwordInput, { target: { value: 'any-password' } })
+    populateField(sut, 'email', 'any-email')
+    populateField(sut, 'password', 'wrong-password')
 
     const submitButton = sut.getByTestId('submit') as HTMLButtonElement
     expect(submitButton.disabled).toBe(false)
@@ -101,14 +124,7 @@ describe('Login Component', () => {
   it('should show loading spinner on submit', () => {
     const { sut } = makeSut()
 
-    const emailInput = sut.getByTestId('email')
-    fireEvent.input(emailInput, { target: { value: 'any-email' } })
-
-    const passwordInput = sut.getByTestId('password')
-    fireEvent.input(passwordInput, { target: { value: 'any-password' } })
-
-    const form = sut.getByTestId('form') as HTMLFormElement
-    fireEvent.submit(form)
+    simulateValidSubmit(sut)
 
     const spinner = sut.queryByTestId('spinner')
 
@@ -120,14 +136,7 @@ describe('Login Component', () => {
     const email = 'any-email'
     const password = 'any-password'
 
-    const emailInput = sut.getByTestId('email')
-    fireEvent.input(emailInput, { target: { value: email } })
-
-    const passwordInput = sut.getByTestId('password')
-    fireEvent.input(passwordInput, { target: { value: password } })
-
-    const form = sut.getByTestId('form') as HTMLFormElement
-    fireEvent.submit(form)
+    simulateValidSubmit(sut, email, password)
 
     expect(authenticationSpy.params).toEqual({
       email,
