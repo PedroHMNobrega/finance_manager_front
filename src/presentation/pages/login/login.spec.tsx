@@ -4,7 +4,8 @@ import { cleanup, fireEvent, render, RenderResult, waitFor } from '@testing-libr
 import Login from './login'
 import { AuthenticationSpy, ValidationStub } from '@/presentation/test'
 import { InvalidCredentialsError } from '@/domain/errors'
-import { BrowserRouter } from 'react-router-dom'
+import { Router } from 'react-router-dom'
+import { createMemoryHistory } from 'history'
 
 type SutTypes = {
   sut: RenderResult
@@ -15,14 +16,16 @@ type SutParams = {
   validationError: string
 }
 
+const history = createMemoryHistory({ initialEntries: ['/login'] })
+
 const makeSut = (params?: SutParams): SutTypes => {
   const validationStub = new ValidationStub()
   const authenticationSpy = new AuthenticationSpy()
   validationStub.errorMessage = params?.validationError
   const sut = render(
-    <BrowserRouter>
+    <Router location={history.location} navigator={history}>
       <Login validation={validationStub} authentication={authenticationSpy} />
-    </BrowserRouter>
+    </Router>
   )
   return {
     sut,
@@ -191,6 +194,7 @@ describe('Login Component', () => {
 
     await waitFor(() => {
       expect(localStorage.setItem).toHaveBeenCalledWith('accessToken', authenticationSpy.account.accessToken)
+      expect(history.location.pathname).toBe('/')
     })
   })
 
@@ -199,6 +203,6 @@ describe('Login Component', () => {
     const signup = sut.getByTestId('signup')
     fireEvent.click(signup)
 
-    expect(window.location.pathname).toBe('/signup')
+    expect(history.location.pathname).toBe('/signup')
   })
 })
