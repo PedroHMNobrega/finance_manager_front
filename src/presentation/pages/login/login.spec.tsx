@@ -150,4 +150,11 @@ describe('Login Component', () => {
     simulateValidSubmit(sut)
     expect(authenticationSpy.callsCount).toBe(1)
   })
+
+  it('should not call authentication if form is invalid', () => {
+    const validationError = 'any-error'
+    const { sut, authenticationSpy } = makeSut({ validationError })
+    simulateValidSubmit(sut)
+    expect(authenticationSpy.callsCount).toBe(0)
+  })
 })
