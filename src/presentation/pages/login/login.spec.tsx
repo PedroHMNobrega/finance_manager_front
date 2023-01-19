@@ -1,4 +1,5 @@
 import React from 'react'
+import 'jest-localstorage-mock'
 import { cleanup, fireEvent, render, RenderResult, waitFor } from '@testing-library/react'
 import Login from './login'
 import { AuthenticationSpy, ValidationStub } from '@/presentation/test'
@@ -53,6 +54,9 @@ const simulateValidSubmit = (sut: RenderResult, email = 'any-email', password = 
 
 describe('Login Component', () => {
   afterEach(cleanup)
+  beforeEach(() => {
+    localStorage.clear()
+  })
 
   it('should start with initial state', () => {
     const validationError = 'any-error'
@@ -172,6 +176,16 @@ describe('Login Component', () => {
 
       const spinner = sut.queryByTestId('spinner')
       expect(spinner).toBeNull()
+    })
+  })
+
+  it('should add accessToken to localstorage on success', async () => {
+    const { sut, authenticationSpy } = makeSut()
+
+    simulateValidSubmit(sut)
+
+    await waitFor(() => {
+      expect(localStorage.setItem).toHaveBeenCalledWith('accessToken', authenticationSpy.account.accessToken)
     })
   })
 })
