@@ -4,6 +4,7 @@ import { cleanup, fireEvent, render, RenderResult, waitFor } from '@testing-libr
 import Login from './login'
 import { AuthenticationSpy, ValidationStub } from '@/presentation/test'
 import { InvalidCredentialsError } from '@/domain/errors'
+import { BrowserRouter } from 'react-router-dom'
 
 type SutTypes = {
   sut: RenderResult
@@ -18,7 +19,11 @@ const makeSut = (params?: SutParams): SutTypes => {
   const validationStub = new ValidationStub()
   const authenticationSpy = new AuthenticationSpy()
   validationStub.errorMessage = params?.validationError
-  const sut = render(<Login validation={validationStub} authentication={authenticationSpy} />)
+  const sut = render(
+    <BrowserRouter>
+      <Login validation={validationStub} authentication={authenticationSpy} />
+    </BrowserRouter>
+  )
   return {
     sut,
     authenticationSpy
@@ -187,5 +192,13 @@ describe('Login Component', () => {
     await waitFor(() => {
       expect(localStorage.setItem).toHaveBeenCalledWith('accessToken', authenticationSpy.account.accessToken)
     })
+  })
+
+  it('should go to signup page', () => {
+    const { sut } = makeSut()
+    const signup = sut.getByTestId('signup')
+    fireEvent.click(signup)
+
+    expect(window.location.pathname).toBe('/signup')
   })
 })
