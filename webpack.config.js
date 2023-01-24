@@ -51,7 +51,7 @@ module.exports = {
   },
   plugins: [
     new DefinePlugin({
-      'process.env.API_URL': JSON.stringify('https://dummyjson.com/auth')
+      'process.env.API_URL': JSON.stringify('http://localhost:8000')
     }),
     new CleanWebpackPlugin()
   ]
