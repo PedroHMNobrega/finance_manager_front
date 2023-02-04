@@ -1,30 +1,27 @@
 import React from 'react'
-import { fireEvent, render, RenderResult } from '@testing-library/react'
+import { fireEvent, screen } from '@testing-library/react'
 import { createMemoryHistory } from 'history'
-import { Router } from 'react-router-dom'
 import NotFound from '@/presentation/pages/not-found/not-found'
-
-type SutTypes = {
-  sut: RenderResult
-}
+import { renderWithHistory } from '@/tests/presentation/mocks'
+import { mockAccountModel } from '@/tests/domain/mocks'
 
 const history = createMemoryHistory({ initialEntries: ['/any-url'] })
 
-const makeSut = (): SutTypes => {
-  const sut = render(
-    <Router location={history.location} navigator={history}>
-      <NotFound />
-    </Router>
+const makeSut = (account = mockAccountModel()): void => {
+  const Page: React.FC = () => (
+    <NotFound />
   )
-  return {
-    sut
-  }
+  renderWithHistory({
+    Page,
+    history,
+    account: account
+  })
 }
 
 describe('NotFound', () => {
-  it('should go to home page', () => {
-    const { sut } = makeSut()
-    const homeLink = sut.getByTestId('homeLink')
+  it('should go to home page if user is logged', () => {
+    makeSut()
+    const homeLink = screen.getByTestId('homeLink')
     fireEvent.click(homeLink)
 
     expect(history.location.pathname).toBe('/')
