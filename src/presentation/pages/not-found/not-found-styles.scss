@@ -1,0 +1,15 @@
+@import "../../styles/colors.scss";
+
+.notFound {
+  text-align: center;
+
+  h1 {
+    font-size: 40px;
+    color: $primaryLight
+  }
+
+  .link {
+    font-size: 40px;
+    color: $primaryDark
+  }
+}

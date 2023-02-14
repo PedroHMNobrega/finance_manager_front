@@ -5,6 +5,9 @@ import { FormContext } from '@/presentation/contexts'
 import { Validation } from '@/presentation/protocols/validation'
 import { Authentication } from '@/domain/usecases'
 import { Link, useNavigate } from 'react-router-dom'
+import Container from '@/presentation/components/container/container'
+import { useAppDispatch } from '@/presentation/store/hooks'
+import { setUser } from '@/presentation/store/reducers/user-reducer'
 
 type Props = {
   validation?: Validation
@@ -12,6 +15,7 @@ type Props = {
 }
 
 const Login: React.FC<Props> = ({ validation, authentication }: Props) => {
+  const dispatch = useAppDispatch()
   const navigate = useNavigate()
 
   const [state, setState] = useState({
@@ -41,7 +45,7 @@ const Login: React.FC<Props> = ({ validation, authentication }: Props) => {
         isLoading: true
       })
       const account = await authentication.auth({ email: state.email, password: state.password })
-      localStorage.setItem('accessToken', account.accessToken)
+      dispatch(setUser(account.accessToken))
       navigate('/', { replace: true })
     } catch (error) {
       setState({
@@ -53,7 +57,7 @@ const Login: React.FC<Props> = ({ validation, authentication }: Props) => {
   }
 
   return (
-    <div className={Styles.login}>
+    <Container>
       <LoginHeader />
       <FormContext.Provider value={{ state, setState }}>
         <form data-testid="form" className={Styles.form} onSubmit={handleSubmit}>
@@ -66,7 +70,7 @@ const Login: React.FC<Props> = ({ validation, authentication }: Props) => {
         </form>
       </FormContext.Provider>
       <Footer />
-    </div>
+    </Container>
   )
 }
 

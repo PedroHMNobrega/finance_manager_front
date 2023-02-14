@@ -1,8 +1,9 @@
 module.exports = {
-  roots: ['<rootDir>/src'],
+  roots: ['<rootDir>/src', '<rootDir>/tests'],
   collectCoverageFrom: [
     '<rootDir>/src/**/*.{ts,tsx}',
     '!<rootDir>/src/main/**/*',
+    '<rootDir>/src/main/proxies/**/*',
     '!<rootDir>/src/presentation/components/router/**/*',
     '!**/index.ts',
     '!**/*.d.ts'
@@ -13,6 +14,7 @@ module.exports = {
     '.+\\.(ts|tsx)$': 'ts-jest'
   },
   moduleNameMapper: {
+    '@/tests/(.*)': '<rootDir>/tests/$1',
     '@/(.*)': '<rootDir>/src/$1',
     '\\.scss$': 'identity-obj-proxy' // Generate a dummy of scss objects found
   }
