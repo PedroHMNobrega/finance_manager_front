@@ -1,8 +1,8 @@
 export type Purchase = {
-  id: number
+  id?: number
   name: string
   installmentsNumber: number
   value: number
   category: number
-  firstInstallmentData: string
+  firstInstallmentDate: string
 }
