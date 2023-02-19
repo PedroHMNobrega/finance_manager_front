@@ -1,6 +1,7 @@
 import { LoadPurchaseListParams } from '@/domain/usecases'
 import { Purchase } from '@/domain/models'
 import { CreatePurchaseParams } from '@/domain/usecases/create-purchase'
+import { DeletePurchaseParams } from '@/domain/usecases/delete-purchase'
 
 export const mockLoadPurchaseListParams = (): LoadPurchaseListParams => ({
   token: 'any-token'
@@ -8,6 +9,11 @@ export const mockLoadPurchaseListParams = (): LoadPurchaseListParams => ({
 
 export const mockCreatePurchaseParams = (): CreatePurchaseParams => ({
   purchase: mockPurchase(null),
+  token: 'any-token'
+})
+
+export const mockDeletePurchaseParams = (): DeletePurchaseParams => ({
+  purchaseId: 33,
   token: 'any-token'
 })
 
