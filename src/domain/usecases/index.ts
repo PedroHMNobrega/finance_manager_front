@@ -1,5 +1,6 @@
 export * from './authentication'
 export * from './purchase'
+export * from './category'
 export * from './create'
 export * from './load'
 export * from './delete'
