@@ -1,16 +1,15 @@
-import { Purchase } from '@/domain/models'
-import { LoadPurchaseList, LoadPurchaseListParams } from '@/domain/usecases'
+import { Load, LoadParams } from '@/domain/usecases'
 import { HttpClient, HttpStatusCode } from '@/data/protocols/http'
 import { InvalidCredentialsError, UnexpectedError } from '@/domain/errors'
 
-export class RemoteLoadPurchaseList implements LoadPurchaseList {
+export class RemoteLoad<P extends LoadParams, R> implements Load<P, R> {
   constructor (
     private readonly url: string,
-    private readonly httpGetClient: HttpClient<Purchase[]>
+    private readonly httpClient: HttpClient<R>
   ) {}
 
-  async loadAll (params: LoadPurchaseListParams): Promise<Purchase[]> {
-    const httpResponse = await this.httpGetClient.request({
+  async loadAll (params: P): Promise<R> {
+    const httpResponse = await this.httpClient.request({
       url: this.url,
       method: 'get',
       headers: {

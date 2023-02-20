@@ -1,12 +1,13 @@
-import { RemoteLoadPurchaseList } from '@/data/usecases/purchase'
 import { HttpClientSpy } from '@/tests/data/mocks'
 import { Purchase } from '@/domain/models'
 import { mockLoadPurchaseListParams, mockPurchaseList } from '@/tests/domain/mocks/mock-purchase'
 import { HttpStatusCode } from '@/data/protocols/http'
 import { InvalidCredentialsError, UnexpectedError } from '@/domain/errors'
+import { RemoteLoad } from '@/data/usecases/remote-load'
+import { LoadPurchaseListParams } from '@/domain/usecases'
 
 type SutTypes = {
-  sut: RemoteLoadPurchaseList
+  sut: RemoteLoad<LoadPurchaseListParams, Purchase[]>
   httpClientSpy: HttpClientSpy<Purchase[]>
 }
 
@@ -14,7 +15,7 @@ const url = 'any-url'
 
 const makeSut = (): SutTypes => {
   const httpClientSpy = new HttpClientSpy<Purchase[]>()
-  const sut = new RemoteLoadPurchaseList(url, httpClientSpy)
+  const sut = new RemoteLoad<LoadPurchaseListParams, Purchase[]>(url, httpClientSpy)
   return {
     sut,
     httpClientSpy

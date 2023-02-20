@@ -1,9 +1,3 @@
-import { Purchase } from '@/domain/models'
+import { LoadParams } from '@/domain/usecases'
 
-export type LoadPurchaseListParams = {
-  token: string
-}
-
-export interface LoadPurchaseList {
-  loadAll(params: LoadPurchaseListParams): Promise<Purchase[]>
-}
+export type LoadPurchaseListParams = LoadParams
