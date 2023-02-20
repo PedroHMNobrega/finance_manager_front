@@ -1,15 +1,14 @@
-import { CreatePurchase, CreatePurchaseParams } from '@/domain/usecases/create-purchase'
-import { Purchase } from '@/domain/models'
 import { HttpClient, HttpStatusCode } from '@/data/protocols/http'
 import { InvalidCredentialsError, UnexpectedError } from '@/domain/errors'
+import { Create, CreateParams } from '@/domain/usecases'
 
-export class RemoteCreatePurchase implements CreatePurchase {
+export class RemoteCreate<P extends CreateParams, R> implements Create<P, R> {
   constructor (
     private readonly url: string,
-    private readonly httpClient: HttpClient<Purchase>
+    private readonly httpClient: HttpClient<R>
   ) {}
 
-  async create (params: CreatePurchaseParams): Promise<Purchase> {
+  async create (params: P): Promise<R> {
     const httpResponse = await this.httpClient.request({
       url: this.url,
       method: 'post',

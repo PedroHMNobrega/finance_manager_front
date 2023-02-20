@@ -1,7 +1,5 @@
-import { LoadPurchaseListParams } from '@/domain/usecases'
+import { CreatePurchaseParams, DeletePurchaseParams, LoadPurchaseListParams } from '@/domain/usecases'
 import { Purchase } from '@/domain/models'
-import { CreatePurchaseParams } from '@/domain/usecases/create-purchase'
-import { DeletePurchaseParams } from '@/domain/usecases/delete-purchase'
 
 export const mockLoadPurchaseListParams = (): LoadPurchaseListParams => ({
   token: 'any-token'

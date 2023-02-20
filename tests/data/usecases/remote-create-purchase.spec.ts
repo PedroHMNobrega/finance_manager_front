@@ -1,12 +1,13 @@
-import { RemoteCreatePurchase } from '@/data/usecases/purchase/remote-create-purchase'
+import { RemoteCreate } from '@/data/usecases'
 import { HttpClientSpy } from '@/tests/data/mocks'
 import { Purchase } from '@/domain/models'
 import { mockCreatePurchaseParams, mockPurchase } from '@/tests/domain/mocks/mock-purchase'
 import { HttpStatusCode } from '@/data/protocols/http'
 import { InvalidCredentialsError, UnexpectedError } from '@/domain/errors'
+import { CreatePurchaseParams } from '@/domain/usecases'
 
 type SutTypes = {
-  sut: RemoteCreatePurchase
+  sut: RemoteCreate<CreatePurchaseParams, Purchase>
   httpClientSpy: HttpClientSpy<Purchase>
 }
 
@@ -14,7 +15,7 @@ const url = 'any-url'
 
 const makeSut = (): SutTypes => {
   const httpClientSpy = new HttpClientSpy<Purchase>()
-  const sut = new RemoteCreatePurchase(url, httpClientSpy)
+  const sut = new RemoteCreate<CreatePurchaseParams, Purchase>(url, httpClientSpy)
   return {
     sut,
     httpClientSpy
