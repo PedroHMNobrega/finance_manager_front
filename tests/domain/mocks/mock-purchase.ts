@@ -11,7 +11,7 @@ export const mockCreatePurchaseParams = (): CreatePurchaseParams => ({
 })
 
 export const mockDeletePurchaseParams = (): DeletePurchaseParams => ({
-  purchaseId: 33,
+  id: 33,
   token: 'any-token'
 })
 

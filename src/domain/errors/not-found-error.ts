@@ -1,5 +1,5 @@
 export class NotFoundError extends Error {
-  constructor (model) {
+  constructor (model = 'Item') {
     super(`${model} não existe`)
     this.name = 'NotFoundError'
   }

@@ -1,16 +1,16 @@
+import { Delete, DeleteParams } from '@/domain/usecases/delete'
 import { HttpClient, HttpStatusCode } from '@/data/protocols/http'
-import { DeletePurchase, DeletePurchaseParams } from '@/domain/usecases'
 import { InvalidCredentialsError, NotFoundError, UnexpectedError } from '@/domain/errors'
 
-export class RemoteDeletePurchase implements DeletePurchase {
+export class RemoteDelete<P extends DeleteParams, R> implements Delete<P, R> {
   constructor (
     private readonly url: string,
-    private readonly httpClient: HttpClient<void>
+    private readonly httpClient: HttpClient<R>
   ) {}
 
-  async delete (params: DeletePurchaseParams): Promise<void> {
+  async delete (params: P): Promise<R> {
     const httpResponse = await this.httpClient.request({
-      url: `${this.url}/${params.purchaseId}`,
+      url: `${this.url}/${params.id}`,
       method: 'delete',
       headers: {
         Authorization: `Bearer ${params.token}`
@@ -18,7 +18,7 @@ export class RemoteDeletePurchase implements DeletePurchase {
     })
     switch (httpResponse.statusCode) {
       case HttpStatusCode.noContent: return
-      case HttpStatusCode.notFound: throw new NotFoundError('Compra')
+      case HttpStatusCode.notFound: throw new NotFoundError()
       case HttpStatusCode.unauthorized: throw new InvalidCredentialsError()
       default: throw new UnexpectedError()
     }

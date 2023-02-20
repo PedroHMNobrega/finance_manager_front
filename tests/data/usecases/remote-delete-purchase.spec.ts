@@ -1,11 +1,12 @@
-import { RemoteDeletePurchase } from '@/data/usecases/purchase'
 import { HttpClientSpy } from '@/tests/data/mocks'
 import { mockDeletePurchaseParams } from '@/tests/domain/mocks/mock-purchase'
 import { HttpStatusCode } from '@/data/protocols/http'
 import { InvalidCredentialsError, NotFoundError, UnexpectedError } from '@/domain/errors'
+import { DeletePurchaseParams } from '@/domain/usecases'
+import { RemoteDelete } from '@/data/usecases'
 
 type SutTypes = {
-  sut: RemoteDeletePurchase
+  sut: RemoteDelete<DeletePurchaseParams, void>
   httpClientSpy: HttpClientSpy<void>
 }
 
@@ -14,7 +15,7 @@ const url = 'any-url'
 const makeSut = (): SutTypes => {
   const httpClientSpy = new HttpClientSpy<void>()
   httpClientSpy.response.statusCode = HttpStatusCode.noContent
-  const sut = new RemoteDeletePurchase(url, httpClientSpy)
+  const sut = new RemoteDelete<DeletePurchaseParams, void>(url, httpClientSpy)
   return {
     sut,
     httpClientSpy
@@ -27,7 +28,7 @@ describe('RemoteDeletePurchase', () => {
     const params = mockDeletePurchaseParams()
     await sut.delete(params)
 
-    expect(httpClientSpy.url).toBe(`${url}/${params.purchaseId}`)
+    expect(httpClientSpy.url).toBe(`${url}/${params.id}`)
     expect(httpClientSpy.method).toBe('delete')
     expect(httpClientSpy.headers).toEqual({
       Authorization: `Bearer ${params.token}`
@@ -51,7 +52,7 @@ describe('RemoteDeletePurchase', () => {
     }
     const params = mockDeletePurchaseParams()
     const promise = sut.delete(params)
-    await expect(promise).rejects.toThrow(new NotFoundError('Compra'))
+    await expect(promise).rejects.toThrow(new NotFoundError())
   })
 
   it.each([

@@ -1,8 +1,3 @@
-export type DeletePurchaseParams = {
-  purchaseId: number
-  token: string
-}
+import { DeleteParams } from '@/domain/usecases/delete'
 
-export interface DeletePurchase {
-  delete(params: DeletePurchaseParams): Promise<void>
-}
+export type DeletePurchaseParams = DeleteParams
