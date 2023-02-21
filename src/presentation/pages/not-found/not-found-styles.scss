@@ -2,14 +2,16 @@
 
 .notFound {
   text-align: center;
+  flex: 1;
 
   h1 {
     font-size: 40px;
-    color: $primaryLight
+    color: $primaryLight;
+    margin: 7vh 0;
   }
 
   .link {
     font-size: 40px;
-    color: $primaryDark
+    color: $primaryDark;
   }
 }
