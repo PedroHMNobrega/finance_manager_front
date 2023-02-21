@@ -1,12 +1,11 @@
 import React from 'react'
 import Styles from './not-found-styles.scss'
-import Container from '@/presentation/components/container/container'
-import { Footer, LoginHeader } from '@/presentation/components'
+import { Footer, LoginHeader, PageContainer } from '@/presentation/components'
 import { LinkHome } from '@/presentation/components/links'
 
 const NotFound: React.FC = () => {
   return (
-    <Container>
+    <PageContainer>
       <LoginHeader />
       <div className={Styles.notFound}>
         <h1>
@@ -15,7 +14,7 @@ const NotFound: React.FC = () => {
         </h1>
       </div>
       <Footer />
-    </Container>
+    </PageContainer>
   )
 }
 

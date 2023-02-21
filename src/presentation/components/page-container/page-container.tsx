@@ -1,11 +1,11 @@
 import React from 'react'
-import Styles from './container-styles.scss'
+import Styles from './page-container-styles.scss'
 
 type Props = {
   children: React.ReactNode
 }
 
-const Container: React.FC<Props> = (props: Props) => {
+const PageContainer: React.FC<Props> = (props: Props) => {
   return (
     <div className={Styles.container}>
       {props.children}
@@ -13,4 +13,4 @@ const Container: React.FC<Props> = (props: Props) => {
   )
 }
 
-export default Container
+export default PageContainer
