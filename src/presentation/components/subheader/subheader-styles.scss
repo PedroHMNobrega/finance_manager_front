@@ -1,0 +1,26 @@
+@import "../../styles/colors.scss";
+
+.header {
+  background-color: $primaryDark;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  .links_container {
+    display: flex;
+
+    .link {
+      margin: 0 5px;
+      font-size: 20px;
+      color: $white;
+      cursor: pointer;
+      text-decoration: none;
+      font-weight: bold;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+}
