@@ -1,0 +1,46 @@
+@import "../../styles/colors.scss";
+
+.mask {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  min-height: 100%;
+  background-color: rgba(0, 0, 0, 0.45);
+}
+
+.modal {
+  position: relative;
+  top: 100px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: $white;
+  width: 80%;
+  max-width: 500px;
+  border-radius: 2px;
+
+  .title_container {
+    padding: 20px;
+    border-bottom: 1px solid $borderColor;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    h2 {
+      font-weight: normal;
+      font-size: 18px;
+      color: rgba(0, 0, 0, 0.85);
+    }
+
+    .close {
+      color: rgba(34,36,38,.55);
+      cursor: pointer;
+      font-weight: bold;
+      font-size: 18px;
+    }
+  }
+
+  .children_container {
+    padding: 30px;
+  }
+}
