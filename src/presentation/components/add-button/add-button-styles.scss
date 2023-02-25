@@ -1,0 +1,19 @@
+@import "../../styles/colors.scss";
+
+$size: 40px;
+
+.button {
+  background-color: $primary;
+  height: $size;
+  width: $size;
+  line-height: $size;
+  border-radius: 50%;
+  text-align: center;
+  cursor: pointer;
+
+  .add_symbol {
+    color: white;
+    font-size: $size;
+    font-weight: bold;
+  }
+}
