@@ -10,8 +10,8 @@ import { setUser } from '@/presentation/store/reducers/user-reducer'
 import Container from '@/presentation/components/container/container'
 
 type Props = {
-  validation?: Validation
-  authentication?: Authentication
+  validation: Validation
+  authentication: Authentication
 }
 
 const Login: React.FC<Props> = ({ validation, authentication }: Props) => {
