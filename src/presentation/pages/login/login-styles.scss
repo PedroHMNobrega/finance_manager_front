@@ -1,5 +1,9 @@
 @import "../../styles/colors.scss";
 
+.container {
+  background-color: $darkerWhite;
+}
+
 .form {
   display: flex;
   flex-direction: column;

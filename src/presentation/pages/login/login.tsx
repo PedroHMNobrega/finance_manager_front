@@ -59,7 +59,7 @@ const Login: React.FC<Props> = ({ validation, authentication }: Props) => {
   return (
     <PageContainer>
       <LoginHeader />
-      <Container>
+      <Container className={Styles.container}>
         <FormContext.Provider value={{ state, setState }}>
           <form data-testid="form" className={Styles.form} onSubmit={handleSubmit}>
             <h2>Login</h2>
