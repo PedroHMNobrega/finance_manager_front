@@ -1,0 +1,41 @@
+@import "../../../../styles/colors.scss";
+
+$border: 1px solid $borderColor;
+
+.container {
+  min-height: 300px;
+}
+
+.no_categories {
+  text-align: center;
+  color: $grey;
+  font-size: 40px;
+  margin-top: 50px;
+}
+
+.categories {
+  display: flex;
+  flex-direction: column;
+  margin-top: 20px;
+  border: $border;
+  border-radius: 5px;
+
+  .category_container {
+    height: 50px;
+    padding: 20px;
+    border-bottom: $border;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    span {
+      font-weight: bold;
+      font-size: 20px;
+    }
+
+    &:last-child {
+      border-bottom: none;
+    }
+  }
+
+}
