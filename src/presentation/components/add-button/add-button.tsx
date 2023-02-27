@@ -6,7 +6,8 @@ type Props = {
 }
 
 const AddButton: React.FC<Props> = ({ action }: Props) => {
-  const handleClick: MouseEventHandler<HTMLButtonElement> = (): void => {
+  const handleClick: MouseEventHandler<HTMLButtonElement> = (event): void => {
+    event.preventDefault()
     action()
   }
 
