@@ -2,36 +2,48 @@
 
 .select_container {
   display: flex;
-  position: relative;
-  align-items: center;
-  border: 1px solid $primaryLight;
-  border-radius: 4px;
+  flex-direction: column;
 
-  select {
-    flex-grow: 1;
-    height: 40px;
-    padding-left: 4px;
-    border: none;
-    border-right: 30px solid transparent;
-    background-color: $white;
-
-    &:focus {
-      outline-color: $primaryLight;
-    }
-
-    &:invalid {
-      color: $grey;
-    }
+  label {
+    color: $grey;
+    font-size: 13px;
+    margin-bottom: 5px;
   }
 
-  option {
-    padding: 20px;
-    font-size: 16px;
-    color: $black;
-  }
+  .select_wrapper {
+    display: flex;
+    position: relative;
+    align-items: center;
+    border: 1px solid $primaryLight;
+    border-radius: 4px;
 
-  .status {
-    position: absolute;
-    right: 8px;
+    select {
+      flex-grow: 1;
+      height: 40px;
+      padding-left: 4px;
+      border: none;
+      border-right: 30px solid transparent;
+      background-color: $white;
+
+      &:focus {
+        outline-color: $primaryLight;
+      }
+
+      &:invalid {
+        color: $grey;
+      }
+    }
+
+    option {
+      padding: 20px;
+      font-size: 16px;
+      color: $black;
+    }
+
+    .status {
+      position: absolute;
+      right: 8px;
+    }
   }
 }
+

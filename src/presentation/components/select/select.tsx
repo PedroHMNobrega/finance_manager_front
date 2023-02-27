@@ -13,6 +13,7 @@ type Props = React.DetailedHTMLProps<React.SelectHTMLAttributes<HTMLSelectElemen
   name: string
   placeholder?: string
   className?: string
+  label?: string
 }
 
 const Select: React.FC<Props> = (props: Props) => {
@@ -28,15 +29,20 @@ const Select: React.FC<Props> = (props: Props) => {
 
   return (
     <div className={Styles.select_container}>
-      <select {...props} value={state[props.name]} onChange={handleChange} className={props.className}>
-        {props.placeholder && (
-          <option value="" disabled hidden>{props.placeholder}</option>
-        )}
-        {props.options.map(option => (
-          <option key={option.value} value={option.value}>{option.name}</option>
-        ))}
-      </select>
-      <InputStatus name={props.name} error={error} className={Styles.status}/>
+      {props.label && (
+        <label>{props.label}</label>
+      )}
+      <div className={Styles.select_wrapper}>
+        <select {...props} value={state[props.name]} onChange={handleChange} className={props.className}>
+          {props.placeholder && (
+            <option value="" disabled hidden>{props.placeholder}</option>
+          )}
+          {props.options.map(option => (
+            <option key={option.value} value={option.value}>{option.name}</option>
+          ))}
+        </select>
+        <InputStatus name={props.name} error={error} className={Styles.status}/>
+      </div>
     </div>
   )
 }
