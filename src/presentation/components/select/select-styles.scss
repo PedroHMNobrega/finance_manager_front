@@ -1,0 +1,39 @@
+@import "../../styles/colors.scss";
+
+.select_container {
+  display: flex;
+  position: relative;
+  align-items: center;
+  border: 1px solid $primaryLight;
+  border-radius: 4px;
+
+  select {
+    flex-grow: 1;
+    height: 40px;
+    padding-left: 4px;
+    border: none;
+    border-right: 30px solid transparent;
+    background-color: $white;
+
+    &:focus {
+      outline-color: $primaryLight;
+    }
+
+    &:invalid {
+      color: $grey;
+    }
+  }
+
+  option {
+    padding: 20px;
+    font-size: 16px;
+    color: $black;
+  }
+
+  .status {
+    position: absolute;
+    right: 8px;
+    font-size: 12px;
+    cursor: help;
+  }
+}
