@@ -1,6 +1,7 @@
 import React, { useContext } from 'react'
 import Styles from './select-styles.scss'
 import { FormContext } from '@/presentation/contexts'
+import { InputStatus } from '@/presentation/components'
 
 type Option = {
   value: string
@@ -25,13 +26,6 @@ const Select: React.FC<Props> = (props: Props) => {
     })
   }
 
-  const getStatus = (): string => {
-    return error ? '🔴' : '🟢'
-  }
-  const getTitle = (): string => {
-    return error || 'Tudo certo!'
-  }
-
   return (
     <div className={Styles.select_container}>
       <select {...props} value={state[props.name]} onChange={handleChange} className={props.className}>
@@ -42,7 +36,7 @@ const Select: React.FC<Props> = (props: Props) => {
           <option key={option.value} value={option.value}>{option.name}</option>
         ))}
       </select>
-      <span data-testid={`${props.name}-status`} title={getTitle()} className={Styles.status}>{getStatus()}</span>
+      <InputStatus name={props.name} error={error} className={Styles.status}/>
     </div>
   )
 }

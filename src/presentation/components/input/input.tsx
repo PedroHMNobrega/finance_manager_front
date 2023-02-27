@@ -1,6 +1,7 @@
 import React, { useContext } from 'react'
 import Styles from './input-styles.scss'
 import { FormContext } from '@/presentation/contexts'
+import { InputStatus } from '@/presentation/components'
 
 type Props = React.DetailedHTMLProps<React.InputHTMLAttributes<HTMLInputElement>, HTMLInputElement> & {
   name: string
@@ -52,13 +53,6 @@ const Input: React.FC<Props> = (props: Props) => {
     })
   }
 
-  const getStatus = (): string => {
-    return error ? '🔴' : '🟢'
-  }
-  const getTitle = (): string => {
-    return error || 'Tudo certo!'
-  }
-
   const getStyle = (): object => {
     if (props.margin) {
       return { marginTop: 16 }
@@ -68,7 +62,7 @@ const Input: React.FC<Props> = (props: Props) => {
   return (
     <div className={`${Styles.inputWrap} ${props.className}`} style={getStyle()}>
       {getInput()}
-      <span data-testid={`${props.name}-status`} title={getTitle()} className={Styles.status}>{getStatus()}</span>
+      <InputStatus name={props.name} error={error} className={Styles.status}/>
     </div>
   )
 }
