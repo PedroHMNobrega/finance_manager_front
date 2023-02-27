@@ -8,6 +8,7 @@ type Props = React.DetailedHTMLProps<React.InputHTMLAttributes<HTMLInputElement>
   type: string
   margin?: boolean
   className?: string
+  label?: string
 }
 
 const Input: React.FC<Props> = (props: Props) => {
@@ -60,9 +61,14 @@ const Input: React.FC<Props> = (props: Props) => {
   }
 
   return (
-    <div className={`${Styles.inputWrap} ${props.className}`} style={getStyle()}>
-      {getInput()}
-      <InputStatus name={props.name} error={error} className={Styles.status}/>
+    <div className={Styles.input_container}>
+      {props.label && (
+        <label>{props.label}</label>
+      )}
+      <div className={`${Styles.inputWrap} ${props.className}`} style={getStyle()}>
+        {getInput()}
+        <InputStatus name={props.name} error={error} className={Styles.status}/>
+      </div>
     </div>
   )
 }
