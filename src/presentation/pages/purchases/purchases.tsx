@@ -1,13 +1,14 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Styles from './purchases-styles.scss'
 import Container from '@/presentation/components/container/container'
 import { Purchase } from '@/domain/models'
 import PurchaseTable from '@/presentation/pages/purchases/components/purchase-table/purchase-table'
 import { AddButton, Modal } from '@/presentation/components'
 import CreatePurchaseModal from '@/presentation/pages/purchases/components/create-purchase-modal/create-purchase-modal'
-import CategoryModal from '@/presentation/pages/purchases/components/category-modal/category-modal'
 
 const Purchases: React.FC = () => {
+  const [openPurchaseModal, setOpenPurchaseModal] = useState(false)
+
   const purchases: Purchase[] = [
     {
       id: 1,
@@ -34,8 +35,9 @@ const Purchases: React.FC = () => {
 
   return (
     <Container className={Styles.container}>
-      <CreatePurchaseModal />
-      <CategoryModal />
+      {openPurchaseModal && (
+        <CreatePurchaseModal setOpen={setOpenPurchaseModal}/>
+      )}
       <div className={Styles.purchases_container}>
         <div className={Styles.header}>
           <h1>Compras</h1>

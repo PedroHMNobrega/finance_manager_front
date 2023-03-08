@@ -4,15 +4,20 @@ import Styles from './modal-styles.scss'
 type Props = {
   title: string
   children: React.ReactNode
+  setOpen: Function
 }
 
-const Modal: React.FC<Props> = ({ children, title }: Props) => {
+const Modal: React.FC<Props> = ({ children, title, setOpen }: Props) => {
+  const handleClick: React.MouseEventHandler<HTMLDivElement> = () => {
+    setOpen(false)
+  }
+
   return (
     <div className={Styles.mask}>
       <div className={Styles.modal}>
         <div className={Styles.title_container}>
-          <h2>{title}</h2>
-          <div className={Styles.close}>X</div>
+          <h2 data-testid="modal-title">{title}</h2>
+          <div className={Styles.close} data-testid="modal-close" onClick={handleClick}>X</div>
         </div>
         <div className={Styles.children_container}>
           {children}

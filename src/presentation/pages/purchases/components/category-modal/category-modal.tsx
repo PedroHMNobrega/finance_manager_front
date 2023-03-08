@@ -4,7 +4,11 @@ import { AddButton, DeleteButton, Modal } from '@/presentation/components'
 import { Category } from '@/domain/models'
 import Container from '@/presentation/components/container/container'
 
-const CategoryModal: React.FC = () => {
+type Props = {
+  setOpen: Function
+}
+
+const CategoryModal: React.FC<Props> = ({ setOpen }: Props) => {
   const categories: Category[] = [
     {
       id: 1,
@@ -36,7 +40,7 @@ const CategoryModal: React.FC = () => {
   }
 
   return (
-    <Modal title={'Categorias'}>
+    <Modal title={'Categorias'} setOpen={setOpen}>
       <Container className={Styles.container}>
         <AddButton action={() => {
           console.log('add-category')
