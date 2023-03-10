@@ -1,24 +1,21 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import Styles from './category-modal-styles.scss'
 import { AddButton, DeleteButton, Modal } from '@/presentation/components'
-import { Category } from '@/domain/models'
 import Container from '@/presentation/components/container/container'
+import { useAppDispatch, useAppSelector } from '@/presentation/store/hooks'
+import { LoadCategories } from '@/presentation/store/reducers/category/actions'
 
 type Props = {
   setOpen: Function
 }
 
 const CategoryModal: React.FC<Props> = ({ setOpen }: Props) => {
-  const categories: Category[] = [
-    {
-      id: 1,
-      name: 'Tech'
-    },
-    {
-      id: 2,
-      name: 'Comida'
-    }
-  ]
+  const dispatch = useAppDispatch()
+  const { categories, loading, errorMessage } = useAppSelector(state => state.category)
+
+  useEffect(() => {
+    dispatch(LoadCategories.request())
+  }, [dispatch])
 
   const renderCategories = (): JSX.Element => {
     if (categories.length === 0) {

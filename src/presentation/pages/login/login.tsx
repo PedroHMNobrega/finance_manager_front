@@ -6,8 +6,8 @@ import { Validation } from '@/presentation/protocols/validation'
 import { Authentication } from '@/domain/usecases'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAppDispatch } from '@/presentation/store/hooks'
-import { setUser } from '@/presentation/store/reducers/user-reducer'
 import Container from '@/presentation/components/container/container'
+import { setUser } from '@/presentation/store/reducers/user/reducer'
 
 type Props = {
   validation: Validation

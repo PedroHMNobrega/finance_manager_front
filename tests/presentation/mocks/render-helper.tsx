@@ -6,7 +6,7 @@ import { Provider } from 'react-redux'
 import { store } from '@/presentation/store/store'
 import { Router } from 'react-router-dom'
 import React from 'react'
-import { setUser } from '@/presentation/store/reducers/user-reducer'
+import { setUser } from '@/presentation/store/reducers/user/reducer'
 
 type Params = {
   Page: React.FC

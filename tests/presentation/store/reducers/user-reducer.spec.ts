@@ -3,7 +3,7 @@
 localStorage.setItem('access-token', 'any-token')
 
 import { AccountModel } from '@/domain/models'
-import { setUser } from '@/presentation/store/reducers/user-reducer'
+import { setUser } from '@/presentation/store/reducers/user/reducer'
 import { userReducer } from '@/presentation/store/reducers'
 
 describe('UserReducer', () => {
