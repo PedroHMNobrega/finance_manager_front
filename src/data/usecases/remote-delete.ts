@@ -8,7 +8,7 @@ export class RemoteDelete<P extends DeleteParams, R> implements Delete<P, R> {
     private readonly httpClient: HttpClient<R>
   ) {}
 
-  async delete (params: P): Promise<R> {
+  delete = async (params: P): Promise<R> => {
     const httpResponse = await this.httpClient.request({
       url: `${this.url}/${params.id}`,
       method: 'delete',

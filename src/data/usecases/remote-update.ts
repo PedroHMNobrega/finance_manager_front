@@ -8,7 +8,7 @@ export class RemoteUpdate<P extends UpdateParams, R> implements Update<P, R> {
     private readonly httpClient: HttpClient<R>
   ) {}
 
-  async update (params: P): Promise<R> {
+  update = async (params: P): Promise<R> => {
     const httpResponse = await this.httpClient.request({
       url: `${this.url}/${params.id}`,
       method: 'put',

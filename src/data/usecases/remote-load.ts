@@ -8,7 +8,7 @@ export class RemoteLoad<P extends LoadParams, R> implements Load<P, R> {
     private readonly httpClient: HttpClient<R>
   ) {}
 
-  async loadAll (params: P): Promise<R> {
+  loadAll = async (params: P): Promise<R> => {
     const httpResponse = await this.httpClient.request({
       url: this.url,
       method: 'get',

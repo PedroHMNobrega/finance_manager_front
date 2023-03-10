@@ -8,7 +8,7 @@ export class RemoteCreate<P extends CreateParams, R> implements Create<P, R> {
     private readonly httpClient: HttpClient<R>
   ) {}
 
-  async create (params: P): Promise<R> {
+  create = async (params: P): Promise<R> => {
     const httpResponse = await this.httpClient.request({
       url: this.url,
       method: 'post',

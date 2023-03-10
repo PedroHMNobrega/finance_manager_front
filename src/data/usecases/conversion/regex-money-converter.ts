@@ -5,7 +5,7 @@ export class RegexMoneyConverter implements MoneyConverter {
     private readonly currency: string
   ) {}
 
-  toMoney (str: string): string {
+  toMoney = (str: string): string => {
     let chars = str.split('')
     chars = chars.filter(char => /[0-9]/.test(char))
 
