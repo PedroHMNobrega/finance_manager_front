@@ -1,5 +1,5 @@
 import { Category } from '@/domain/models'
-import { CategoryTypes } from '@/presentation/store/reducers/category/types'
+import { createSlice } from '@reduxjs/toolkit'
 
 type CategoryState = {
   categories: Category[]
@@ -13,29 +13,25 @@ const initialState: CategoryState = {
   loading: false
 }
 
-const reducer = (state = initialState, { type, payload }): CategoryState => {
-  switch (type) {
-    case CategoryTypes.SUCCESS:
-      return {
-        ...state,
-        loading: false,
-        categories: payload
-      }
-    case CategoryTypes.REQUEST:
-      return {
-        ...state,
-        loading: true,
-        errorMessage: ''
-      }
-    case CategoryTypes.FAIL:
-      return {
-        ...state,
-        loading: false,
-        errorMessage: payload
-      }
-    default:
-      return state
+const categorySlice = createSlice({
+  name: 'category',
+  initialState,
+  reducers: {
+    loadCategoryRequest: (state) => {
+      state.loading = true
+      state.errorMessage = ''
+    },
+    loadCategorySuccess: (state, { payload }) => {
+      state.loading = false
+      state.categories = payload
+    },
+    loadCategoryFail: (state, { payload }) => {
+      state.loading = false
+      state.errorMessage = payload
+    }
   }
-}
+})
 
-export default reducer
+export const { loadCategoryRequest, loadCategorySuccess, loadCategoryFail } = categorySlice.actions
+
+export default categorySlice.reducer

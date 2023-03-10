@@ -3,7 +3,7 @@ import Styles from './category-modal-styles.scss'
 import { AddButton, DeleteButton, Modal } from '@/presentation/components'
 import Container from '@/presentation/components/container/container'
 import { useAppDispatch, useAppSelector } from '@/presentation/store/hooks'
-import { LoadCategories } from '@/presentation/store/reducers/category/actions'
+import { loadCategoryRequest } from '@/presentation/store/reducers/category/reducer'
 
 type Props = {
   setOpen: Function
@@ -14,7 +14,7 @@ const CategoryModal: React.FC<Props> = ({ setOpen }: Props) => {
   const { categories, loading, errorMessage } = useAppSelector(state => state.category)
 
   useEffect(() => {
-    dispatch(LoadCategories.request())
+    dispatch(loadCategoryRequest())
   }, [dispatch])
 
   const renderCategories = (): JSX.Element => {
