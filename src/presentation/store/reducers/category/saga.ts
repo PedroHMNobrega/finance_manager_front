@@ -1,27 +1,32 @@
-import { getContext, put, all, takeLatest, call, GetContextEffect, AllEffect, ForkEffect, CallEffect, PutEffect } from 'redux-saga/effects'
-import { Load, LoadCategoryListParams } from '@/domain/usecases'
-import { Category } from '@/domain/models'
+import { all, call, put, takeLatest } from 'redux-saga/effects'
 import {
   loadCategoryFail,
   loadCategoryRequest,
   loadCategorySuccess
 } from '@/presentation/store/reducers/category/reducer'
+import SagaI from '@/presentation/store/reducers/SagaI'
 
-type SagaType = Generator<GetContextEffect | CallEffect<unknown> | PutEffect<{type: string, payload: any}>, void, unknown>
+class CategorySaga implements SagaI {
+  constructor (
+    private readonly remoteLoadCategories
+  ) {}
 
-function * loadCategories (): SagaType {
-  try {
-    const token = localStorage.getItem('access-token')
-    const loadCategories = (yield getContext('loadCategories')) as Load<LoadCategoryListParams, Category[]>
-    const response = yield call(loadCategories.loadAll, { token: token })
-    yield put(loadCategorySuccess(response))
-  } catch (e) {
-    yield put(loadCategoryFail(e.message))
+  loadCategories (): () => Generator<any> {
+    const { remoteLoadCategories } = this
+    return function * () {
+      try {
+        const token = localStorage.getItem('access-token')
+        const response = yield call(remoteLoadCategories.loadAll, { token: token })
+        yield put(loadCategorySuccess(response))
+      } catch (e) {
+        yield put(loadCategoryFail(e.message))
+      }
+    }
+  }
+
+  * register (): Iterable<any> {
+    yield all([takeLatest(loadCategoryRequest.type, this.loadCategories())])
   }
 }
 
-function * categorySaga (): Generator<AllEffect<ForkEffect<never>>> {
-  yield all([takeLatest(loadCategoryRequest.type, loadCategories)])
-}
-
-export default categorySaga
+export default CategorySaga
