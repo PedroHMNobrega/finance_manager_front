@@ -8,11 +8,9 @@ import SagaContainer from '@/presentation/store/reducers/saga-container'
 export function * rootSaga (): Generator<any> {
   const sagaContainer = new SagaContainer()
 
-  const token = localStorage.getItem('access-token')
-
   const loadCategories = makeRemoteLoad<LoadCategoryListParams, Category[]>('/categories/')
   sagaContainer.addSaga(
-    new CategorySaga(token, loadCategories)
+    new CategorySaga(loadCategories)
   )
 
   return yield fork(sagaContainer.register())
