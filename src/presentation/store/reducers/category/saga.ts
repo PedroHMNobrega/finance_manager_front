@@ -4,18 +4,18 @@ import {
   loadCategoryRequest,
   loadCategorySuccess
 } from '@/presentation/store/reducers/category/reducer'
-import SagaI from '@/presentation/store/reducers/SagaI'
+import SagaInterface from '@/presentation/store/reducers/saga-interface'
 
-class CategorySaga implements SagaI {
+class CategorySaga implements SagaInterface {
   constructor (
+    private readonly token,
     private readonly remoteLoadCategories
   ) {}
 
   loadCategories (): () => Generator<any> {
-    const { remoteLoadCategories } = this
+    const { token, remoteLoadCategories } = this
     return function * () {
       try {
-        const token = localStorage.getItem('access-token')
         const response = yield call(remoteLoadCategories.loadAll, { token: token })
         yield put(loadCategorySuccess(response))
       } catch (e) {
