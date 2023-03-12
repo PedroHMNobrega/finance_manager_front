@@ -1,9 +1,9 @@
-import { LocalstorageJwt } from '@/data/usecases/authentication/localstorage-jwt'
+import { LocalStorageJwt } from '@/data/usecases/authentication'
 import { mockJwt } from '@/tests/domain/mocks'
 import { mockLocalStorage } from '@/tests/data/mocks'
 
 type SutTypes = {
-  sut: LocalstorageJwt
+  sut: LocalStorageJwt
   key: string
   localStorageSpy: Storage
 }
@@ -15,7 +15,7 @@ const makeSut = (): SutTypes => {
   })
 
   const key = 'any-key'
-  const sut = new LocalstorageJwt(key)
+  const sut = new LocalStorageJwt(key)
   return {
     sut,
     key,

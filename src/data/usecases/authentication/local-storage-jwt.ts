@@ -1,7 +1,7 @@
 import { GetJwt, SetJwt } from '@/domain/usecases'
 import { Jwt } from '@/domain/models'
 
-export class LocalstorageJwt implements GetJwt, SetJwt {
+export class LocalStorageJwt implements GetJwt, SetJwt {
   constructor (
     private readonly key
   ) {}
