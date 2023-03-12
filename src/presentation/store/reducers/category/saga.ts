@@ -5,18 +5,21 @@ import {
   loadCategorySuccess
 } from '@/presentation/store/reducers/category/reducer'
 import SagaInterface from '@/presentation/store/reducers/saga-interface'
+import { GetJwt, Load, LoadCategoryListParams } from '@/domain/usecases'
+import { Category } from '@/domain/models'
 
 class CategorySaga implements SagaInterface {
   constructor (
-    private readonly remoteLoadCategories
+    private readonly loadCategoriesUsecase: Load<LoadCategoryListParams, Category[]>,
+    private readonly getJwt: GetJwt
   ) {}
 
   loadCategories (): () => Generator<any> {
-    const { remoteLoadCategories } = this
+    const { loadCategoriesUsecase, getJwt } = this
     return function * () {
       try {
-        const token = localStorage.getItem('access-token')
-        const response = yield call(remoteLoadCategories.loadAll, { token: token })
+        const token = getJwt.get()
+        const response = yield call(loadCategoriesUsecase.loadAll, { token: token })
         yield put(loadCategorySuccess(response))
       } catch (e) {
         yield put(loadCategoryFail(e.message))
