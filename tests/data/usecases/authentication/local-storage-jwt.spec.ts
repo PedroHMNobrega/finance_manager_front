@@ -1,48 +1,51 @@
+import 'jest-localstorage-mock'
 import { LocalStorageJwt } from '@/data/usecases/authentication'
 import { mockJwt } from '@/tests/domain/mocks'
-import { mockLocalStorage } from '@/tests/data/mocks'
 
 type SutTypes = {
   sut: LocalStorageJwt
   key: string
-  localStorageSpy: Storage
 }
 
 const makeSut = (): SutTypes => {
-  const localStorageSpy = mockLocalStorage
-  Object.defineProperty(global, 'localStorage', {
-    value: localStorageSpy
-  })
-
   const key = 'any-key'
   const sut = new LocalStorageJwt(key)
   return {
     sut,
-    key,
-    localStorageSpy
+    key
   }
 }
 
 describe('LocalstorageJwt', () => {
+  beforeEach(() => {
+    localStorage.clear()
+  })
+
   it('set should call localStorage with correct values', () => {
-    const { sut, key, localStorageSpy } = makeSut()
+    const { sut, key } = makeSut()
     const token = mockJwt()
     sut.set(token)
 
-    expect(localStorageSpy.setItem).toHaveBeenCalledWith(key, token)
+    expect(localStorage.setItem).toHaveBeenCalledWith(key, token)
   })
 
   it('get should call localStorage with correct values', () => {
-    const { sut, key, localStorageSpy } = makeSut()
+    const { sut, key } = makeSut()
     sut.get()
-    expect(localStorageSpy.getItem).toHaveBeenCalledWith(key)
+    expect(localStorage.getItem).toHaveBeenCalledWith(key)
+  })
+
+  it('get should return null if there is no value', () => {
+    const { sut } = makeSut()
+    const response = sut.get()
+    expect(response).toBeNull()
   })
 
   it('get should return correct value', () => {
-    const { sut, localStorageSpy } = makeSut()
+    const { sut } = makeSut()
     const token = 'token'
 
-    const getItem: jest.Mock = localStorageSpy.getItem as jest.Mock
+    const getItem: jest.Mock = localStorage.getItem as jest.Mock
     getItem.mockImplementationOnce(() => {
       return token
     })
