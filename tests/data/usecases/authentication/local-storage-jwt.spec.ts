@@ -40,7 +40,7 @@ describe('LocalstorageJwt', () => {
 
   it('get should return correct value', () => {
     const { sut, localStorageSpy } = makeSut()
-    const token = 'any-token'
+    const token = 'token'
 
     const getItem: jest.Mock = localStorageSpy.getItem as jest.Mock
     getItem.mockImplementationOnce(() => {
