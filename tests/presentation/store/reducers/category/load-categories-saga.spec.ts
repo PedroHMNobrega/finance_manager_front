@@ -24,7 +24,7 @@ const makeSut = (): SutTypes => {
   }
 }
 
-describe('Saga', () => {
+describe('Load Categories Saga', () => {
   it('should call getJwt', async () => {
     const { sut, jwtSpy } = makeSut()
     await sagaExec(sut.loadCategories())
