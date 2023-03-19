@@ -2,10 +2,9 @@ import { CategorySaga } from '@/presentation/store/reducers'
 import { GetJwt, Load, LoadCategoryListParams } from '@/domain/usecases'
 import { loadSpy } from '@/tests/data/mocks'
 import { getJwtSpy } from '@/tests/data/mocks/mock-jwt-usecase'
-import { runSaga } from 'redux-saga'
-import { Action } from '@reduxjs/toolkit'
 import { mockJwt } from '@/tests/domain/mocks'
 import { Category } from '@/domain/models'
+import { sagaExec } from '@/tests/presentation/helpers/saga-helper'
 
 type SutTypes = {
   sut: CategorySaga
@@ -25,24 +24,16 @@ const makeSut = (): SutTypes => {
   }
 }
 
-const sagaExec = async (sut): Promise<Action[]> => {
-  const dispatched: Action[] = []
-  await runSaga({
-    dispatch: (action: Action) => dispatched.push(action)
-  }, sut.loadCategories())
-  return dispatched
-}
-
 describe('Saga', () => {
   it('should call getJwt', async () => {
     const { sut, jwtSpy } = makeSut()
-    await sagaExec(sut)
+    await sagaExec(sut.loadCategories())
     expect(jwtSpy.get).toHaveBeenCalledTimes(1)
   })
 
   it('should call loadCategories with correct value', async () => {
     const { sut, loadCategoriesSpy } = makeSut()
-    await sagaExec(sut)
+    await sagaExec(sut.loadCategories())
     expect(loadCategoriesSpy.loadAll).toHaveBeenCalledTimes(1)
     expect(loadCategoriesSpy.loadAll).toHaveBeenCalledWith({
       token: mockJwt()
@@ -55,7 +46,7 @@ describe('Saga', () => {
     const loadAll = loadCategoriesSpy.loadAll as jest.Mock
     loadAll.mockRejectedValueOnce(new Error(errorMessage))
 
-    const result = await sagaExec(sut)
+    const result = await sagaExec(sut.loadCategories())
     expect(result.length).toBe(1)
     expect(result[0]).toStrictEqual({
       type: 'category/loadCategoryFail',
@@ -69,7 +60,7 @@ describe('Saga', () => {
     const loadAll = loadCategoriesSpy.loadAll as jest.Mock
     loadAll.mockResolvedValue(expectedResponse)
 
-    const result = await sagaExec(sut)
+    const result = await sagaExec(sut.loadCategories())
     expect(result.length).toBe(1)
     expect(result[0]).toStrictEqual({
       type: 'category/loadCategorySuccess',
