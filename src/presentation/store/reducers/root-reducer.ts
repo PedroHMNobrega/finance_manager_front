@@ -7,5 +7,9 @@ const rootReducer = combineReducers({
 })
 
 export type RootState = ReturnType<typeof rootReducer>
+export type ReduxAction = {
+  type: string
+  payload: any
+}
 
 export default rootReducer
