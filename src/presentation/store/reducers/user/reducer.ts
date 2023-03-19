@@ -1,5 +1,6 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { createSlice } from '@reduxjs/toolkit'
 import { AccountModel } from '@/domain/models'
+import { makeLocalStorageJwt } from '@/main/factories/usecases/local-storage-jwt-factory'
 
 type UserState = {
   user: AccountModel
@@ -7,18 +8,16 @@ type UserState = {
 
 const initialState: UserState = {
   user: {
-    accessToken: localStorage.getItem('access-token')
+    accessToken: makeLocalStorageJwt().get()
   }
 }
 
-// TODO: Remove localstorage side effect
 const userSlice = createSlice({
   name: 'user',
   initialState,
   reducers: {
-    setUser: (state, action: PayloadAction<string>) => {
-      localStorage.setItem('access-token', action.payload)
-      state.user.accessToken = action.payload
+    setUser: (state, { payload }) => {
+      state.user.accessToken = payload
     }
   }
 })

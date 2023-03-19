@@ -1,5 +1,5 @@
 import { fork } from 'redux-saga/effects'
-import { CategorySaga } from '@/presentation/store/reducers/'
+import { CategorySaga, UserSaga } from '@/presentation/store/reducers/'
 import { makeRemoteLoad } from '@/main/factories/usecases/remote-http-factory'
 import { LoadCategoryListParams } from '@/domain/usecases'
 import { Category } from '@/domain/models'
@@ -14,6 +14,10 @@ export function * rootSaga (): Generator<any> {
   const loadCategoriesUsecase = makeRemoteLoad<LoadCategoryListParams, Category[]>('/categories/')
   sagaContainer.addSaga(
     new CategorySaga(loadCategoriesUsecase, jwtUsecase)
+  )
+
+  sagaContainer.addSaga(
+    new UserSaga(jwtUsecase)
   )
 
   return yield fork(sagaContainer.register())
