@@ -1,9 +1,8 @@
 import { CategorySaga } from '@/presentation/store/reducers'
 import { Delete, DeleteCategoryParams, GetJwt } from '@/domain/usecases'
-import { getJwtSpy } from '@/tests/data/mocks/mock-jwt-usecase'
-import { deleteSpy } from '@/tests/data/mocks/mock-remote-delete'
 import { sagaExec } from '@/tests/presentation/helpers/saga-helper'
 import { mockJwt } from '@/tests/domain/mocks'
+import { deleteSpy, getJwtSpy } from '@/tests/data/mocks'
 
 type SutTypes = {
   sut: CategorySaga
