@@ -15,7 +15,7 @@ type SutTypes = {
 const makeSut = (): SutTypes => {
   const loadCategoriesSpy = loadSpy()
   const jwtSpy = getJwtSpy()
-  const sut = new CategorySaga(loadCategoriesSpy, jwtSpy)
+  const sut = new CategorySaga(jwtSpy, loadCategoriesSpy, null)
 
   return {
     sut,
