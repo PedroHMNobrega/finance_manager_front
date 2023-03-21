@@ -45,12 +45,28 @@ const deleteCategoryReducers = {
   }
 }
 
+const createCategoryReducers = {
+  createCategoryRequest: (state) => {
+    state.loading = true
+    state.errorMessage = ''
+  },
+  createCategorySuccess: (state, { payload }) => {
+    state.loading = false
+    state.categories = state.categories.push(payload)
+  },
+  createCategoryFail: (state, { payload }) => {
+    state.loading = false
+    state.errorMessage = payload
+  }
+}
+
 const categorySlice = createSlice({
   name: 'category',
   initialState,
   reducers: {
     ...loadCategoriesReducers,
-    ...deleteCategoryReducers
+    ...deleteCategoryReducers,
+    ...createCategoryReducers
   }
 })
 
@@ -60,7 +76,10 @@ export const {
   loadCategoryFail,
   deleteCategoryRequest,
   deleteCategorySuccess,
-  deleteCategoryFail
+  deleteCategoryFail,
+  createCategoryRequest,
+  createCategorySuccess,
+  createCategoryFail
 } = categorySlice.actions
 
 export default categorySlice.reducer

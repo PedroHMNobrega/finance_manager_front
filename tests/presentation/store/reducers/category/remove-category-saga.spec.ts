@@ -15,7 +15,7 @@ const params = 1
 const makeSut = (): SutTypes => {
   const deleteCategorySpy = deleteSpy()
   const jwtSpy = getJwtSpy()
-  const sut = new CategorySaga(jwtSpy, null, deleteCategorySpy)
+  const sut = new CategorySaga(jwtSpy, null, deleteCategorySpy, null)
 
   return {
     sut,

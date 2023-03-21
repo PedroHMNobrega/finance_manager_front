@@ -1,6 +1,6 @@
-import { RemoteDelete, RemoteLoad } from '@/data/usecases'
+import { RemoteCreate, RemoteDelete, RemoteLoad } from '@/data/usecases'
 import { makeApiUrl } from '@/main/factories/http/api-url-factory'
-import { DeleteParams, LoadParams } from '@/domain/usecases'
+import { CreateParams, DeleteParams, LoadParams } from '@/domain/usecases'
 import { makeAxiosHttpAdapter } from '@/main/factories/http/axios-http-adapter-factory'
 
 export function makeRemoteLoad<P extends LoadParams, R> (path: string): RemoteLoad<P, R> {
@@ -13,4 +13,10 @@ export function makeRemoteDelete<P extends DeleteParams, R> (path: string): Remo
   const url = makeApiUrl(path)
   const axiosHttpAdapter = makeAxiosHttpAdapter()
   return new RemoteDelete<P, R>(url, axiosHttpAdapter)
+}
+
+export function makeRemoteCreate<P extends CreateParams, R> (path: string): RemoteCreate<P, R> {
+  const url = makeApiUrl(path)
+  const axiosHttpAdapter = makeAxiosHttpAdapter()
+  return new RemoteCreate<P, R>(url, axiosHttpAdapter)
 }
