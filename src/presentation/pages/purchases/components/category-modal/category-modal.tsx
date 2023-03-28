@@ -20,11 +20,11 @@ const CategoryModal: React.FC<Props> = ({ setOpen }: Props) => {
   const renderCategories = (): JSX.Element => {
     if (categories.length === 0) {
       return (
-        <h1 className={Styles.no_categories}>Criar Categoria</h1>
+        <h1 className={Styles.no_categories} data-testid="no-category-message">Criar Categoria</h1>
       )
     } else {
       return (
-        <div className={Styles.categories}>
+        <div className={Styles.categories} data-testid="categories-wrapper">
           {categories.map(category => (
             <div key={category.id} className={Styles.category_container}>
               <span>{category.name}</span>
