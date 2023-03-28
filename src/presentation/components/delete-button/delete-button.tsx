@@ -14,7 +14,7 @@ const DeleteButton: React.FC<Props> = (props: Props) => {
   }
 
   return (
-    <FontAwesomeIcon icon={faTrash} className={Styles.icon} onClick={handleClick} />
+    <FontAwesomeIcon icon={faTrash} className={Styles.icon} onClick={handleClick} data-testid="delete-button" id={`${props.id}`} />
   )
 }
 
