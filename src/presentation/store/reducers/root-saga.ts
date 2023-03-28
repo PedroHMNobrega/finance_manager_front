@@ -1,26 +1,39 @@
 import { fork } from 'redux-saga/effects'
 import { CategorySaga, UserSaga } from '@/presentation/store/reducers/'
-import { makeRemoteCreate, makeRemoteDelete, makeRemoteLoad } from '@/main/factories/usecases/remote-http-factory'
-import { CreateCategoryParams, DeleteCategoryParams, LoadCategoryListParams } from '@/domain/usecases'
+import {
+  Create,
+  CreateCategoryParams,
+  Delete,
+  DeleteCategoryParams,
+  Load,
+  LoadCategoryListParams
+} from '@/domain/usecases'
 import { Category } from '@/domain/models'
 import SagaContainer from '@/presentation/store/reducers/saga-container'
-import { makeLocalStorageJwt } from '@/main/factories/usecases/local-storage-jwt-factory'
+import { LocalStorageJwt } from '@/data/usecases/authentication'
 
-export function * rootSaga (): Generator<any> {
+export function * rootSaga (usecases: SagaUseCases): Generator<any> {
   const sagaContainer = new SagaContainer()
 
-  const jwtUsecase = makeLocalStorageJwt()
-
-  const loadCategoriesUsecase = makeRemoteLoad<LoadCategoryListParams, Category[]>('/categories')
-  const deleteCategoryUsecase = makeRemoteDelete<DeleteCategoryParams, void>('/categories')
-  const createCategoryUsecase = makeRemoteCreate<CreateCategoryParams, Category>('/categories')
   sagaContainer.addSaga(
-    new CategorySaga(jwtUsecase, loadCategoriesUsecase, deleteCategoryUsecase, createCategoryUsecase)
+    new CategorySaga(
+      usecases.jwtUsecase,
+      usecases.loadCategoriesUsecase,
+      usecases.deleteCategoryUsecase,
+      usecases.createCategoryUsecase
+    )
   )
 
   sagaContainer.addSaga(
-    new UserSaga(jwtUsecase)
+    new UserSaga(usecases.jwtUsecase)
   )
 
   return yield fork(sagaContainer.register())
+}
+
+export type SagaUseCases = {
+  jwtUsecase: LocalStorageJwt
+  loadCategoriesUsecase: Load<LoadCategoryListParams, Category[]>
+  deleteCategoryUsecase: Delete<DeleteCategoryParams, void>
+  createCategoryUsecase: Create<CreateCategoryParams, Category>
 }
