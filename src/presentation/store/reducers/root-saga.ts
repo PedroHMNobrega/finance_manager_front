@@ -11,9 +11,9 @@ export function * rootSaga (): Generator<any> {
 
   const jwtUsecase = makeLocalStorageJwt()
 
-  const loadCategoriesUsecase = makeRemoteLoad<LoadCategoryListParams, Category[]>('/categories/')
-  const deleteCategoryUsecase = makeRemoteDelete<DeleteCategoryParams, void>('/categories/')
-  const createCategoryUsecase = makeRemoteCreate<CreateCategoryParams, Category>('/categories/')
+  const loadCategoriesUsecase = makeRemoteLoad<LoadCategoryListParams, Category[]>('/categories')
+  const deleteCategoryUsecase = makeRemoteDelete<DeleteCategoryParams, void>('/categories')
+  const createCategoryUsecase = makeRemoteCreate<CreateCategoryParams, Category>('/categories')
   sagaContainer.addSaga(
     new CategorySaga(jwtUsecase, loadCategoriesUsecase, deleteCategoryUsecase, createCategoryUsecase)
   )

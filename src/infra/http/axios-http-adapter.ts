@@ -7,7 +7,7 @@ export class AxiosHttpAdapter implements HttpClient {
     let axiosResponse
     try {
       axiosResponse = await axios.request({
-        url: data.url,
+        url: `${data.url}/`,
         method: data.method,
         data: data.body,
         headers: data.headers

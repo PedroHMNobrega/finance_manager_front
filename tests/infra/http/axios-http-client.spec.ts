@@ -25,7 +25,7 @@ describe('AxiosHttpClient', () => {
     const { sut, mockedAxios } = makeSut()
     await sut.request(request)
     expect(mockedAxios.request).toHaveBeenCalledWith({
-      url: request.url,
+      url: `${request.url}/`,
       data: request.body,
       headers: request.headers,
       method: request.method
