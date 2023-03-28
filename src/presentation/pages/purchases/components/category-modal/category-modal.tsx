@@ -3,7 +3,7 @@ import Styles from './category-modal-styles.scss'
 import { AddButton, DeleteButton, Modal } from '@/presentation/components'
 import Container from '@/presentation/components/container/container'
 import { useAppDispatch, useAppSelector } from '@/presentation/store/hooks'
-import { loadCategoryRequest } from '@/presentation/store/reducers/category/reducer'
+import { deleteCategoryRequest, loadCategoryRequest } from '@/presentation/store/reducers/category/reducer'
 
 type Props = {
   setOpen: Function
@@ -17,6 +17,10 @@ const CategoryModal: React.FC<Props> = ({ setOpen }: Props) => {
     dispatch(loadCategoryRequest())
   }, [dispatch])
 
+  const handleDelete = (id): void => {
+    dispatch(deleteCategoryRequest(id))
+  }
+
   const renderCategories = (): JSX.Element => {
     if (categories.length === 0) {
       return (
@@ -28,7 +32,7 @@ const CategoryModal: React.FC<Props> = ({ setOpen }: Props) => {
           {categories.map(category => (
             <div key={category.id} className={Styles.category_container}>
               <span>{category.name}</span>
-              <DeleteButton id={category.id} callback={(id) => console.log(id)}/>
+              <DeleteButton id={category.id} callback={handleDelete}/>
             </div>
           ))}
         </div>
