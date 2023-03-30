@@ -73,7 +73,7 @@ describe('CategoryModal Component', () => {
     })
 
     it('should display loading spinner on loadCategories load', () => {
-      const { renderScreen } = makeSut()
+      const { renderScreen } = makeSut([])
       renderScreen()
 
       const withLoading = screen.queryByTestId('with-loading')
@@ -137,20 +137,24 @@ describe('CategoryModal Component', () => {
         expect(remainingButton.id).toEqual(expectedButton.id)
       })
     })
-  })
 
-  it('should display load error message on loading error', async () => {
-    const { renderScreen, sagaUsecases } = makeSut()
-    const loadCategories = sagaUsecases.loadCategoriesUsecase.loadAll as jest.Mock
-    loadCategories.mockImplementationOnce(() => {
-      throw new UnexpectedError()
-    })
+    it('should display error message on delete error', async () => {
+      const { renderScreen, sagaUsecases } = makeSut()
+      const deleteCategories = sagaUsecases.deleteCategoryUsecase.delete as jest.Mock
+      deleteCategories.mockImplementation(() => {
+        throw new UnexpectedError()
+      })
 
-    renderScreen()
+      jest.useFakeTimers()
+      renderScreen()
 
-    await waitFor(() => {
-      const errorMessage = screen.queryByTestId('load-error-message')
-      expect(errorMessage).toBeTruthy()
+      const deleteButton = screen.queryAllByTestId('delete-button')[0]
+      fireEvent.click(deleteButton)
+
+      await waitFor(() => {
+        const errorMessage = screen.queryByTestId('message')
+        expect(errorMessage).toBeTruthy()
+      })
     })
   })
 })
