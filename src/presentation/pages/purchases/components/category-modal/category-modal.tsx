@@ -12,7 +12,7 @@ type Props = {
 
 const CategoryModal: React.FC<Props> = ({ setOpen }: Props) => {
   const dispatch = useAppDispatch()
-  const { categories, loading, errorMessage } = useAppSelector(state => state.category)
+  const { categories, loading, error, type } = useAppSelector(state => state.category)
 
   useEffect(() => {
     dispatch(loadCategoryRequest())
@@ -22,10 +22,27 @@ const CategoryModal: React.FC<Props> = ({ setOpen }: Props) => {
     dispatch(deleteCategoryRequest(id))
   }
 
+  const render = (): JSX.Element => {
+    if (error && type === 'load') {
+      return (
+        <h1 className={Styles.title_message} data-testid="load-error-message">Ocorreu um Erro!<br/>Tente Novamente</h1>
+      )
+    } else {
+      return (
+        <>
+          <AddButton action={() => {
+            console.log('add-category')
+          }} />
+          {renderCategories()}
+        </>
+      )
+    }
+  }
+
   const renderCategories = (): JSX.Element => {
     if (categories.length === 0) {
       return (
-        <h1 className={Styles.no_categories} data-testid="no-category-message">Criar Categoria</h1>
+        <h1 className={Styles.title_message} data-testid="no-category-message">Criar Categoria</h1>
       )
     } else {
       return (
@@ -45,10 +62,7 @@ const CategoryModal: React.FC<Props> = ({ setOpen }: Props) => {
     <Modal title={'Categorias'} setOpen={setOpen}>
       <Container className={Styles.container}>
         <WithLoading loadingClass={Styles.spinner} loading={loading}>
-          <AddButton action={() => {
-            console.log('add-category')
-          }} />
-          {renderCategories()}
+          {render()}
         </WithLoading>
       </Container>
     </Modal>

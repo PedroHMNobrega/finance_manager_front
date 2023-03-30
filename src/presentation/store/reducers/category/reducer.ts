@@ -3,60 +3,71 @@ import { createSlice } from '@reduxjs/toolkit'
 
 type CategoryState = {
   categories: Category[]
-  errorMessage: string
+  error: {
+    name: string
+    message: string
+  }
   loading: boolean
+  type: string
 }
 
 const initialState: CategoryState = {
   categories: [],
-  errorMessage: '',
-  loading: false
+  error: null,
+  loading: false,
+  type: ''
 }
 
 const loadCategoriesReducers = {
   loadCategoryRequest: (state) => {
     state.loading = true
-    state.errorMessage = ''
+    state.error = null
+    state.type = 'load'
   },
   loadCategorySuccess: (state, { payload }) => {
     state.loading = false
+    state.type = ''
     state.categories = payload
   },
   loadCategoryFail: (state, { payload }) => {
     state.loading = false
-    state.errorMessage = payload
+    state.error = payload
   }
 }
 
 const deleteCategoryReducers = {
   deleteCategoryRequest: (state) => {
     state.loading = true
-    state.errorMessage = ''
+    state.error = null
+    state.type = 'delete'
   },
   deleteCategorySuccess: (state, { payload }) => {
     state.loading = false
+    state.type = ''
     state.categories = state.categories.filter(category => {
       return category.id !== payload
     })
   },
   deleteCategoryFail: (state, { payload }) => {
     state.loading = false
-    state.errorMessage = payload
+    state.error = payload
   }
 }
 
 const createCategoryReducers = {
   createCategoryRequest: (state) => {
     state.loading = true
-    state.errorMessage = ''
+    state.error = null
+    state.type = 'create'
   },
   createCategorySuccess: (state, { payload }) => {
     state.loading = false
+    state.type = ''
     state.categories = state.categories.push(payload)
   },
   createCategoryFail: (state, { payload }) => {
     state.loading = false
-    state.errorMessage = payload
+    state.error = payload
   }
 }
 

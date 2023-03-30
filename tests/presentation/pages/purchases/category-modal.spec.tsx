@@ -6,6 +6,7 @@ import { mockMakeStore } from '@/tests/main/mocks/mock-redux-store-factory'
 import { SagaUseCases } from '@/presentation/store/reducers/root-saga'
 import { mockCategoryList, mockJwt } from '@/tests/domain/mocks'
 import { ToolkitStore } from '@reduxjs/toolkit/dist/configureStore'
+import { UnexpectedError } from '@/domain/errors'
 
 type SutType = {
   renderScreen: Function
@@ -64,6 +65,9 @@ describe('CategoryModal Component', () => {
 
       const categoriesWrapper = screen.queryByTestId('categories-wrapper')
       expect(categoriesWrapper).toBeTruthy()
+
+      const errorMessage = screen.queryByTestId('load-error-message')
+      expect(errorMessage).toBeNull()
     })
   })
 
@@ -114,5 +118,20 @@ describe('CategoryModal Component', () => {
 
     const children = withLoading.children
     expect(children.length).toBe(2)
+  })
+
+  it('should display load error message on loading error', async () => {
+    const { renderScreen, sagaUsecases } = makeSut()
+    const loadCategories = sagaUsecases.loadCategoriesUsecase.loadAll as jest.Mock
+    loadCategories.mockImplementationOnce(() => {
+      throw new UnexpectedError()
+    })
+
+    renderScreen()
+
+    await waitFor(() => {
+      const errorMessage = screen.queryByTestId('load-error-message')
+      expect(errorMessage).toBeTruthy()
+    })
   })
 })

@@ -37,7 +37,10 @@ class CategorySaga implements SagaInterface {
         const response = yield call(loadCategoriesUsecase.loadAll, { token: token })
         yield put(loadCategorySuccess(response))
       } catch (e) {
-        yield put(loadCategoryFail(e.message))
+        yield put(loadCategoryFail({
+          name: e.name,
+          message: e.message
+        }))
       }
     }
   }
@@ -54,7 +57,10 @@ class CategorySaga implements SagaInterface {
         })
         yield put(deleteCategorySuccess(id))
       } catch (e) {
-        yield put(deleteCategoryFail(e.message))
+        yield put(deleteCategoryFail({
+          name: e.name,
+          message: e.message
+        }))
       }
     }
   }
@@ -71,7 +77,10 @@ class CategorySaga implements SagaInterface {
         })
         yield put(createCategorySuccess(category))
       } catch (e) {
-        yield put(createCategoryFail(e.message))
+        yield put(createCategoryFail({
+          name: e.name,
+          message: e.message
+        }))
       }
     }
   }

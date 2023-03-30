@@ -55,7 +55,10 @@ describe('CreateCategorySaga', () => {
     expect(result.length).toBe(1)
     expect(result[0]).toStrictEqual({
       type: 'category/createCategoryFail',
-      payload: errorMessage
+      payload: {
+        name: 'Error',
+        message: errorMessage
+      }
     })
   })
 
