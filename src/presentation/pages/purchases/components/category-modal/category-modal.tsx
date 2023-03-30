@@ -4,6 +4,7 @@ import { AddButton, DeleteButton, Modal } from '@/presentation/components'
 import Container from '@/presentation/components/container/container'
 import { useAppDispatch, useAppSelector } from '@/presentation/store/hooks'
 import { deleteCategoryRequest, loadCategoryRequest } from '@/presentation/store/reducers/category/reducer'
+import WithLoading from '@/presentation/components/with-loading/with-loading'
 
 type Props = {
   setOpen: Function
@@ -43,10 +44,12 @@ const CategoryModal: React.FC<Props> = ({ setOpen }: Props) => {
   return (
     <Modal title={'Categorias'} setOpen={setOpen}>
       <Container className={Styles.container}>
-        <AddButton action={() => {
-          console.log('add-category')
-        }} />
-        {renderCategories()}
+        <WithLoading loadingClass={Styles.spinner} loading={loading}>
+          <AddButton action={() => {
+            console.log('add-category')
+          }} />
+          {renderCategories()}
+        </WithLoading>
       </Container>
     </Modal>
   )

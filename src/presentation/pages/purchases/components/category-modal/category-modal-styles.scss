@@ -4,6 +4,14 @@ $border: 1px solid $borderColor;
 
 .container {
   min-height: 300px;
+  position: relative;
+
+  .spinner {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -80%);
+  }
 }
 
 .no_categories {
