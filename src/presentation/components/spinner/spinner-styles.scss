@@ -1,21 +1,22 @@
 @import "../../styles/colors.scss";
 
 .spinner {
+  --size: 1;
   display: inline-block;
   position: relative;
-  width: 80px;
-  height: 80px;
+  width: calc(80px / var(--size));
+  height: calc(80px / var(--size));
 
   div {
     animation: spinner 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
-    transform-origin: 40px 40px;
+    transform-origin: calc(40px / var(--size)) calc(40px / var(--size));
 
     &:after {
       content: " ";
       display: block;
       position: absolute;
-      width: 7px;
-      height: 7px;
+      width: calc(7px / var(--size));
+      height: calc(7px / var(--size));
       border-radius: 50%;
       background: $primaryLight;
       margin: -4px 0 0 -4px;
@@ -26,8 +27,8 @@
     }
 
     &:nth-child(1):after {
-      top: 63px;
-      left: 63px;
+      top: calc(63px / var(--size));
+      left: calc(63px / var(--size));
     }
 
     &:nth-child(2) {
@@ -35,8 +36,8 @@
     }
 
     &:nth-child(2):after {
-      top: 68px;
-      left: 56px;
+      top: calc(68px / var(--size));
+      left: calc(56px / var(--size));
     }
 
     &:nth-child(3) {
@@ -44,8 +45,8 @@
     }
 
     &:nth-child(3):after {
-      top: 71px;
-      left: 48px;
+      top: calc(71px / var(--size));
+      left: calc(48px / var(--size));
     }
 
     &:nth-child(4) {
@@ -53,8 +54,8 @@
     }
 
     &:nth-child(4):after {
-      top: 72px;
-      left: 40px;
+      top: calc(72px / var(--size));
+      left: calc(40px / var(--size));
     }
 
     &:nth-child(5) {
@@ -62,8 +63,8 @@
     }
 
     &:nth-child(5):after {
-      top: 71px;
-      left: 32px;
+      top: calc(71px / var(--size));
+      left: calc(32px / var(--size));
     }
 
     &:nth-child(6) {
@@ -71,8 +72,8 @@
     }
 
     &:nth-child(6):after {
-      top: 68px;
-      left: 24px;
+      top: calc(68px / var(--size));
+      left: calc(24px / var(--size));
     }
 
     &:nth-child(7) {
@@ -80,8 +81,8 @@
     }
 
     &:nth-child(7):after {
-      top: 63px;
-      left: 17px;
+      top: calc(63px / var(--size));
+      left: calc(17px / var(--size));
     }
 
     &:nth-child(8) {
@@ -89,8 +90,8 @@
     }
 
     &:nth-child(8):after {
-      top: 56px;
-      left: 12px;
+      top: calc(56px / var(--size));
+      left: calc(12px / var(--size));
     }
   }
 
