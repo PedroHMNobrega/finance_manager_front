@@ -8,6 +8,7 @@ import { mockCategoryList, mockJwt } from '@/tests/domain/mocks'
 import { ToolkitStore } from '@reduxjs/toolkit/dist/configureStore'
 
 type SutType = {
+  renderScreen: Function
   setOpenSpy: jest.Mock
   sagaUsecases: SagaUseCases
   store: ToolkitStore
@@ -15,18 +16,24 @@ type SutType = {
 
 const makeSut = (categories = mockCategoryList()): SutType => {
   const setOpenSpy = jest.fn()
-  const { store, sagaUsecases } = mockMakeStore()
+  const {
+    store,
+    sagaUsecases
+  } = mockMakeStore()
 
   const loadCategories = sagaUsecases.loadCategoriesUsecase.loadAll as jest.Mock
   loadCategories.mockReturnValue(categories)
 
-  render(
-    <Provider store={store}>
-      <CategoryModal setOpen={setOpenSpy} />
-    </Provider>
-  )
+  const renderScreen = (): void => {
+    render(
+      <Provider store={store}>
+        <CategoryModal setOpen={setOpenSpy}/>
+      </Provider>
+    )
+  }
 
   return {
+    renderScreen,
     setOpenSpy,
     sagaUsecases,
     store
@@ -35,7 +42,8 @@ const makeSut = (categories = mockCategoryList()): SutType => {
 
 describe('CategoryModal Component', () => {
   it('should render no category message if no category is returned', async () => {
-    makeSut([])
+    const { renderScreen } = makeSut([])
+    renderScreen()
 
     await waitFor(() => {
       const h1 = screen.queryByTestId('no-category-message')
@@ -44,7 +52,8 @@ describe('CategoryModal Component', () => {
   })
 
   it('should render categories if any category is returned', async () => {
-    const { sagaUsecases } = makeSut()
+    const { sagaUsecases, renderScreen } = makeSut()
+    renderScreen()
 
     const loadCategories = sagaUsecases.loadCategoriesUsecase.loadAll as jest.Mock
 
@@ -59,7 +68,8 @@ describe('CategoryModal Component', () => {
   })
 
   it('should call delete usecase with correct values when DeleteButton is clicked', async () => {
-    const { sagaUsecases } = makeSut()
+    const { sagaUsecases, renderScreen } = makeSut()
+    renderScreen()
 
     const deleteCategory = sagaUsecases.deleteCategoryUsecase.delete as jest.Mock
     const deleteButtons = screen.getAllByTestId('delete-button')
@@ -76,7 +86,9 @@ describe('CategoryModal Component', () => {
   })
 
   it('should delete correct category', async () => {
-    makeSut()
+    const { renderScreen } = makeSut()
+    renderScreen()
+
     const deleteButtons = screen.getAllByTestId('delete-button')
     const buttonToBeDeleted = deleteButtons[0]
     const expectedButton = deleteButtons[1]
