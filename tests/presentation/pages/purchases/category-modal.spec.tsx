@@ -42,82 +42,101 @@ const makeSut = (categories = mockCategoryList()): SutType => {
 }
 
 describe('CategoryModal Component', () => {
-  it('should render no category message if no category is returned', async () => {
-    const { renderScreen } = makeSut([])
-    renderScreen()
+  describe('Load', () => {
+    it('should render no category message if no category is returned', async () => {
+      const { renderScreen } = makeSut([])
+      renderScreen()
 
-    await waitFor(() => {
-      const h1 = screen.queryByTestId('no-category-message')
-      expect(h1.textContent).toBe('Criar Categoria')
+      await waitFor(() => {
+        const h1 = screen.queryByTestId('no-category-message')
+        expect(h1.textContent).toBe('Criar Categoria')
+      })
     })
-  })
 
-  it('should render categories if any category is returned', async () => {
-    const { sagaUsecases, renderScreen } = makeSut()
-    renderScreen()
+    it('should render categories if any category is returned', async () => {
+      const { sagaUsecases, renderScreen } = makeSut()
+      renderScreen()
 
-    const loadCategories = sagaUsecases.loadCategoriesUsecase.loadAll as jest.Mock
+      const loadCategories = sagaUsecases.loadCategoriesUsecase.loadAll as jest.Mock
 
-    await waitFor(() => {
-      expect(loadCategories).toHaveBeenCalled()
-      const h1 = screen.queryByTestId('no-category-message')
-      expect(h1).toBeNull()
+      await waitFor(() => {
+        expect(loadCategories).toHaveBeenCalled()
+        const h1 = screen.queryByTestId('no-category-message')
+        expect(h1).toBeNull()
 
-      const categoriesWrapper = screen.queryByTestId('categories-wrapper')
-      expect(categoriesWrapper).toBeTruthy()
+        const categoriesWrapper = screen.queryByTestId('categories-wrapper')
+        expect(categoriesWrapper).toBeTruthy()
 
-      const errorMessage = screen.queryByTestId('load-error-message')
-      expect(errorMessage).toBeNull()
+        const errorMessage = screen.queryByTestId('load-error-message')
+        expect(errorMessage).toBeNull()
+      })
     })
-  })
 
-  it('should call delete usecase with correct values when DeleteButton is clicked', async () => {
-    const { sagaUsecases, renderScreen } = makeSut()
-    renderScreen()
+    it('should display loading spinner on loadCategories load', () => {
+      const { renderScreen } = makeSut()
+      renderScreen()
 
-    const deleteCategory = sagaUsecases.deleteCategoryUsecase.delete as jest.Mock
-    const deleteButtons = screen.getAllByTestId('delete-button')
-    const firstButton = deleteButtons[0]
+      const withLoading = screen.queryByTestId('with-loading')
+      expect(withLoading).toBeTruthy()
 
-    fireEvent.click(firstButton)
+      const children = withLoading.children
+      expect(children.length).toBe(2)
+    })
 
-    await waitFor(() => {
-      expect(deleteCategory).toHaveBeenCalledWith({
-        id: parseInt(firstButton.id),
-        token: mockJwt()
+    it('should display load error message on loading error', async () => {
+      const { renderScreen, sagaUsecases } = makeSut()
+      const loadCategories = sagaUsecases.loadCategoriesUsecase.loadAll as jest.Mock
+      loadCategories.mockImplementationOnce(() => {
+        throw new UnexpectedError()
+      })
+
+      renderScreen()
+
+      await waitFor(() => {
+        const errorMessage = screen.queryByTestId('load-error-message')
+        expect(errorMessage).toBeTruthy()
       })
     })
   })
 
-  it('should delete correct category', async () => {
-    const { renderScreen } = makeSut()
-    renderScreen()
+  describe('Delete', () => {
+    it('should call delete usecase with correct values when DeleteButton is clicked', async () => {
+      const { sagaUsecases, renderScreen } = makeSut()
+      renderScreen()
 
-    const deleteButtons = screen.getAllByTestId('delete-button')
-    const buttonToBeDeleted = deleteButtons[0]
-    const expectedButton = deleteButtons[1]
+      const deleteCategory = sagaUsecases.deleteCategoryUsecase.delete as jest.Mock
+      const deleteButtons = screen.getAllByTestId('delete-button')
+      const firstButton = deleteButtons[0]
 
-    const categoriesWrapper = screen.queryByTestId('categories-wrapper')
-    expect(categoriesWrapper.childElementCount).toBe(2)
+      fireEvent.click(firstButton)
 
-    fireEvent.click(buttonToBeDeleted)
-
-    await waitFor(() => {
-      expect(categoriesWrapper.childElementCount).toBe(1)
-      const remainingButton = screen.getByTestId('delete-button')
-      expect(remainingButton.id).toEqual(expectedButton.id)
+      await waitFor(() => {
+        expect(deleteCategory).toHaveBeenCalledWith({
+          id: parseInt(firstButton.id),
+          token: mockJwt()
+        })
+      })
     })
-  })
 
-  it('should display loading spinner on loadCategories load', () => {
-    const { renderScreen } = makeSut()
-    renderScreen()
+    it('should delete correct category', async () => {
+      const { renderScreen } = makeSut()
+      renderScreen()
 
-    const withLoading = screen.queryByTestId('with-loading')
-    expect(withLoading).toBeTruthy()
+      const deleteButtons = screen.getAllByTestId('delete-button')
+      const buttonToBeDeleted = deleteButtons[0]
+      const expectedButton = deleteButtons[1]
 
-    const children = withLoading.children
-    expect(children.length).toBe(2)
+      const categoriesWrapper = screen.queryByTestId('categories-wrapper')
+      expect(categoriesWrapper.childElementCount).toBe(2)
+
+      fireEvent.click(buttonToBeDeleted)
+
+      await waitFor(() => {
+        expect(categoriesWrapper.childElementCount).toBe(1)
+        const remainingButton = screen.getByTestId('delete-button')
+        expect(remainingButton.id).toEqual(expectedButton.id)
+      })
+    })
   })
 
   it('should display load error message on loading error', async () => {
