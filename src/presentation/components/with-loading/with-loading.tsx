@@ -9,10 +9,10 @@ type Props = {
 
 const WithLoading: React.FC<Props> = (props: Props) => {
   return (
-    <>
+    <div data-testid="with-loading">
       { props.loading && <Spinner className={props.loadingClass} />}
       { !props.loading && props.children}
-    </>
+    </div>
   )
 }
 

@@ -104,4 +104,15 @@ describe('CategoryModal Component', () => {
       expect(remainingButton.id).toEqual(expectedButton.id)
     })
   })
+
+  it('should display loading spinner on loadCategories load', () => {
+    const { renderScreen } = makeSut()
+    renderScreen()
+
+    const withLoading = screen.queryByTestId('with-loading')
+    expect(withLoading).toBeTruthy()
+
+    const children = withLoading.children
+    expect(children.length).toBe(2)
+  })
 })
