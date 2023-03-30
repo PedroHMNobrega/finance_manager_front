@@ -5,6 +5,7 @@ import Container from '@/presentation/components/container/container'
 import { useAppDispatch, useAppSelector } from '@/presentation/store/hooks'
 import { deleteCategoryRequest, loadCategoryRequest } from '@/presentation/store/reducers/category/reducer'
 import WithLoading from '@/presentation/components/with-loading/with-loading'
+import Message, { MessageType } from '@/presentation/components/message/message'
 
 type Props = {
   setOpen: Function
@@ -30,6 +31,7 @@ const CategoryModal: React.FC<Props> = ({ setOpen }: Props) => {
     } else {
       return (
         <>
+          <Message message={error ? error.message : ''} type={MessageType.ERROR} />
           <AddButton action={() => {
             console.log('add-category')
           }} />
