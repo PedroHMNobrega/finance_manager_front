@@ -1,0 +1,28 @@
+@import "../../styles/colors.scss";
+
+.message {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  text-align: center;
+  padding: 10px 0;
+  z-index: 100000000;
+}
+
+.message_text {
+  font-size: 18px;
+  color: $white;
+}
+
+.message_error {
+  background-color: $red;
+}
+
+.message_success {
+  background-color: $green;
+}
+
+.message_alert {
+  background-color: $yellow;
+}
