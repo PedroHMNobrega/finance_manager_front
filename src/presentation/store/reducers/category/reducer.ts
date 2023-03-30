@@ -8,6 +8,7 @@ type CategoryState = {
     message: string
   }
   loading: boolean
+  loadingId: number
   type: string
 }
 
@@ -15,6 +16,7 @@ const initialState: CategoryState = {
   categories: [],
   error: null,
   loading: false,
+  loadingId: null,
   type: ''
 }
 
@@ -36,13 +38,15 @@ const loadCategoriesReducers = {
 }
 
 const deleteCategoryReducers = {
-  deleteCategoryRequest: (state) => {
+  deleteCategoryRequest: (state, { payload }) => {
     state.loading = true
+    state.loadingId = payload
     state.error = null
     state.type = 'delete'
   },
   deleteCategorySuccess: (state, { payload }) => {
     state.loading = false
+    state.loadingData = null
     state.type = ''
     state.categories = state.categories.filter(category => {
       return category.id !== payload
@@ -50,6 +54,7 @@ const deleteCategoryReducers = {
   },
   deleteCategoryFail: (state, { payload }) => {
     state.loading = false
+    state.loadingData = null
     state.error = payload
   }
 }

@@ -13,14 +13,16 @@ type Props = {
 
 const CategoryModal: React.FC<Props> = ({ setOpen }: Props) => {
   const dispatch = useAppDispatch()
-  const { categories, loading, error, type } = useAppSelector(state => state.category)
+  const { categories, loading, error, type, loadingId } = useAppSelector(state => state.category)
 
   useEffect(() => {
     dispatch(loadCategoryRequest())
   }, [dispatch])
 
   const handleDelete = (id): void => {
-    dispatch(deleteCategoryRequest(id))
+    if (!loading) {
+      dispatch(deleteCategoryRequest(id))
+    }
   }
 
   const render = (): JSX.Element => {
@@ -52,7 +54,7 @@ const CategoryModal: React.FC<Props> = ({ setOpen }: Props) => {
           {categories.map(category => (
             <div key={category.id} className={Styles.category_container}>
               <span>{category.name}</span>
-              <DeleteButton id={category.id} callback={handleDelete}/>
+              <DeleteButton id={category.id} callback={handleDelete} loading={loading && loadingId === category.id}/>
             </div>
           ))}
         </div>
@@ -63,7 +65,7 @@ const CategoryModal: React.FC<Props> = ({ setOpen }: Props) => {
   return (
     <Modal title={'Categorias'} setOpen={setOpen}>
       <Container className={Styles.container}>
-        <WithLoading loadingClass={Styles.spinner} loading={loading}>
+        <WithLoading loadingClass={Styles.spinner} loading={loading && type === 'load'}>
           {render()}
         </WithLoading>
       </Container>
