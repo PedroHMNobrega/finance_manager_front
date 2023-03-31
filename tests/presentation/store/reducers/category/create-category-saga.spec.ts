@@ -3,7 +3,7 @@ import { Create, CreateCategoryParams, GetJwt } from '@/domain/usecases'
 import { Category } from '@/domain/models'
 import { createSpy, getJwtSpy } from '@/tests/data/mocks'
 import { sagaExec } from '@/tests/presentation/helpers/saga-helper'
-import { mockJwt } from '@/tests/domain/mocks'
+import { mockCategory, mockJwt } from '@/tests/domain/mocks'
 
 type SutTypes = {
   sut: CategorySaga
@@ -66,7 +66,7 @@ describe('CreateCategorySaga', () => {
 
   it('should call createCategorySuccess with correct values on success', async () => {
     const { sut, createCategorySpy } = makeSut()
-    const expectedResponse = 'any-response'
+    const expectedResponse = mockCategory(235)
     const createCategory = createCategorySpy.create as jest.Mock
     createCategory.mockResolvedValue(expectedResponse)
 
@@ -74,7 +74,7 @@ describe('CreateCategorySaga', () => {
     expect(result.length).toBe(1)
     expect(result[0]).toStrictEqual({
       type: 'category/createCategorySuccess',
-      payload: params
+      payload: expectedResponse
     })
   })
 })

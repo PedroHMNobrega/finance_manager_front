@@ -71,13 +71,13 @@ class CategorySaga implements SagaInterface {
       try {
         const token = getJwt.get()
         const category = action.payload
-        yield call(createCategoryUsecase.create, {
+        const response = yield call(createCategoryUsecase.create, {
           token: token,
           body: {
             name: category
           }
         })
-        yield put(createCategorySuccess(category))
+        yield put(createCategorySuccess(response))
       } catch (e) {
         yield put(createCategoryFail({
           name: e.name,

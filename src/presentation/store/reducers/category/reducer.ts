@@ -60,7 +60,7 @@ const deleteCategoryReducers = {
 }
 
 const createCategoryReducers = {
-  createCategoryRequest: (state) => {
+  createCategoryRequest: (state, { payload }) => {
     state.loading = true
     state.error = null
     state.type = 'create'
@@ -68,7 +68,7 @@ const createCategoryReducers = {
   createCategorySuccess: (state, { payload }) => {
     state.loading = false
     state.type = ''
-    state.categories = state.categories.push(payload)
+    state.categories = [...state.categories, payload]
   },
   createCategoryFail: (state, { payload }) => {
     state.loading = false

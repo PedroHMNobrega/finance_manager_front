@@ -18,7 +18,7 @@ export class RemoteCreate<P, R> implements Create<P, R> {
       }
     })
     switch (httpResponse.statusCode) {
-      case HttpStatusCode.ok: return httpResponse.body
+      case HttpStatusCode.created: return httpResponse.body
       case HttpStatusCode.unauthorized: throw new InvalidCredentialsError()
       default: throw new UnexpectedError()
     }

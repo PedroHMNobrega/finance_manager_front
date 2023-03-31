@@ -1,11 +1,12 @@
 import React, { useEffect } from 'react'
 import Styles from './category-modal-styles.scss'
-import { AddButton, DeleteButton, Modal } from '@/presentation/components'
+import { DeleteButton, Modal } from '@/presentation/components'
 import Container from '@/presentation/components/container/container'
 import { useAppDispatch, useAppSelector } from '@/presentation/store/hooks'
 import { deleteCategoryRequest, loadCategoryRequest } from '@/presentation/store/reducers/category/reducer'
 import WithLoading from '@/presentation/components/with-loading/with-loading'
 import Message, { MessageType } from '@/presentation/components/message/message'
+import AddCategoryButton from '@/presentation/pages/purchases/components/add-category-button/add-category-button'
 
 type Props = {
   setOpen: Function
@@ -34,9 +35,7 @@ const CategoryModal: React.FC<Props> = ({ setOpen }: Props) => {
       return (
         <>
           <Message message={error ? error.message : ''} type={MessageType.ERROR} />
-          <AddButton action={() => {
-            console.log('add-category')
-          }} />
+          <AddCategoryButton />
           {renderCategories()}
         </>
       )

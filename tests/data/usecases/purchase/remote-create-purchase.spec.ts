@@ -15,6 +15,9 @@ const url = 'any-url'
 
 const makeSut = (): SutTypes => {
   const httpClientSpy = new HttpClientSpy<Purchase>()
+  httpClientSpy.response = {
+    statusCode: HttpStatusCode.created
+  }
   const sut = new RemoteCreate<CreatePurchaseParams, Purchase>(url, httpClientSpy)
   return {
     sut,
@@ -59,11 +62,11 @@ describe('RemoteCreatePurchase', () => {
     await expect(promise).rejects.toThrow(new UnexpectedError())
   })
 
-  it('Should return Purchase if HttpClient returns 200', async () => {
+  it('Should return Purchase if HttpClient returns 201', async () => {
     const { sut, httpClientSpy } = makeSut()
     const httpResult = mockPurchase(1)
     httpClientSpy.response = {
-      statusCode: HttpStatusCode.ok,
+      statusCode: HttpStatusCode.created,
       body: httpResult
     }
     const params = mockCreatePurchaseParams()

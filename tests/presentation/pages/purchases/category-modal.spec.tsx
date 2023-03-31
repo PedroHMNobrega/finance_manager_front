@@ -1,11 +1,12 @@
 import React from 'react'
-import { fireEvent, screen, waitFor } from '@testing-library/react'
+import { act, fireEvent, screen, waitFor } from '@testing-library/react'
 import CategoryModal from '@/presentation/pages/purchases/components/category-modal/category-modal'
 import { SagaUseCases } from '@/presentation/store/reducers/root-saga'
-import { mockCategoryList, mockJwt } from '@/tests/domain/mocks'
+import { mockCategory, mockCategoryList, mockJwt } from '@/tests/domain/mocks'
 import { ToolkitStore } from '@reduxjs/toolkit/dist/configureStore'
 import { UnexpectedError } from '@/domain/errors'
 import { renderWithProvider } from '@/tests/presentation/mocks'
+import { populateField } from '@/tests/presentation/helpers/form-helper'
 
 type SutType = {
   renderScreen: Function
@@ -146,6 +147,39 @@ describe('CategoryModal Component', () => {
       await waitFor(() => {
         const errorMessage = screen.queryByTestId('message')
         expect(errorMessage).toBeTruthy()
+      })
+    })
+  })
+
+  describe('Create', () => {
+    it('should display correct category on create', async () => {
+      const { renderScreen, sagaUsecases } = makeSut()
+      const category = mockCategory(23)
+
+      const createCategory = sagaUsecases.createCategoryUsecase.create as jest.Mock
+      createCategory.mockReturnValueOnce(category)
+
+      renderScreen()
+
+      const categoriesWrapper = screen.queryByTestId('categories-wrapper')
+      expect(categoriesWrapper.childElementCount).toBe(2)
+
+      const addButton = screen.queryByTestId('add-button')
+      act(() => {
+        fireEvent.click(addButton)
+      })
+
+      populateField('create-category-input', category.name)
+
+      const createButton = screen.queryByTestId('create-category-button')
+      act(() => {
+        fireEvent.click(createButton)
+      })
+
+      await waitFor(() => {
+        expect(categoriesWrapper.childElementCount).toBe(3)
+        const createdCategory = categoriesWrapper.children[2]
+        expect(createdCategory.children[0].textContent).toBe(category.name)
       })
     })
   })
