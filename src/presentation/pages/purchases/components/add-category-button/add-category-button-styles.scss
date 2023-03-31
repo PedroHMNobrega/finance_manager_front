@@ -1,0 +1,35 @@
+@import "../../../../styles/colors.scss";
+
+.addCategoryButtonContainer {
+  display: flex;
+  align-items: center;
+}
+
+.createCategoryWrapper {
+  margin-left: 10px;
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  height: 35px;
+
+  input {
+    width: 80%;
+    border: 1px solid $primaryLight;
+    line-height: 100%;
+    border-radius: 4px;
+    padding: 0 30px 0 8px;
+
+    &:focus {
+      outline-color: $primaryLight;
+    }
+  }
+
+  button {
+    width: 18%;
+    border: none;
+    color: white;
+    border-radius: 4px;
+    background-color: $primaryLight;
+    font-weight: bold;
+  }
+}
