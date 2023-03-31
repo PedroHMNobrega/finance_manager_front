@@ -5,6 +5,7 @@ import Login from '@/presentation/pages/login/login'
 import { AuthenticationSpy, renderWithHistory, ValidationStub } from '@/tests/presentation/mocks'
 import { InvalidCredentialsError } from '@/domain/errors'
 import { createMemoryHistory } from 'history'
+import { populateField } from '@/tests/presentation/helpers/form-helper'
 
 type SutTypes = {
   authenticationSpy: AuthenticationSpy
@@ -33,12 +34,6 @@ const makeSut = (params?: SutParams): SutTypes => {
   return {
     authenticationSpy
   }
-}
-
-const populateField = (testId, value): HTMLInputElement => {
-  const input = screen.getByTestId(testId) as HTMLInputElement
-  fireEvent.input(input, { target: { value: value } })
-  return input
 }
 
 type ValidSubmitTypes = {
