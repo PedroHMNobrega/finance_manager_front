@@ -1,12 +1,11 @@
 import React from 'react'
-import { fireEvent, render, screen, waitFor } from '@testing-library/react'
+import { fireEvent, screen, waitFor } from '@testing-library/react'
 import CategoryModal from '@/presentation/pages/purchases/components/category-modal/category-modal'
-import { Provider } from 'react-redux'
-import { mockMakeStore } from '@/tests/main/mocks/mock-redux-store-factory'
 import { SagaUseCases } from '@/presentation/store/reducers/root-saga'
 import { mockCategoryList, mockJwt } from '@/tests/domain/mocks'
 import { ToolkitStore } from '@reduxjs/toolkit/dist/configureStore'
 import { UnexpectedError } from '@/domain/errors'
+import { renderWithProvider } from '@/tests/presentation/mocks'
 
 type SutType = {
   renderScreen: Function
@@ -17,21 +16,14 @@ type SutType = {
 
 const makeSut = (categories = mockCategoryList()): SutType => {
   const setOpenSpy = jest.fn()
-  const {
-    store,
-    sagaUsecases
-  } = mockMakeStore()
+  const Page: React.FC = () => (
+    <CategoryModal setOpen={setOpenSpy}/>
+  )
+
+  const { store, sagaUsecases, renderScreen } = renderWithProvider({ Page })
 
   const loadCategories = sagaUsecases.loadCategoriesUsecase.loadAll as jest.Mock
   loadCategories.mockReturnValue(categories)
-
-  const renderScreen = (): void => {
-    render(
-      <Provider store={store}>
-        <CategoryModal setOpen={setOpenSpy}/>
-      </Provider>
-    )
-  }
 
   return {
     renderScreen,
