@@ -2,16 +2,17 @@ import { HttpClient, HttpStatusCode } from '@/data/protocols/http'
 import { InvalidCredentialsError, UnexpectedError } from '@/domain/errors'
 import { Create, CreateParams } from '@/domain/usecases'
 
-export class RemoteCreate<P extends CreateParams, R> implements Create<P, R> {
+export class RemoteCreate<P, R> implements Create<P, R> {
   constructor (
     private readonly url: string,
     private readonly httpClient: HttpClient<R>
   ) {}
 
-  create = async (params: P): Promise<R> => {
+  create = async (params: CreateParams<P>): Promise<R> => {
     const httpResponse = await this.httpClient.request({
       url: this.url,
       method: 'post',
+      body: params.body,
       headers: {
         Authorization: `Bearer ${params.token}`
       }

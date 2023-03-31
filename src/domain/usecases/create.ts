@@ -1,7 +1,8 @@
-export type CreateParams = {
+export type CreateParams<P> = {
   token: string
+  body: P
 }
 
-export interface Create<P extends CreateParams, R> {
-  create(params: P): Promise<R>
+export interface Create<P, R> {
+  create(params: CreateParams<P>): Promise<R>
 }

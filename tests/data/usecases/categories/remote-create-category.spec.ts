@@ -33,6 +33,7 @@ describe('RemoteCreateCategory', () => {
     expect(httpClientSpy.headers).toEqual({
       Authorization: `Bearer ${params.token}`
     })
+    expect(httpClientSpy.body).toBe(params.body)
   })
 
   it('should throw InvalidCredientialsError if HttpClient returns 401', async () => {

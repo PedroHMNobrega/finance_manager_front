@@ -73,7 +73,9 @@ class CategorySaga implements SagaInterface {
         const category = action.payload
         yield call(createCategoryUsecase.create, {
           token: token,
-          category: category
+          body: {
+            name: category
+          }
         })
         yield put(createCategorySuccess(category))
       } catch (e) {

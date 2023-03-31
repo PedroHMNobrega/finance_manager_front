@@ -1,12 +1,12 @@
-import { CreateCategoryParams, DeleteCategoryParams, LoadCategoryListParams } from '@/domain/usecases'
+import { CreateCategoryParams, CreateParams, DeleteCategoryParams, LoadCategoryListParams } from '@/domain/usecases'
 import { Category } from '@/domain/models'
 
 export const mockLoadCategoryListParams = (): LoadCategoryListParams => ({
   token: 'any-token'
 })
 
-export const mockCreateCategoryParams = (): CreateCategoryParams => ({
-  category: mockCategory(null),
+export const mockCreateCategoryParams = (): CreateParams<CreateCategoryParams> => ({
+  body: mockCategory(null),
   token: 'any-token'
 })
 

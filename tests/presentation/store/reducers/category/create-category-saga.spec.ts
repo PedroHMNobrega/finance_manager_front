@@ -41,7 +41,9 @@ describe('CreateCategorySaga', () => {
     expect(createCategorySpy.create).toHaveBeenCalledTimes(1)
     expect(createCategorySpy.create).toHaveBeenCalledWith({
       token: mockJwt(),
-      category: params
+      body: {
+        name: params
+      }
     })
   })
 
