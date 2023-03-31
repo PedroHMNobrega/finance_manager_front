@@ -12,7 +12,7 @@ const AddButton: React.FC<Props> = ({ action }: Props) => {
   }
 
   return (
-    <button className={Styles.button} onClick={handleClick}>
+    <button className={Styles.button} onClick={handleClick} data-testid="add-button">
       <span className={Styles.add_symbol}>+</span>
     </button>
   )
