@@ -46,7 +46,7 @@ const deleteCategoryReducers = {
   },
   deleteCategorySuccess: (state, { payload }) => {
     state.loading = false
-    state.loadingData = null
+    state.loadingId = null
     state.type = ''
     state.categories = state.categories.filter(category => {
       return category.id !== payload
@@ -54,7 +54,7 @@ const deleteCategoryReducers = {
   },
   deleteCategoryFail: (state, { payload }) => {
     state.loading = false
-    state.loadingData = null
+    state.loadingId = null
     state.error = payload
   }
 }
