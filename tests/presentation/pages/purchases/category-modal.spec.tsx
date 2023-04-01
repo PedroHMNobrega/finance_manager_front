@@ -91,6 +91,9 @@ describe('CategoryModal Component', () => {
       await waitFor(() => {
         const errorMessage = screen.queryByTestId('load-error-message')
         expect(errorMessage).toBeTruthy()
+
+        const errorMessageAlert = screen.queryByTestId('message')
+        expect(errorMessageAlert).toBeNull()
       })
     })
   })
