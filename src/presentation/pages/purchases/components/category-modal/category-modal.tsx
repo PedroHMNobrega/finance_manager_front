@@ -61,7 +61,7 @@ const CategoryModal: React.FC<Props> = ({ setOpen }: Props) => {
   }
 
   return (
-    <Modal title={'Categorias'} setOpen={setOpen}>
+    <Modal title={'Categorias'} setOpen={setOpen} name='category-modal'>
       <Message message={(error && type !== 'load') ? error.message : ''} type={MessageType.ERROR} />
       <Container className={Styles.container}>
         <WithLoading loadingClass={Styles.spinner} loading={loading && type === 'load'}>

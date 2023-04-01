@@ -20,6 +20,10 @@ const CreatePurchaseModal: React.FC<Props> = ({ setOpen }: Props) => {
     mainError: ''
   })
 
+  const handleOpenModal = (): void => {
+    setOpenCategoryModal(true)
+  }
+
   return (
     <>
       <Modal title={'Adicionar Compra'} setOpen={setOpen}>
@@ -46,9 +50,7 @@ const CreatePurchaseModal: React.FC<Props> = ({ setOpen }: Props) => {
                   name: 'Compras'
                 }
               ]}/>
-              <AddButton action={() => {
-                console.log('Adicionar')
-              }}/>
+              <AddButton action={handleOpenModal}/>
             </div>
             <div className={Styles.button_container}>
               <SubmitButton title={'Criar'} disabled={false} className={Styles.button} />
