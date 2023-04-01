@@ -6,6 +6,7 @@ import { SagaUseCases } from '@/presentation/store/reducers/root-saga'
 import { ToolkitStore } from '@reduxjs/toolkit/dist/configureStore'
 import { clickButton, populateField } from '@/tests/presentation/helpers/form-helper'
 import { mockJwt } from '@/tests/domain/mocks'
+import { mockLoading } from '@/tests/presentation/helpers/saga-helper'
 
 type SutType = {
   renderScreen: Function
@@ -106,6 +107,27 @@ describe('AddCategoryButton Component', () => {
       clickButton(createButton)
 
       expect(input.value).toBe('')
+    })
+
+    it('should disable create button on loading', () => {
+      const { renderScreen, sagaUsecases } = makeSut()
+
+      const createCategoryMock = sagaUsecases.createCategoryUsecase.create as jest.Mock
+      mockLoading(createCategoryMock)
+
+      renderScreen()
+      openInput()
+
+      populateField('create-category-input', 'any-name')
+
+      const createButton = screen.queryByTestId('create-category-button') as HTMLButtonElement
+      clickButton(createButton)
+
+      expect(createButton.disabled).toBeTruthy()
+
+      clickButton(createButton)
+      clickButton(createButton)
+      expect(createCategoryMock).toHaveBeenCalledTimes(1)
     })
   })
 })

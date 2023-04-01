@@ -30,7 +30,7 @@ const AddCategoryButton: React.FC = () => {
       {showCreateCategory && (
         <div className={Styles.createCategoryWrapper} data-testid="create-category-wrapper">
           <input value={category} onChange={(event) => setCategory(event.target.value)} required data-testid="create-category-input" />
-          <button onClick={handleCreateButtonClick} data-testid="create-category-button">Criar</button>
+          <button disabled={loading} onClick={handleCreateButtonClick} data-testid="create-category-button">Criar</button>
         </div>
       )}
     </div>

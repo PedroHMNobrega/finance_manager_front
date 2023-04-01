@@ -14,3 +14,12 @@ export const sagaExec = async (saga, params = null): Promise<Action[]> => {
   )
   return dispatched
 }
+
+export const mockLoading = (mock: jest.Mock): void => {
+  jest.useFakeTimers()
+  mock.mockImplementation(async () => {
+    await new Promise(resolve => {
+      setTimeout(resolve, 2000)
+    })
+  })
+}
