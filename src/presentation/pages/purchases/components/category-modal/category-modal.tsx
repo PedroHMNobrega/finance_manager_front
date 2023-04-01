@@ -34,7 +34,6 @@ const CategoryModal: React.FC<Props> = ({ setOpen }: Props) => {
     } else {
       return (
         <>
-          <Message message={error ? error.message : ''} type={MessageType.ERROR} />
           <AddCategoryButton />
           {renderCategories()}
         </>
@@ -63,6 +62,7 @@ const CategoryModal: React.FC<Props> = ({ setOpen }: Props) => {
 
   return (
     <Modal title={'Categorias'} setOpen={setOpen}>
+      <Message message={error ? error.message : ''} type={MessageType.ERROR} />
       <Container className={Styles.container}>
         <WithLoading loadingClass={Styles.spinner} loading={loading && type === 'load'}>
           {render()}

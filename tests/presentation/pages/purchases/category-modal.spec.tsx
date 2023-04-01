@@ -152,34 +152,56 @@ describe('CategoryModal Component', () => {
   })
 
   describe('Create', () => {
+    const createCategory = (categoryName = 'any-category-name'): void => {
+      const addButton = screen.queryByTestId('add-button')
+      act(() => {
+        fireEvent.click(addButton)
+      })
+
+      populateField('create-category-input', categoryName)
+
+      const createButton = screen.queryByTestId('create-category-button')
+      act(() => {
+        fireEvent.click(createButton)
+      })
+    }
+
     it('should display correct category on create', async () => {
       const { renderScreen, sagaUsecases } = makeSut()
       const category = mockCategory(23)
 
-      const createCategory = sagaUsecases.createCategoryUsecase.create as jest.Mock
-      createCategory.mockReturnValueOnce(category)
+      const createCategoryMock = sagaUsecases.createCategoryUsecase.create as jest.Mock
+      createCategoryMock.mockReturnValueOnce(category)
 
       renderScreen()
 
       const categoriesWrapper = screen.queryByTestId('categories-wrapper')
       expect(categoriesWrapper.childElementCount).toBe(2)
 
-      const addButton = screen.queryByTestId('add-button')
-      act(() => {
-        fireEvent.click(addButton)
-      })
-
-      populateField('create-category-input', category.name)
-
-      const createButton = screen.queryByTestId('create-category-button')
-      act(() => {
-        fireEvent.click(createButton)
-      })
+      createCategory(category.name)
 
       await waitFor(() => {
         expect(categoriesWrapper.childElementCount).toBe(3)
         const createdCategory = categoriesWrapper.children[2]
         expect(createdCategory.children[0].textContent).toBe(category.name)
+      })
+    })
+
+    it('should display error message on create error', async () => {
+      const { renderScreen, sagaUsecases } = makeSut()
+      const createCategoryMock = sagaUsecases.createCategoryUsecase.create as jest.Mock
+      createCategoryMock.mockImplementation(() => {
+        throw new UnexpectedError()
+      })
+
+      jest.useFakeTimers()
+      renderScreen()
+
+      createCategory()
+
+      await waitFor(() => {
+        const errorMessage = screen.queryByTestId('message')
+        expect(errorMessage).toBeTruthy()
       })
     })
   })
