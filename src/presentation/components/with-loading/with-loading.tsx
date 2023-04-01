@@ -11,7 +11,7 @@ type Props = {
 
 const WithLoading: React.FC<Props> = (props: Props) => {
   return (
-    <div data-testid="with-loading">
+    <div>
       { props.loading && <Spinner className={props.loadingClass} size={props.size} />}
       { !props.loading && props.children}
     </div>

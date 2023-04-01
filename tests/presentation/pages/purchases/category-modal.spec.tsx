@@ -69,14 +69,15 @@ describe('CategoryModal Component', () => {
     })
 
     it('should display loading spinner on loadCategories load', () => {
-      const { renderScreen } = makeSut([])
+      const { renderScreen, sagaUsecases } = makeSut([])
+
+      const loadCategories = sagaUsecases.loadCategoriesUsecase.loadAll as jest.Mock
+      mockLoading(loadCategories)
+
       renderScreen()
 
-      const withLoading = screen.queryByTestId('with-loading')
-      expect(withLoading).toBeTruthy()
-
-      const children = withLoading.children
-      expect(children.length).toBe(2)
+      const spinner = screen.queryByTestId('spinner')
+      expect(spinner).toBeTruthy()
     })
 
     it('should display load error message on loading error', async () => {
