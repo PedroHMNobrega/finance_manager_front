@@ -7,3 +7,9 @@ export const populateField = (testId, value): HTMLInputElement => {
   })
   return input
 }
+
+export const clickButton = (button: HTMLButtonElement): void => {
+  act(() => {
+    fireEvent.click(button)
+  })
+}

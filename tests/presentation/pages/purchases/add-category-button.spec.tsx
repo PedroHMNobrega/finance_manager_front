@@ -1,10 +1,10 @@
 import React from 'react'
-import { act, fireEvent, screen } from '@testing-library/react'
+import { screen } from '@testing-library/react'
 import AddCategoryButton from '@/presentation/pages/purchases/components/add-category-button/add-category-button'
 import { renderWithProvider } from '@/tests/presentation/mocks'
 import { SagaUseCases } from '@/presentation/store/reducers/root-saga'
 import { ToolkitStore } from '@reduxjs/toolkit/dist/configureStore'
-import { populateField } from '@/tests/presentation/helpers/form-helper'
+import { clickButton, populateField } from '@/tests/presentation/helpers/form-helper'
 import { mockJwt } from '@/tests/domain/mocks'
 
 type SutType = {
@@ -28,10 +28,8 @@ const makeSut = (): SutType => {
 }
 
 const openInput = (): void => {
-  const addButton = screen.queryByTestId('add-button')
-  act(() => {
-    fireEvent.click(addButton)
-  })
+  const addButton = screen.queryByTestId('add-button') as HTMLButtonElement
+  clickButton(addButton)
 }
 
 describe('AddCategoryButton Component', () => {
@@ -61,13 +59,9 @@ describe('AddCategoryButton Component', () => {
       const { renderScreen } = makeSut()
       renderScreen()
 
-      const addButton = screen.queryByTestId('add-button')
-      act(() => {
-        fireEvent.click(addButton)
-      })
-      act(() => {
-        fireEvent.click(addButton)
-      })
+      const addButton = screen.queryByTestId('add-button') as HTMLButtonElement
+      clickButton(addButton)
+      clickButton(addButton)
 
       const createCategoryWrapper = screen.queryByTestId('create-category-wrapper')
       expect(createCategoryWrapper).toBeNull()
@@ -84,10 +78,8 @@ describe('AddCategoryButton Component', () => {
 
       populateField('create-category-input', categoryName)
 
-      const createButton = screen.queryByTestId('create-category-button')
-      act(() => {
-        fireEvent.click(createButton)
-      })
+      const createButton = screen.queryByTestId('create-category-button') as HTMLButtonElement
+      clickButton(createButton)
 
       expect(sagaUsecases.createCategoryUsecase.create).toHaveBeenCalledTimes(1)
       expect(sagaUsecases.createCategoryUsecase.create).toHaveBeenCalledWith({
@@ -110,10 +102,8 @@ describe('AddCategoryButton Component', () => {
 
       expect(input.value).toBe(categoryName)
 
-      const createButton = screen.queryByTestId('create-category-button')
-      act(() => {
-        fireEvent.click(createButton)
-      })
+      const createButton = screen.queryByTestId('create-category-button') as HTMLButtonElement
+      clickButton(createButton)
 
       expect(input.value).toBe('')
     })
