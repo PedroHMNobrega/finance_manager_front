@@ -7,6 +7,9 @@ import { ToolkitStore } from '@reduxjs/toolkit/dist/configureStore'
 import { UnexpectedError } from '@/domain/errors'
 import { renderWithProvider } from '@/tests/presentation/mocks'
 import { createCategory } from '@/tests/presentation/helpers/category-helper'
+import { clickButton } from '@/tests/presentation/helpers/form-helper'
+import { mockLoading } from '@/tests/presentation/helpers/saga-helper'
+import { queryElementByTestId } from '@/tests/presentation/helpers/query-helper'
 
 type SutType = {
   renderScreen: Function
@@ -129,6 +132,27 @@ describe('CategoryModal Component', () => {
         const remainingButton = screen.getByTestId('delete-button')
         expect(remainingButton.id).toEqual(expectedButton.id)
       })
+    })
+
+    it('should show loading spinner on correct category', () => {
+      const { renderScreen, sagaUsecases } = makeSut()
+
+      const deleteCategory = sagaUsecases.deleteCategoryUsecase.delete as jest.Mock
+      mockLoading(deleteCategory)
+
+      renderScreen()
+
+      const categoryWrapper = screen.queryByTestId('categories-wrapper')
+      const firstCategory = categoryWrapper.children[0]
+      const secondCategory = categoryWrapper.children[1]
+
+      expect(queryElementByTestId(firstCategory, 'spinner')).toBeNull()
+      expect(queryElementByTestId(secondCategory, 'spinner')).toBeNull()
+
+      clickButton(queryElementByTestId(firstCategory, 'delete-button') as HTMLButtonElement)
+
+      expect(queryElementByTestId(firstCategory, 'spinner')).toBeTruthy()
+      expect(queryElementByTestId(secondCategory, 'spinner')).toBeNull()
     })
 
     it('should display error message on delete error', async () => {
