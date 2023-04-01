@@ -1,12 +1,12 @@
 import React from 'react'
-import { act, fireEvent, screen, waitFor } from '@testing-library/react'
+import { fireEvent, screen, waitFor } from '@testing-library/react'
 import CategoryModal from '@/presentation/pages/purchases/components/category-modal/category-modal'
 import { SagaUseCases } from '@/presentation/store/reducers/root-saga'
 import { mockCategory, mockCategoryList, mockJwt } from '@/tests/domain/mocks'
 import { ToolkitStore } from '@reduxjs/toolkit/dist/configureStore'
 import { UnexpectedError } from '@/domain/errors'
 import { renderWithProvider } from '@/tests/presentation/mocks'
-import { populateField } from '@/tests/presentation/helpers/form-helper'
+import { createCategory } from '@/tests/presentation/helpers/category-helper'
 
 type SutType = {
   renderScreen: Function
@@ -152,20 +152,6 @@ describe('CategoryModal Component', () => {
   })
 
   describe('Create', () => {
-    const createCategory = (categoryName = 'any-category-name'): void => {
-      const addButton = screen.queryByTestId('add-button')
-      act(() => {
-        fireEvent.click(addButton)
-      })
-
-      populateField('create-category-input', categoryName)
-
-      const createButton = screen.queryByTestId('create-category-button')
-      act(() => {
-        fireEvent.click(createButton)
-      })
-    }
-
     it('should display correct category on create', async () => {
       const { renderScreen, sagaUsecases } = makeSut()
       const category = mockCategory(23)

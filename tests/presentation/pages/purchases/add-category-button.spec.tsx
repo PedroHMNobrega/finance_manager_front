@@ -7,6 +7,7 @@ import { ToolkitStore } from '@reduxjs/toolkit/dist/configureStore'
 import { clickButton, populateField } from '@/tests/presentation/helpers/form-helper'
 import { mockJwt } from '@/tests/domain/mocks'
 import { mockLoading } from '@/tests/presentation/helpers/saga-helper'
+import { createCategory } from '@/tests/presentation/helpers/category-helper'
 
 type SutType = {
   renderScreen: Function
@@ -70,17 +71,19 @@ describe('AddCategoryButton Component', () => {
   })
 
   describe('Create', () => {
-    it('should call create usecase with correct values when create button is clicked', () => {
+    it('should not call create usecase if category is empty', () => {
       const { renderScreen, sagaUsecases } = makeSut()
       renderScreen()
-      openInput()
+      createCategory('    ')
+      expect(sagaUsecases.createCategoryUsecase.create).toHaveBeenCalledTimes(0)
+    })
 
+    it('should call create usecase with correct values when create button is clicked', () => {
+      const { renderScreen, sagaUsecases } = makeSut()
       const categoryName = 'any-category-name'
 
-      populateField('create-category-input', categoryName)
-
-      const createButton = screen.queryByTestId('create-category-button') as HTMLButtonElement
-      clickButton(createButton)
+      renderScreen()
+      createCategory(categoryName)
 
       expect(sagaUsecases.createCategoryUsecase.create).toHaveBeenCalledTimes(1)
       expect(sagaUsecases.createCategoryUsecase.create).toHaveBeenCalledWith({

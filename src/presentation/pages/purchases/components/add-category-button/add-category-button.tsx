@@ -16,8 +16,9 @@ const AddCategoryButton: React.FC = () => {
   }
 
   const handleCreateButtonClick = (): void => {
-    if (!loading) {
-      dispatch(createCategoryRequest(category))
+    const trimmedCategory = category.trim()
+    if (!loading && trimmedCategory) {
+      dispatch(createCategoryRequest(trimmedCategory))
       setCategory('')
     }
   }
