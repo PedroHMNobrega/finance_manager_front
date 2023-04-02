@@ -271,5 +271,19 @@ describe('CreatePurchaseModal Component', () => {
 
       testIfInputsAreFilled(['name', 'value', 'category', 'installmentsNumber', 'firstInstallmentDate'])
     })
+
+    it('should deactivate create button on loading', () => {
+      const { renderScreen, sagaUsecases } = makeSut()
+
+      const createPurchase = sagaUsecases.createPurchaseUsecase.create as jest.Mock
+      mockLoading(createPurchase)
+
+      renderScreen()
+
+      simulateValidSubmit({})
+
+      const createPurchaseButton = screen.queryByTestId('submit') as HTMLButtonElement
+      expect(createPurchaseButton.disabled).toBeTruthy()
+    })
   })
 })

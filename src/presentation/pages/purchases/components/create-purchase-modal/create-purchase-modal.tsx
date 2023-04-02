@@ -94,7 +94,7 @@ const CreatePurchaseModal: React.FC<Props> = ({ setOpen, validation }: Props) =>
   }
 
   const checkSubmitDisabled = (): boolean => {
-    return !!state.nameError || !!state.categoryError || !!state.valueError || !!state.installmentsNumberError || !!state.firstInstallmentDateError
+    return purchaseState.loading || !!state.nameError || !!state.categoryError || !!state.valueError || !!state.installmentsNumberError || !!state.firstInstallmentDateError
   }
 
   const displayMessage = (): JSX.Element => {
