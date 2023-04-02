@@ -1,9 +1,10 @@
 import { combineReducers } from '@reduxjs/toolkit'
-import { categoryReducer, userReducer } from '@/presentation/store/reducers/'
+import { categoryReducer, purchaseReducer, userReducer } from '@/presentation/store/reducers/'
 
 const rootReducer = combineReducers({
   user: userReducer,
-  category: categoryReducer
+  category: categoryReducer,
+  purchase: purchaseReducer
 })
 
 export type RootState = ReturnType<typeof rootReducer>

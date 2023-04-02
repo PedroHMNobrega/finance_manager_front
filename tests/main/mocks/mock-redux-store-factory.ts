@@ -17,7 +17,10 @@ export const mockMakeStore = (): MockMakeStoreReturn => {
     } as unknown as LocalStorageJwt,
     loadCategoriesUsecase: loadSpy(),
     deleteCategoryUsecase: deleteSpy(),
-    createCategoryUsecase: createSpy()
+    createCategoryUsecase: createSpy(),
+    loadPurchasesUsecase: loadSpy(),
+    deletePurchaseUsecase: deleteSpy(),
+    createPurchaseUsecase: createSpy()
   }
 
   const reduxStore = new ReduxStore(sagaUsecases)

@@ -87,9 +87,9 @@ class PurchaseSaga implements SagaInterface {
 
   * register (): Iterable<any> {
     yield all([
-      takeLatest(loadPurchaseRequest.type, this.loadPurchases),
-      takeLatest(deletePurchaseRequest.type, this.deletePurchase),
-      takeLatest(createPurchaseRequest.type, this.createPurchase)
+      takeLatest(loadPurchaseRequest.type, this.loadPurchases()),
+      takeLatest(deletePurchaseRequest.type, this.deletePurchase()),
+      takeLatest(createPurchaseRequest.type, this.createPurchase())
     ])
   }
 }

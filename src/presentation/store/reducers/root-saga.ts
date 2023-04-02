@@ -1,14 +1,14 @@
 import { fork } from 'redux-saga/effects'
-import { CategorySaga, UserSaga } from '@/presentation/store/reducers/'
+import { CategorySaga, PurchaseSaga, UserSaga } from '@/presentation/store/reducers/'
 import {
   Create,
-  CreateCategoryParams,
+  CreateCategoryParams, CreatePurchaseParams,
   Delete,
-  DeleteCategoryParams,
+  DeleteCategoryParams, DeletePurchaseParams,
   Load,
-  LoadCategoryListParams
+  LoadCategoryListParams, LoadPurchaseListParams
 } from '@/domain/usecases'
-import { Category } from '@/domain/models'
+import { Category, Purchase } from '@/domain/models'
 import SagaContainer from '@/presentation/store/reducers/saga-container'
 import { LocalStorageJwt } from '@/data/usecases/authentication'
 
@@ -25,6 +25,15 @@ export function * rootSaga (usecases: SagaUseCases): Generator<any> {
   )
 
   sagaContainer.addSaga(
+    new PurchaseSaga(
+      usecases.jwtUsecase,
+      usecases.loadPurchasesUsecase,
+      usecases.deletePurchaseUsecase,
+      usecases.createPurchaseUsecase
+    )
+  )
+
+  sagaContainer.addSaga(
     new UserSaga(usecases.jwtUsecase)
   )
 
@@ -36,4 +45,7 @@ export type SagaUseCases = {
   loadCategoriesUsecase: Load<LoadCategoryListParams, Category[]>
   deleteCategoryUsecase: Delete<DeleteCategoryParams, void>
   createCategoryUsecase: Create<CreateCategoryParams, Category>
+  loadPurchasesUsecase: Load<LoadPurchaseListParams, Purchase[]>
+  deletePurchaseUsecase: Delete<DeletePurchaseParams, void>
+  createPurchaseUsecase: Create<CreatePurchaseParams, Purchase>
 }
