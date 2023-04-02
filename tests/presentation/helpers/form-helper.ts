@@ -1,4 +1,5 @@
 import { act, fireEvent, screen } from '@testing-library/react'
+import { MessageType } from '@/presentation/components/message/message'
 
 export const populateField = (testId, value): HTMLInputElement => {
   const input = screen.getByTestId(testId) as HTMLInputElement
@@ -37,4 +38,10 @@ export const testInputSuccess = (name: string): void => {
   const inputStatus = screen.getByTestId(`${name}-status`)
   expect(inputStatus.title).toBe('Tudo certo!')
   expect(inputStatus.textContent).toBe('🟢')
+}
+
+export const testMessage = (type: MessageType): void => {
+  const message = screen.queryByTestId('message')
+  expect(message).toBeTruthy()
+  expect(message.className).toBe(`message ${type}`)
 }

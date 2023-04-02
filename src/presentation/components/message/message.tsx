@@ -2,9 +2,9 @@ import React, { useEffect, useState } from 'react'
 import Styles from './message-styles.scss'
 
 export enum MessageType {
-  ERROR,
-  SUCCESS,
-  ALERT
+  ERROR = 'message_error',
+  SUCCESS = 'message_success',
+  ALERT = 'message_alert'
 }
 
 type Props = {
@@ -25,22 +25,11 @@ const Message: React.FC<Props> = ({ message, type, duration = 4000 }: Props) => 
     }
   }, [message, duration, setShowMessage])
 
-  const getClass = (): string => {
-    switch (type) {
-      case MessageType.SUCCESS:
-        return Styles.message_success
-      case MessageType.ERROR:
-        return Styles.message_error
-      default:
-        return Styles.message_alert
-    }
-  }
-
   const render = (): JSX.Element => {
     if (!showMessage) return null
 
     return (
-      <div className={[Styles.message, getClass()].join(' ')} data-testid="message">
+      <div className={[Styles.message, Styles[type]].join(' ')} data-testid="message">
         <h2 className={Styles.message_text} data-testid="message-text">{message}</h2>
       </div>
     )

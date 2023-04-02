@@ -6,10 +6,11 @@ import { mockCategory, mockCategoryList, mockJwt } from '@/tests/domain/mocks'
 import { ToolkitStore } from '@reduxjs/toolkit/dist/configureStore'
 import { renderWithProvider } from '@/tests/presentation/mocks'
 import { createCategory } from '@/tests/presentation/helpers/category-helper'
-import { clickButton } from '@/tests/presentation/helpers/form-helper'
+import { clickButton, testMessage } from '@/tests/presentation/helpers/form-helper'
 import { mockError, mockLoading } from '@/tests/presentation/helpers/saga-helper'
 import { queryElementByTestId } from '@/tests/presentation/helpers/query-helper'
 import { loadCategoryRequest } from '@/presentation/store/reducers/category/reducer'
+import { MessageType } from '@/presentation/components/message/message'
 
 type SutType = {
   renderScreen: Function
@@ -140,8 +141,7 @@ describe('CategoryModal Component', () => {
       fireEvent.click(deleteButton)
 
       await waitFor(() => {
-        const errorMessage = screen.queryByTestId('message')
-        expect(errorMessage).toBeTruthy()
+        testMessage(MessageType.ERROR)
       })
     })
   })
@@ -179,8 +179,7 @@ describe('CategoryModal Component', () => {
       createCategory()
 
       await waitFor(() => {
-        const errorMessage = screen.queryByTestId('message')
-        expect(errorMessage).toBeTruthy()
+        testMessage(MessageType.ERROR)
       })
     })
   })

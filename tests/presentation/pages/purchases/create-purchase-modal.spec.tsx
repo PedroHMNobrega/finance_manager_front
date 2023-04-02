@@ -9,10 +9,12 @@ import {
   clickButton, getInputValue,
   populateField, populateSelect,
   testInputSuccess,
-  testInputWithError
+  testInputWithError,
+  testMessage
 } from '@/tests/presentation/helpers/form-helper'
 import { Category } from '@/domain/models'
 import { mockError, mockLoading } from '@/tests/presentation/helpers/saga-helper'
+import { MessageType } from '@/presentation/components/message/message'
 
 type SutType = {
   renderScreen: Function
@@ -99,8 +101,7 @@ describe('CreatePurchaseModal Component', () => {
 
       renderScreen()
 
-      const errorMessageAlert = screen.queryByTestId('message')
-      expect(errorMessageAlert).toBeTruthy()
+      testMessage(MessageType.ERROR)
     })
   })
 
