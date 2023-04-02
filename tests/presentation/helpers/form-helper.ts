@@ -13,3 +13,15 @@ export const clickButton = (button: HTMLButtonElement): void => {
     fireEvent.click(button)
   })
 }
+
+export const testInputWithError = (name: string, errorMessage: string): void => {
+  const inputStatus = screen.getByTestId(`${name}-status`)
+  expect(inputStatus.title).toBe(errorMessage)
+  expect(inputStatus.textContent).toBe('🔴')
+}
+
+export const testInputSuccess = (name: string): void => {
+  const inputStatus = screen.getByTestId(`${name}-status`)
+  expect(inputStatus.title).toBe('Tudo certo!')
+  expect(inputStatus.textContent).toBe('🟢')
+}

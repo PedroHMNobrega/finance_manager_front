@@ -7,12 +7,14 @@ import { useAppDispatch, useAppSelector } from '@/presentation/store/hooks'
 import { loadCategoryRequest } from '@/presentation/store/reducers/category/reducer'
 import { SpinnerSize } from '@/presentation/components/spinner/spinner'
 import Message, { MessageType } from '@/presentation/components/message/message'
+import { Validation } from '@/presentation/protocols/validation'
 
 type Props = {
   setOpen: Function
+  validation?: Validation
 }
 
-const CreatePurchaseModal: React.FC<Props> = ({ setOpen }: Props) => {
+const CreatePurchaseModal: React.FC<Props> = ({ setOpen, validation }: Props) => {
   const dispatch = useAppDispatch()
   const { categories, loading, error } = useAppSelector(state => state.category)
   const [openCategoryModal, setOpenCategoryModal] = useState(false)
@@ -23,8 +25,24 @@ const CreatePurchaseModal: React.FC<Props> = ({ setOpen }: Props) => {
     category: '',
     installmentsNumber: '',
     firstInstallmentDate: '',
+    nameError: '',
+    valueError: '',
+    categoryError: '',
+    installmentsNumberError: '',
+    firstInstallmentDateError: '',
     mainError: ''
   })
+
+  useEffect(() => {
+    setState({
+      ...state,
+      nameError: validation.validate('name', state.name),
+      valueError: validation.validate('value', state.value),
+      categoryError: validation.validate('category', state.category),
+      installmentsNumberError: validation.validate('installmentsNumber', state.installmentsNumber),
+      firstInstallmentDateError: validation.validate('firstInstallmentDate', state.firstInstallmentDate)
+    })
+  }, [state.name, state.category, state.value, state.installmentsNumber, state.firstInstallmentDate])
 
   useEffect(() => {
     dispatch(loadCategoryRequest())
@@ -32,6 +50,10 @@ const CreatePurchaseModal: React.FC<Props> = ({ setOpen }: Props) => {
 
   const handleOpenModal = (): void => {
     setOpenCategoryModal(true)
+  }
+
+  const checkSubmitDisabled = (): boolean => {
+    return !!state.nameError || !!state.categoryError || !!state.valueError || !!state.installmentsNumberError || !!state.firstInstallmentDateError
   }
 
   return (
@@ -66,7 +88,7 @@ const CreatePurchaseModal: React.FC<Props> = ({ setOpen }: Props) => {
               </WithLoading>
             </div>
             <div className={Styles.button_container}>
-              <SubmitButton title={'Criar'} disabled={false} className={Styles.button} />
+              <SubmitButton title={'Criar'} disabled={checkSubmitDisabled()} className={Styles.button} />
             </div>
           </form>
         </FormContext.Provider>

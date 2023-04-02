@@ -33,7 +33,7 @@ const Select: React.FC<Props> = (props: Props) => {
         <label>{props.label}</label>
       )}
       <div className={Styles.select_wrapper}>
-        <select {...props} value={state[props.name]} onChange={handleChange} className={props.className}>
+        <select {...props} value={state[props.name]} onChange={handleChange} className={props.className} data-testid={props.name}>
           {props.placeholder && (
             <option value="" disabled hidden>{props.placeholder}</option>
           )}
