@@ -10,6 +10,8 @@ import {
 } from '@/domain/usecases'
 import { all, call, put, takeLatest } from 'redux-saga/effects'
 import {
+  createPurchaseFail,
+  createPurchaseRequest, createPurchaseSuccess,
   deletePurchaseFail, deletePurchaseRequest,
   deletePurchaseSuccess,
   loadPurchaseFail,
@@ -63,10 +65,31 @@ class PurchaseSaga implements SagaInterface {
     }
   }
 
+  createPurchase (): (ReduxAction) => Generator<any> {
+    const { getJwt, createPurchaseUsecase } = this
+    return function * (action: ReduxAction) {
+      try {
+        const token = getJwt.get()
+        const purchase = action.payload
+        const response = yield call(createPurchaseUsecase.create, {
+          token,
+          body: purchase
+        })
+        yield put(createPurchaseSuccess(response))
+      } catch (e) {
+        yield put(createPurchaseFail({
+          name: e.name,
+          message: e.message
+        }))
+      }
+    }
+  }
+
   * register (): Iterable<any> {
     yield all([
       takeLatest(loadPurchaseRequest.type, this.loadPurchases),
-      takeLatest(deletePurchaseRequest.type, this.deletePurchase)
+      takeLatest(deletePurchaseRequest.type, this.deletePurchase),
+      takeLatest(createPurchaseRequest.type, this.createPurchase)
     ])
   }
 }
