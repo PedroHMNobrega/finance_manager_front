@@ -4,11 +4,10 @@ import CategoryModal from '@/presentation/pages/purchases/components/category-mo
 import { SagaUseCases } from '@/presentation/store/reducers/root-saga'
 import { mockCategory, mockCategoryList, mockJwt } from '@/tests/domain/mocks'
 import { ToolkitStore } from '@reduxjs/toolkit/dist/configureStore'
-import { UnexpectedError } from '@/domain/errors'
 import { renderWithProvider } from '@/tests/presentation/mocks'
 import { createCategory } from '@/tests/presentation/helpers/category-helper'
 import { clickButton } from '@/tests/presentation/helpers/form-helper'
-import { mockLoading } from '@/tests/presentation/helpers/saga-helper'
+import { mockError, mockLoading } from '@/tests/presentation/helpers/saga-helper'
 import { queryElementByTestId } from '@/tests/presentation/helpers/query-helper'
 
 type SutType = {
@@ -83,9 +82,7 @@ describe('CategoryModal Component', () => {
     it('should display load error message on loading error', async () => {
       const { renderScreen, sagaUsecases } = makeSut()
       const loadCategories = sagaUsecases.loadCategoriesUsecase.loadAll as jest.Mock
-      loadCategories.mockImplementationOnce(() => {
-        throw new UnexpectedError()
-      })
+      mockError(loadCategories)
 
       renderScreen()
 
@@ -162,9 +159,7 @@ describe('CategoryModal Component', () => {
     it('should display error message on delete error', async () => {
       const { renderScreen, sagaUsecases } = makeSut()
       const deleteCategories = sagaUsecases.deleteCategoryUsecase.delete as jest.Mock
-      deleteCategories.mockImplementation(() => {
-        throw new UnexpectedError()
-      })
+      mockError(deleteCategories)
 
       jest.useFakeTimers()
       renderScreen()
@@ -204,9 +199,7 @@ describe('CategoryModal Component', () => {
     it('should display error message on create error', async () => {
       const { renderScreen, sagaUsecases } = makeSut()
       const createCategoryMock = sagaUsecases.createCategoryUsecase.create as jest.Mock
-      createCategoryMock.mockImplementation(() => {
-        throw new UnexpectedError()
-      })
+      mockError(createCategoryMock)
 
       jest.useFakeTimers()
       renderScreen()
