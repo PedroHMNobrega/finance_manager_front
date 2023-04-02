@@ -50,6 +50,12 @@ const CreatePurchaseModal: React.FC<Props> = ({ setOpen, validation }: Props) =>
     dispatch(loadCategoryRequest())
   }, [dispatch])
 
+  useEffect(() => {
+    if (purchaseState.success) {
+      clearInput()
+    }
+  }, [purchaseState.success])
+
   const handleOpenModal = (): void => {
     setOpenCategoryModal(true)
   }
@@ -74,7 +80,6 @@ const CreatePurchaseModal: React.FC<Props> = ({ setOpen, validation }: Props) =>
     }
 
     dispatch(createPurchaseRequest(purchase))
-    clearInput()
   }
 
   const clearInput = (): void => {
@@ -99,6 +104,8 @@ const CreatePurchaseModal: React.FC<Props> = ({ setOpen, validation }: Props) =>
     if (purchaseState.success) {
       message = 'Compra criada com sucesso!'
       messageType = MessageType.SUCCESS
+    } else if (purchaseState.error) {
+      message = purchaseState.error.message
     } else if (error) {
       message = error.message
     }

@@ -45,3 +45,17 @@ export const testMessage = (type: MessageType): void => {
   expect(message).toBeTruthy()
   expect(message.className).toBe(`message ${type}`)
 }
+
+export const testIfInputsAreEmpty = (testIds: string[]): void => {
+  for (const testId of testIds) {
+    const nameValue = getInputValue(testId)
+    expect(nameValue).toBe('')
+  }
+}
+
+export const testIfInputsAreFilled = (testIds: string[]): void => {
+  for (const testId of testIds) {
+    const nameValue = getInputValue(testId)
+    expect(nameValue).not.toBe('')
+  }
+}

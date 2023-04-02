@@ -7,9 +7,10 @@ import { renderWithProvider, ValidationStub } from '@/tests/presentation/mocks'
 import { mockCategoryList, mockJwt } from '@/tests/domain/mocks'
 import {
   clickButton,
-  getInputValue,
   populateField,
   populateSelect,
+  testIfInputsAreEmpty,
+  testIfInputsAreFilled,
   testInputSuccess,
   testInputWithError,
   testMessage
@@ -241,20 +242,7 @@ describe('CreatePurchaseModal Component', () => {
 
       simulateValidSubmit({})
 
-      const nameValue = getInputValue('name')
-      expect(nameValue).toBe('')
-
-      const valueValue = getInputValue('value')
-      expect(valueValue).toBe('')
-
-      const categoryValue = getInputValue('category')
-      expect(categoryValue).toBe('')
-
-      const installmentsNumberValue = getInputValue('installmentsNumber')
-      expect(installmentsNumberValue).toBe('')
-
-      const firstInstallmentDateValue = getInputValue('firstInstallmentDate')
-      expect(firstInstallmentDateValue).toBe('')
+      testIfInputsAreEmpty(['name', 'value', 'category', 'installmentsNumber', 'firstInstallmentDate'])
     })
 
     it('should display success message on create purchase success', () => {
@@ -266,6 +254,22 @@ describe('CreatePurchaseModal Component', () => {
       simulateValidSubmit({})
 
       testMessage(MessageType.SUCCESS)
+    })
+
+    it('should display error message and do not clear inputs on create purchase error', () => {
+      const { renderScreen, sagaUsecases } = makeSut()
+
+      const createPurchase = sagaUsecases.createPurchaseUsecase.create as jest.Mock
+      mockError(createPurchase)
+
+      jest.useFakeTimers()
+      renderScreen()
+
+      simulateValidSubmit({})
+
+      testMessage(MessageType.ERROR)
+
+      testIfInputsAreFilled(['name', 'value', 'category', 'installmentsNumber', 'firstInstallmentDate'])
     })
   })
 })
