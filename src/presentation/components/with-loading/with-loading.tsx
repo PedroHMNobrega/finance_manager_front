@@ -4,7 +4,7 @@ import { SpinnerSize } from '@/presentation/components/spinner/spinner'
 
 type Props = {
   children: React.ReactNode
-  loadingClass: string
+  loadingClass?: string
   loading: boolean
   size?: SpinnerSize
 }

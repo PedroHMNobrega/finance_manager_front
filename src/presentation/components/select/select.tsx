@@ -38,7 +38,7 @@ const Select: React.FC<Props> = (props: Props) => {
             <option value="" disabled hidden>{props.placeholder}</option>
           )}
           {props.options.map(option => (
-            <option key={option.value} value={option.value}>{option.name}</option>
+            <option key={option.value} value={option.value} data-testid="select-option">{option.name}</option>
           ))}
         </select>
         <InputStatus name={props.name} error={error} className={Styles.status}/>

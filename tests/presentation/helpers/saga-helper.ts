@@ -1,5 +1,6 @@
 import { Action } from '@reduxjs/toolkit'
 import { runSaga } from 'redux-saga'
+import { UnexpectedError } from '@/domain/errors'
 
 export const sagaExec = async (saga, params = null): Promise<Action[]> => {
   const dispatched: Action[] = []
@@ -21,5 +22,11 @@ export const mockLoading = (mock: jest.Mock): void => {
     await new Promise(resolve => {
       setTimeout(resolve, 2000)
     })
+  })
+}
+
+export const mockError = (mock: jest.Mock): void => {
+  mock.mockImplementation(() => {
+    throw new UnexpectedError()
   })
 }
