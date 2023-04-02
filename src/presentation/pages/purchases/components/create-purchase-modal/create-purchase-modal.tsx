@@ -18,6 +18,7 @@ type Props = {
 
 const CreatePurchaseModal: React.FC<Props> = ({ setOpen, validation }: Props) => {
   const dispatch = useAppDispatch()
+  const purchaseState = useAppSelector(state => state.purchase)
   const { categories, loading, error } = useAppSelector(state => state.category)
   const [openCategoryModal, setOpenCategoryModal] = useState(false)
   const [state, setState] = useState({
@@ -91,10 +92,26 @@ const CreatePurchaseModal: React.FC<Props> = ({ setOpen, validation }: Props) =>
     return !!state.nameError || !!state.categoryError || !!state.valueError || !!state.installmentsNumberError || !!state.firstInstallmentDateError
   }
 
+  const displayMessage = (): JSX.Element => {
+    let message = ''
+    let messageType = MessageType.ERROR
+
+    if (purchaseState.success) {
+      message = 'Compra criada com sucesso!'
+      messageType = MessageType.SUCCESS
+    } else if (error) {
+      message = error.message
+    }
+
+    return (
+      <Message message={message} type={messageType} />
+    )
+  }
+
   return (
     <>
       <Modal title={'Adicionar Compra'} setOpen={setOpen}>
-        <Message message={error ? error.message : ''} type={MessageType.ERROR} />
+        { displayMessage() }
         <FormContext.Provider value={{ state, setState }}>
           <form className={Styles.form} data-testid="create-purchase-form" onSubmit={handleSubmit}>
             <div className={Styles.double_input_container}>

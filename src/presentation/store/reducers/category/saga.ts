@@ -1,6 +1,8 @@
 import { all, call, put, takeLatest } from 'redux-saga/effects'
 import {
-  createCategoryFail, createCategoryRequest, createCategorySuccess,
+  createCategoryFail,
+  createCategoryRequest,
+  createCategorySuccess,
   deleteCategoryFail,
   deleteCategoryRequest,
   deleteCategorySuccess,

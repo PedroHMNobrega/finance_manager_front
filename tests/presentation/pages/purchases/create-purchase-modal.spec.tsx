@@ -6,8 +6,10 @@ import CreatePurchaseModal from '@/presentation/pages/purchases/components/creat
 import { renderWithProvider, ValidationStub } from '@/tests/presentation/mocks'
 import { mockCategoryList, mockJwt } from '@/tests/domain/mocks'
 import {
-  clickButton, getInputValue,
-  populateField, populateSelect,
+  clickButton,
+  getInputValue,
+  populateField,
+  populateSelect,
   testInputSuccess,
   testInputWithError,
   testMessage
@@ -253,6 +255,17 @@ describe('CreatePurchaseModal Component', () => {
 
       const firstInstallmentDateValue = getInputValue('firstInstallmentDate')
       expect(firstInstallmentDateValue).toBe('')
+    })
+
+    it('should display success message on create purchase success', () => {
+      const { renderScreen } = makeSut()
+
+      jest.useFakeTimers()
+      renderScreen()
+
+      simulateValidSubmit({})
+
+      testMessage(MessageType.SUCCESS)
     })
   })
 })

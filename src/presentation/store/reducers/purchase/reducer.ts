@@ -8,18 +8,21 @@ type PurchaseState = {
     message: string
   }
   loading: boolean
+  success: boolean
 }
 
 const initialState: PurchaseState = {
   purchases: [],
   error: null,
-  loading: false
+  loading: false,
+  success: false
 }
 
 const loadPurchasesReducers = {
   loadPurchaseRequest: (state) => {
     state.loading = true
     state.error = null
+    state.success = false
   },
   loadPurchaseSuccess: (state, { payload }) => {
     state.loading = false
@@ -35,6 +38,7 @@ const deletePurchaseReducers = {
   deletePurchaseRequest: (state, { payload }) => {
     state.loading = true
     state.error = null
+    state.success = false
   },
   deletePurchaseSuccess: (state, { payload }) => {
     state.loading = false
@@ -52,9 +56,11 @@ const createPurchaseReducers = {
   createPurchaseRequest: (state, { payload }) => {
     state.loading = true
     state.error = null
+    state.success = false
   },
   createPurchaseSuccess: (state, { payload }) => {
     state.loading = false
+    state.success = true
     state.purchases = [...state.purchases, payload]
   },
   createPurchaseFail: (state, { payload }) => {
