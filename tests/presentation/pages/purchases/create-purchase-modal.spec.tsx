@@ -38,57 +38,59 @@ const makeSut = (categories = mockCategoryList()): SutType => {
 }
 
 describe('CreatePurchaseModal Component', () => {
-  it('should open category modal on open button click', () => {
-    const { renderScreen } = makeSut()
-    renderScreen()
+  describe('Categories', () => {
+    it('should open category modal on open button click', () => {
+      const { renderScreen } = makeSut()
+      renderScreen()
 
-    let categoryModal = screen.queryByTestId('category-modal')
-    expect(categoryModal).toBeNull()
+      let categoryModal = screen.queryByTestId('category-modal')
+      expect(categoryModal).toBeNull()
 
-    const addButton = screen.queryByTestId('add-button') as HTMLButtonElement
-    clickButton(addButton)
+      const addButton = screen.queryByTestId('add-button') as HTMLButtonElement
+      clickButton(addButton)
 
-    categoryModal = screen.queryByTestId('category-modal')
-    expect(categoryModal).toBeTruthy()
-  })
+      categoryModal = screen.queryByTestId('category-modal')
+      expect(categoryModal).toBeTruthy()
+    })
 
-  it('should list correct categories on category selector', () => {
-    const { renderScreen, categories } = makeSut()
-    renderScreen()
+    it('should list correct categories on category selector', () => {
+      const { renderScreen, categories } = makeSut()
+      renderScreen()
 
-    const options = screen.queryAllByTestId('select-option') as HTMLOptionElement[]
+      const options = screen.queryAllByTestId('select-option') as HTMLOptionElement[]
 
-    expect(options.length).toBe(categories.length)
-    expect(options[0].textContent).toBe(categories[0].name)
-    expect(options[0].value).toBe(categories[0].id.toString())
-    expect(options[1].textContent).toBe(categories[1].name)
-    expect(options[1].value).toBe(categories[1].id.toString())
-  })
+      expect(options.length).toBe(categories.length)
+      expect(options[0].textContent).toBe(categories[0].name)
+      expect(options[0].value).toBe(categories[0].id.toString())
+      expect(options[1].textContent).toBe(categories[1].name)
+      expect(options[1].value).toBe(categories[1].id.toString())
+    })
 
-  it('should show spinner on category load loading', () => {
-    const { renderScreen, sagaUsecases } = makeSut()
+    it('should show spinner on category load loading', () => {
+      const { renderScreen, sagaUsecases } = makeSut()
 
-    const loadCategories = sagaUsecases.loadCategoriesUsecase.loadAll as jest.Mock
-    mockLoading(loadCategories)
+      const loadCategories = sagaUsecases.loadCategoriesUsecase.loadAll as jest.Mock
+      mockLoading(loadCategories)
 
-    renderScreen()
+      renderScreen()
 
-    const addButton = screen.queryByTestId('add-button')
-    expect(addButton).toBeNull()
+      const addButton = screen.queryByTestId('add-button')
+      expect(addButton).toBeNull()
 
-    const spinner = screen.queryByTestId('spinner')
-    expect(spinner).toBeTruthy()
-  })
+      const spinner = screen.queryByTestId('spinner')
+      expect(spinner).toBeTruthy()
+    })
 
-  it('should display error message on category load error', () => {
-    const { renderScreen, sagaUsecases } = makeSut()
+    it('should display error message on category load error', () => {
+      const { renderScreen, sagaUsecases } = makeSut()
 
-    const loadCategories = sagaUsecases.loadCategoriesUsecase.loadAll as jest.Mock
-    mockError(loadCategories)
+      const loadCategories = sagaUsecases.loadCategoriesUsecase.loadAll as jest.Mock
+      mockError(loadCategories)
 
-    renderScreen()
+      renderScreen()
 
-    const errorMessageAlert = screen.queryByTestId('message')
-    expect(errorMessageAlert).toBeTruthy()
+      const errorMessageAlert = screen.queryByTestId('message')
+      expect(errorMessageAlert).toBeTruthy()
+    })
   })
 })
