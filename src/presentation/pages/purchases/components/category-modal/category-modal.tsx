@@ -1,10 +1,9 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import Styles from './category-modal-styles.scss'
 import { DeleteButton, Modal } from '@/presentation/components'
 import Container from '@/presentation/components/container/container'
 import { useAppDispatch, useAppSelector } from '@/presentation/store/hooks'
-import { deleteCategoryRequest, loadCategoryRequest } from '@/presentation/store/reducers/category/reducer'
-import WithLoading from '@/presentation/components/with-loading/with-loading'
+import { deleteCategoryRequest } from '@/presentation/store/reducers/category/reducer'
 import Message, { MessageType } from '@/presentation/components/message/message'
 import AddCategoryButton from '@/presentation/pages/purchases/components/add-category-button/add-category-button'
 
@@ -15,10 +14,6 @@ type Props = {
 const CategoryModal: React.FC<Props> = ({ setOpen }: Props) => {
   const dispatch = useAppDispatch()
   const { categories, loading, error, type, loadingId } = useAppSelector(state => state.category)
-
-  useEffect(() => {
-    dispatch(loadCategoryRequest())
-  }, [dispatch])
 
   const handleDelete = (id): void => {
     if (!loading) {
@@ -64,9 +59,7 @@ const CategoryModal: React.FC<Props> = ({ setOpen }: Props) => {
     <Modal title={'Categorias'} setOpen={setOpen} name='category-modal'>
       <Message message={(error && type !== 'load') ? error.message : ''} type={MessageType.ERROR} />
       <Container className={Styles.container}>
-        <WithLoading loadingClass={Styles.spinner} loading={loading && type === 'load'}>
-          {render()}
-        </WithLoading>
+        {render()}
       </Container>
     </Modal>
   )

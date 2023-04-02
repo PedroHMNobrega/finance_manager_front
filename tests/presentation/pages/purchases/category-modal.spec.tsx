@@ -9,6 +9,7 @@ import { createCategory } from '@/tests/presentation/helpers/category-helper'
 import { clickButton } from '@/tests/presentation/helpers/form-helper'
 import { mockError, mockLoading } from '@/tests/presentation/helpers/saga-helper'
 import { queryElementByTestId } from '@/tests/presentation/helpers/query-helper'
+import { loadCategoryRequest } from '@/presentation/store/reducers/category/reducer'
 
 type SutType = {
   renderScreen: Function
@@ -27,6 +28,8 @@ const makeSut = (categories = mockCategoryList()): SutType => {
 
   const loadCategories = sagaUsecases.loadCategoriesUsecase.loadAll as jest.Mock
   loadCategories.mockReturnValue(categories)
+
+  store.dispatch(loadCategoryRequest())
 
   return {
     renderScreen,
@@ -49,13 +52,10 @@ describe('CategoryModal Component', () => {
     })
 
     it('should render categories if any category is returned', async () => {
-      const { sagaUsecases, renderScreen } = makeSut()
+      const { renderScreen } = makeSut()
       renderScreen()
 
-      const loadCategories = sagaUsecases.loadCategoriesUsecase.loadAll as jest.Mock
-
       await waitFor(() => {
-        expect(loadCategories).toHaveBeenCalled()
         const h1 = screen.queryByTestId('no-category-message')
         expect(h1).toBeNull()
 
@@ -64,34 +64,6 @@ describe('CategoryModal Component', () => {
 
         const errorMessage = screen.queryByTestId('load-error-message')
         expect(errorMessage).toBeNull()
-      })
-    })
-
-    it('should display loading spinner on loadCategories load', () => {
-      const { renderScreen, sagaUsecases } = makeSut([])
-
-      const loadCategories = sagaUsecases.loadCategoriesUsecase.loadAll as jest.Mock
-      mockLoading(loadCategories)
-
-      renderScreen()
-
-      const spinner = screen.queryByTestId('spinner')
-      expect(spinner).toBeTruthy()
-    })
-
-    it('should display load error message on loading error', async () => {
-      const { renderScreen, sagaUsecases } = makeSut()
-      const loadCategories = sagaUsecases.loadCategoriesUsecase.loadAll as jest.Mock
-      mockError(loadCategories)
-
-      renderScreen()
-
-      await waitFor(() => {
-        const errorMessage = screen.queryByTestId('load-error-message')
-        expect(errorMessage).toBeTruthy()
-
-        const errorMessageAlert = screen.queryByTestId('message')
-        expect(errorMessageAlert).toBeNull()
       })
     })
   })
