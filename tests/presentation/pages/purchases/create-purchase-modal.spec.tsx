@@ -4,10 +4,10 @@ import { SagaUseCases } from '@/presentation/store/reducers/root-saga'
 import { ToolkitStore } from '@reduxjs/toolkit/dist/configureStore'
 import CreatePurchaseModal from '@/presentation/pages/purchases/components/create-purchase-modal/create-purchase-modal'
 import { renderWithProvider, ValidationStub } from '@/tests/presentation/mocks'
-import { mockCategoryList } from '@/tests/domain/mocks'
+import { mockCategoryList, mockJwt } from '@/tests/domain/mocks'
 import {
-  clickButton,
-  populateField,
+  clickButton, getInputValue,
+  populateField, populateSelect,
   testInputSuccess,
   testInputWithError
 } from '@/tests/presentation/helpers/form-helper'
@@ -105,14 +105,20 @@ describe('CreatePurchaseModal Component', () => {
   })
 
   describe('Form', () => {
-    const simulateValidSubmit = (): void => {
-      populateField('name', 'any-name')
-      populateField('value', '123')
-      populateField('installmentsNumber', '1')
-      populateField('firstInstallmentDate', '03/01/1999')
-      populateField('category', '1')
+    const simulateValidSubmit = ({
+      name = 'any-name',
+      value = 'R$ 11.32',
+      installmentsNumber = '10',
+      firstInstallmentDate = '1999-01-03',
+      category = '1'
+    }): void => {
+      populateField('name', name)
+      populateField('value', value)
+      populateField('installmentsNumber', installmentsNumber)
+      populateField('firstInstallmentDate', firstInstallmentDate)
+      populateSelect('category', category)
 
-      const form = screen.queryByTestId('form') as HTMLFormElement
+      const form = screen.queryByTestId('create-purchase-form') as HTMLFormElement
       act(() => {
         fireEvent.submit(form)
       })
@@ -147,7 +153,7 @@ describe('CreatePurchaseModal Component', () => {
       const { renderScreen } = makeSut()
       renderScreen()
 
-      populateField('value', '123')
+      populateField('value', 'R$ 0.32')
 
       testInputSuccess('value')
     })
@@ -165,7 +171,7 @@ describe('CreatePurchaseModal Component', () => {
       const { renderScreen } = makeSut()
       renderScreen()
 
-      populateField('firstInstallmentDate', '03/01/1999')
+      populateField('firstInstallmentDate', '1999-01-03')
 
       testInputSuccess('firstInstallmentDate')
     })
@@ -184,13 +190,68 @@ describe('CreatePurchaseModal Component', () => {
       renderScreen()
 
       populateField('name', 'any-name')
-      populateField('value', '123')
+      populateField('value', 'R$ 0.32')
       populateField('installmentsNumber', '1')
-      populateField('firstInstallmentDate', '03/01/1999')
+      populateField('firstInstallmentDate', '1999-01-03')
       populateField('category', '1')
 
       const submitButton = screen.getByTestId('submit') as HTMLButtonElement
       expect(submitButton.disabled).toBe(false)
+    })
+
+    it('should call create usecase with correct values on submit', () => {
+      const { renderScreen, sagaUsecases, categories } = makeSut()
+
+      renderScreen()
+
+      const name = 'any-name'
+      const value = 'R$ 11.32'
+      const installmentsNumber = '10'
+      const firstInstallmentDate = '1999-01-03'
+      const category = categories[0].id.toString()
+
+      simulateValidSubmit({
+        name,
+        value,
+        installmentsNumber,
+        firstInstallmentDate,
+        category
+      })
+
+      expect(sagaUsecases.createPurchaseUsecase.create).toHaveBeenCalledTimes(1)
+      expect(sagaUsecases.createPurchaseUsecase.create).toHaveBeenCalledWith({
+        body: {
+          name,
+          value: parseFloat(value.split(' ')[1]),
+          installmentsNumber: parseInt(installmentsNumber),
+          firstInstallmentDate,
+          category: parseInt(category)
+        },
+        token: mockJwt()
+      })
+    })
+
+    it('should clear inputs after submit', () => {
+      const { renderScreen } = makeSut()
+
+      renderScreen()
+
+      simulateValidSubmit({})
+
+      const nameValue = getInputValue('name')
+      expect(nameValue).toBe('')
+
+      const valueValue = getInputValue('value')
+      expect(valueValue).toBe('')
+
+      const categoryValue = getInputValue('category')
+      expect(categoryValue).toBe('')
+
+      const installmentsNumberValue = getInputValue('installmentsNumber')
+      expect(installmentsNumberValue).toBe('')
+
+      const firstInstallmentDateValue = getInputValue('firstInstallmentDate')
+      expect(firstInstallmentDateValue).toBe('')
     })
   })
 })

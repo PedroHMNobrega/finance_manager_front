@@ -8,6 +8,19 @@ export const populateField = (testId, value): HTMLInputElement => {
   return input
 }
 
+export const populateSelect = (testId, value): HTMLSelectElement => {
+  const select = screen.getByTestId(testId) as HTMLSelectElement
+  act(() => {
+    fireEvent.change(select, { target: { value: value } })
+  })
+  return select
+}
+
+export const getInputValue = (testId): string => {
+  const input = screen.getByTestId(testId) as HTMLInputElement
+  return input.value
+}
+
 export const clickButton = (button: HTMLButtonElement): void => {
   act(() => {
     fireEvent.click(button)
