@@ -19,11 +19,11 @@ const makeSut = (): SutTypes => {
 }
 
 describe('AddButton Component', () => {
-  it('should execute callback on click', () => {
+  it('should execute callback on click', async () => {
     const { callback } = makeSut()
     const addButton = screen.queryByTestId('add-button')
 
-    act(() => {
+    await act(() => {
       fireEvent.click(addButton)
     })
 

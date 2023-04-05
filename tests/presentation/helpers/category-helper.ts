@@ -1,16 +1,16 @@
 import { act, fireEvent, screen } from '@testing-library/react'
 import { populateField } from '@/tests/presentation/helpers/form-helper'
 
-export const createCategory = (categoryName = 'any-category-name'): void => {
+export const createCategory = async (categoryName = 'any-category-name'): Promise<void> => {
   const addButton = screen.queryByTestId('add-button')
-  act(() => {
+  await act(() => {
     fireEvent.click(addButton)
   })
 
-  populateField('create-category-input', categoryName)
+  await populateField('create-category-input', categoryName)
 
   const createButton = screen.queryByTestId('create-category-button')
-  act(() => {
+  await act(() => {
     fireEvent.click(createButton)
   })
 }

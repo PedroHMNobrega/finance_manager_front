@@ -29,9 +29,9 @@ const makeSut = (): SutType => {
   }
 }
 
-const openInput = (): void => {
+const openInput = async (): Promise<void> => {
   const addButton = screen.queryByTestId('add-button') as HTMLButtonElement
-  clickButton(addButton)
+  await clickButton(addButton)
 }
 
 describe('AddCategoryButton Component', () => {
@@ -47,23 +47,23 @@ describe('AddCategoryButton Component', () => {
       expect(createCategoryWrapper).toBeNull()
     })
 
-    it('should display create category input on button click', () => {
+    it('should display create category input on button click', async () => {
       const { renderScreen } = makeSut()
       renderScreen()
 
-      openInput()
+      await openInput()
 
       const createCategoryWrapper = screen.queryByTestId('create-category-wrapper')
       expect(createCategoryWrapper).toBeTruthy()
     })
 
-    it('should close create category input on button click', () => {
+    it('should close create category input on button click', async () => {
       const { renderScreen } = makeSut()
       renderScreen()
 
       const addButton = screen.queryByTestId('add-button') as HTMLButtonElement
-      clickButton(addButton)
-      clickButton(addButton)
+      await clickButton(addButton)
+      await clickButton(addButton)
 
       const createCategoryWrapper = screen.queryByTestId('create-category-wrapper')
       expect(createCategoryWrapper).toBeNull()
@@ -71,19 +71,19 @@ describe('AddCategoryButton Component', () => {
   })
 
   describe('Create', () => {
-    it('should not call create usecase if category is empty', () => {
+    it('should not call create usecase if category is empty', async () => {
       const { renderScreen, sagaUsecases } = makeSut()
       renderScreen()
-      createCategory('    ')
+      await createCategory('    ')
       expect(sagaUsecases.createCategoryUsecase.create).toHaveBeenCalledTimes(0)
     })
 
-    it('should call create usecase with correct values when create button is clicked', () => {
+    it('should call create usecase with correct values when create button is clicked', async () => {
       const { renderScreen, sagaUsecases } = makeSut()
       const categoryName = 'any-category-name'
 
       renderScreen()
-      createCategory(categoryName)
+      await createCategory(categoryName)
 
       expect(sagaUsecases.createCategoryUsecase.create).toHaveBeenCalledTimes(1)
       expect(sagaUsecases.createCategoryUsecase.create).toHaveBeenCalledWith({
@@ -94,42 +94,42 @@ describe('AddCategoryButton Component', () => {
       })
     })
 
-    it('should erase input content after created', () => {
+    it('should erase input content after created', async () => {
       const { renderScreen } = makeSut()
       renderScreen()
-      openInput()
+      await openInput()
 
       const categoryName = 'any-category-name'
       const input = screen.queryByTestId('create-category-input') as HTMLInputElement
 
-      populateField('create-category-input', categoryName)
+      await populateField('create-category-input', categoryName)
 
       expect(input.value).toBe(categoryName)
 
       const createButton = screen.queryByTestId('create-category-button') as HTMLButtonElement
-      clickButton(createButton)
+      await clickButton(createButton)
 
       expect(input.value).toBe('')
     })
 
-    it('should disable create button on loading', () => {
+    it('should disable create button on loading', async () => {
       const { renderScreen, sagaUsecases } = makeSut()
 
       const createCategoryMock = sagaUsecases.createCategoryUsecase.create as jest.Mock
       mockLoading(createCategoryMock)
 
       renderScreen()
-      openInput()
+      await openInput()
 
-      populateField('create-category-input', 'any-name')
+      await populateField('create-category-input', 'any-name')
 
       const createButton = screen.queryByTestId('create-category-button') as HTMLButtonElement
-      clickButton(createButton)
+      await clickButton(createButton)
 
       expect(createButton.disabled).toBeTruthy()
 
-      clickButton(createButton)
-      clickButton(createButton)
+      await clickButton(createButton)
+      await clickButton(createButton)
       expect(createCategoryMock).toHaveBeenCalledTimes(1)
     })
   })

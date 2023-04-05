@@ -108,7 +108,7 @@ describe('CategoryModal Component', () => {
       })
     })
 
-    it('should show loading spinner on correct category', () => {
+    it('should show loading spinner on correct category', async () => {
       const { renderScreen, sagaUsecases } = makeSut()
 
       const deleteCategory = sagaUsecases.deleteCategoryUsecase.delete as jest.Mock
@@ -123,7 +123,7 @@ describe('CategoryModal Component', () => {
       expect(queryElementByTestId(firstCategory, 'spinner')).toBeNull()
       expect(queryElementByTestId(secondCategory, 'spinner')).toBeNull()
 
-      clickButton(queryElementByTestId(firstCategory, 'delete-button') as HTMLButtonElement)
+      await clickButton(queryElementByTestId(firstCategory, 'delete-button') as HTMLButtonElement)
 
       expect(queryElementByTestId(firstCategory, 'spinner')).toBeTruthy()
       expect(queryElementByTestId(secondCategory, 'spinner')).toBeNull()
@@ -159,7 +159,7 @@ describe('CategoryModal Component', () => {
       const categoriesWrapper = screen.queryByTestId('categories-wrapper')
       expect(categoriesWrapper.childElementCount).toBe(2)
 
-      createCategory(category.name)
+      await createCategory(category.name)
 
       await waitFor(() => {
         expect(categoriesWrapper.childElementCount).toBe(3)
@@ -176,7 +176,7 @@ describe('CategoryModal Component', () => {
       jest.useFakeTimers()
       renderScreen()
 
-      createCategory()
+      await createCategory()
 
       await waitFor(() => {
         testMessage(MessageType.ERROR)

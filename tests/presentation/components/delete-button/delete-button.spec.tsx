@@ -46,13 +46,11 @@ describe('DeleteButton Component', () => {
     const { callback, id } = makeSut()
     const deleteButon = screen.queryByTestId('delete-button')
 
-    act(() => {
+    await act(() => {
       fireEvent.click(deleteButon)
     })
 
-    await waitFor(() => {
-      expect(callback).toHaveBeenCalledTimes(1)
-      expect(callback).toHaveBeenCalledWith(id)
-    })
+    expect(callback).toHaveBeenCalledTimes(1)
+    expect(callback).toHaveBeenCalledWith(id)
   })
 })

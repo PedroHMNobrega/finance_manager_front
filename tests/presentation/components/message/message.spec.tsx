@@ -25,7 +25,7 @@ describe('Message Component', () => {
 
   it('should disappear after duration', async () => {
     makeSut(MessageType.ERROR)
-    act(() => {
+    await act(() => {
       jest.runAllTimers()
     })
     await waitFor(() => {

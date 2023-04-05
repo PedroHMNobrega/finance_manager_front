@@ -58,7 +58,7 @@ const makeSut = (validationError = null): SutType => {
 
 describe('CreatePurchaseModal Component', () => {
   describe('Categories', () => {
-    it('should open category modal on open button click', () => {
+    it('should open category modal on open button click', async () => {
       const { renderScreen } = makeSut()
       renderScreen()
 
@@ -66,7 +66,7 @@ describe('CreatePurchaseModal Component', () => {
       expect(categoryModal).toBeNull()
 
       const addButton = screen.queryByTestId('add-button') as HTMLButtonElement
-      clickButton(addButton)
+      await clickButton(addButton)
 
       categoryModal = screen.queryByTestId('category-modal')
       expect(categoryModal).toBeTruthy()
@@ -113,21 +113,21 @@ describe('CreatePurchaseModal Component', () => {
   })
 
   describe('Form', () => {
-    const simulateValidSubmit = ({
+    const simulateValidSubmit = async ({
       name = 'any-name',
       value = 'R$ 11.32',
       installmentsNumber = '10',
       firstInstallmentDate = '1999-01-03',
       category = '1'
-    }): void => {
-      populateField('name', name)
-      populateField('value', value)
-      populateField('installmentsNumber', installmentsNumber)
-      populateField('firstInstallmentDate', firstInstallmentDate)
-      populateSelect('category', category)
+    }): Promise<void> => {
+      await populateField('name', name)
+      await populateField('value', value)
+      await populateField('installmentsNumber', installmentsNumber)
+      await populateField('firstInstallmentDate', firstInstallmentDate)
+      await populateSelect('category', category)
 
       const form = screen.queryByTestId('create-purchase-form') as HTMLFormElement
-      act(() => {
+      await act(() => {
         fireEvent.submit(form)
       })
     }
@@ -148,66 +148,66 @@ describe('CreatePurchaseModal Component', () => {
       testInputWithError('firstInstallmentDate', validationError)
     })
 
-    it('should show valid name state if validation succeeds', () => {
+    it('should show valid name state if validation succeeds', async () => {
       const { renderScreen } = makeSut()
       renderScreen()
 
-      populateField('name', 'any-name')
+      await populateField('name', 'any-name')
 
       testInputSuccess('name')
     })
 
-    it('should show valid value state if validation succeeds', () => {
+    it('should show valid value state if validation succeeds', async () => {
       const { renderScreen } = makeSut()
       renderScreen()
 
-      populateField('value', 'R$ 0.32')
+      await populateField('value', 'R$ 0.32')
 
       testInputSuccess('value')
     })
 
-    it('should show valid installmentsNumber state if validation succeeds', () => {
+    it('should show valid installmentsNumber state if validation succeeds', async () => {
       const { renderScreen } = makeSut()
       renderScreen()
 
-      populateField('installmentsNumber', '1')
+      await populateField('installmentsNumber', '1')
 
       testInputSuccess('installmentsNumber')
     })
 
-    it('should show valid firstInstallmentDate state if validation succeeds', () => {
+    it('should show valid firstInstallmentDate state if validation succeeds', async () => {
       const { renderScreen } = makeSut()
       renderScreen()
 
-      populateField('firstInstallmentDate', '1999-01-03')
+      await populateField('firstInstallmentDate', '1999-01-03')
 
       testInputSuccess('firstInstallmentDate')
     })
 
-    it('should show valid category state if validation succeeds', () => {
+    it('should show valid category state if validation succeeds', async () => {
       const { renderScreen } = makeSut()
       renderScreen()
 
-      populateField('category', '1')
+      await populateField('category', '1')
 
       testInputSuccess('category')
     })
 
-    it('should enable submit button if form is valid', () => {
+    it('should enable submit button if form is valid', async () => {
       const { renderScreen } = makeSut()
       renderScreen()
 
-      populateField('name', 'any-name')
-      populateField('value', 'R$ 0.32')
-      populateField('installmentsNumber', '1')
-      populateField('firstInstallmentDate', '1999-01-03')
-      populateField('category', '1')
+      await populateField('name', 'any-name')
+      await populateField('value', 'R$ 0.32')
+      await populateField('installmentsNumber', '1')
+      await populateField('firstInstallmentDate', '1999-01-03')
+      await populateField('category', '1')
 
       const submitButton = screen.getByTestId('submit') as HTMLButtonElement
       expect(submitButton.disabled).toBe(false)
     })
 
-    it('should call create usecase with correct values on submit', () => {
+    it('should call create usecase with correct values on submit', async () => {
       const { renderScreen, sagaUsecases, categories } = makeSut()
 
       renderScreen()
@@ -218,7 +218,7 @@ describe('CreatePurchaseModal Component', () => {
       const firstInstallmentDate = '1999-01-03'
       const category = categories[0].id.toString()
 
-      simulateValidSubmit({
+      await simulateValidSubmit({
         name,
         value,
         installmentsNumber,
@@ -239,28 +239,28 @@ describe('CreatePurchaseModal Component', () => {
       })
     })
 
-    it('should clear inputs after submit', () => {
+    it('should clear inputs after submit', async () => {
       const { renderScreen } = makeSut()
 
       renderScreen()
 
-      simulateValidSubmit({})
+      await simulateValidSubmit({})
 
       testIfInputsAreEmpty(['name', 'value', 'category', 'installmentsNumber', 'firstInstallmentDate'])
     })
 
-    it('should display success message on create purchase success', () => {
+    it('should display success message on create purchase success', async () => {
       const { renderScreen } = makeSut()
 
       jest.useFakeTimers()
       renderScreen()
 
-      simulateValidSubmit({})
+      await simulateValidSubmit({})
 
       testMessage(MessageType.SUCCESS)
     })
 
-    it('should display error message and do not clear inputs on create purchase error', () => {
+    it('should display error message and do not clear inputs on create purchase error', async () => {
       const { renderScreen, sagaUsecases } = makeSut()
 
       const createPurchase = sagaUsecases.createPurchaseUsecase.create as jest.Mock
@@ -269,14 +269,14 @@ describe('CreatePurchaseModal Component', () => {
       jest.useFakeTimers()
       renderScreen()
 
-      simulateValidSubmit({})
+      await simulateValidSubmit({})
 
       testMessage(MessageType.ERROR)
 
       testIfInputsAreFilled(['name', 'value', 'category', 'installmentsNumber', 'firstInstallmentDate'])
     })
 
-    it('should deactivate create button on loading', () => {
+    it('should deactivate create button on loading', async () => {
       const { renderScreen, sagaUsecases } = makeSut()
 
       const createPurchase = sagaUsecases.createPurchaseUsecase.create as jest.Mock
@@ -284,7 +284,7 @@ describe('CreatePurchaseModal Component', () => {
 
       renderScreen()
 
-      simulateValidSubmit({})
+      await simulateValidSubmit({})
 
       const createPurchaseButton = screen.queryByTestId('submit') as HTMLButtonElement
       expect(createPurchaseButton.disabled).toBeTruthy()

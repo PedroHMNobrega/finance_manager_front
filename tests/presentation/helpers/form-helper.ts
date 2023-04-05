@@ -1,17 +1,17 @@
 import { act, fireEvent, screen } from '@testing-library/react'
 import { MessageType } from '@/presentation/components/message/message'
 
-export const populateField = (testId, value): HTMLInputElement => {
+export const populateField = async (testId, value): Promise<HTMLInputElement> => {
   const input = screen.getByTestId(testId) as HTMLInputElement
-  act(() => {
+  await act(() => {
     fireEvent.input(input, { target: { value: value } })
   })
   return input
 }
 
-export const populateSelect = (testId, value): HTMLSelectElement => {
+export const populateSelect = async (testId, value): Promise<HTMLSelectElement> => {
   const select = screen.getByTestId(testId) as HTMLSelectElement
-  act(() => {
+  await act(() => {
     fireEvent.change(select, { target: { value: value } })
   })
   return select
@@ -22,8 +22,8 @@ export const getInputValue = (testId): string => {
   return input.value
 }
 
-export const clickButton = (button: HTMLButtonElement): void => {
-  act(() => {
+export const clickButton = async (button: HTMLButtonElement): Promise<void> => {
+  await act(() => {
     fireEvent.click(button)
   })
 }
