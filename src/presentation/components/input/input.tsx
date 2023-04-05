@@ -6,24 +6,25 @@ import { InputStatus } from '@/presentation/components'
 type Props = React.DetailedHTMLProps<React.InputHTMLAttributes<HTMLInputElement>, HTMLInputElement> & {
   name: string
   type: string
-  margin?: boolean
+  withMargin?: boolean
   className?: string
   label?: string
 }
 
 const Input: React.FC<Props> = (props: Props) => {
+  const { withMargin, ...inputProps } = props
   const { state, setState } = useContext(FormContext)
-  const error = state[`${props.name}Error`]
+  const error = state[`${inputProps.name}Error`]
 
   const getInput = (): JSX.Element => {
-    switch (props.type) {
+    switch (inputProps.type) {
       case 'money':
         return (
-          <input {...props} data-testid={props.name} value={state[props.name]} onChange={handleMoneyChange} type='text' />
+          <input {...inputProps} data-testid={inputProps.name} value={state[inputProps.name]} onChange={handleMoneyChange} type='text' />
         )
       default:
         return (
-          <input {...props} data-testid={props.name} value={state[props.name]} onChange={handleChange} />
+          <input {...inputProps} data-testid={inputProps.name} value={state[inputProps.name]} onChange={handleChange} />
         )
     }
   }
@@ -55,19 +56,19 @@ const Input: React.FC<Props> = (props: Props) => {
   }
 
   const getStyle = (): object => {
-    if (props.margin) {
+    if (withMargin) {
       return { marginTop: 16 }
     }
   }
 
   return (
     <div className={Styles.input_container}>
-      {props.label && (
-        <label>{props.label}</label>
+      {inputProps.label && (
+        <label>{inputProps.label}</label>
       )}
-      <div className={`${Styles.inputWrap} ${props.className}`} style={getStyle()}>
+      <div className={`${Styles.inputWrap} ${inputProps.className}`} style={getStyle()}>
         {getInput()}
-        <InputStatus name={props.name} error={error} className={Styles.status}/>
+        <InputStatus name={inputProps.name} error={error} className={Styles.status}/>
       </div>
     </div>
   )
