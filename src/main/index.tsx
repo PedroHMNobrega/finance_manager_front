@@ -1,11 +1,17 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import Router from '@/main/routes/router'
+import Router, { RouterFactories } from '@/main/routes/router'
 import '@/presentation/styles/global.scss'
-import { makeLogin } from '@/main/factories/pages/login/login-factory'
 import { makeStore } from '@/main/factories/store/redux-store-factory'
+import { makeHome, makeLogin } from '@/main/factories/pages'
+
+const factories: RouterFactories = {
+  makeHome: makeHome,
+  makeLogin: makeLogin,
+  makeStore: makeStore
+}
 
 ReactDOM.render(
-  <Router makeLogin={makeLogin} makeStore={makeStore}/>,
+  <Router factories={factories} />,
   document.getElementById('main')
 )

@@ -18,6 +18,8 @@ import {
 import { Category } from '@/domain/models'
 import { mockError, mockLoading } from '@/tests/presentation/helpers/saga-helper'
 import { MessageType } from '@/presentation/components/message/message'
+import { HomeContext } from '@/main/factories/pages/home/home-fatory'
+import { mockHomeContextValue } from '@/tests/main/mocks/context/mock-home-context-value'
 
 type SutType = {
   renderScreen: Function
@@ -35,7 +37,9 @@ const makeSut = (validationError = null): SutType => {
 
   const setOpenSpy = jest.fn()
   const Page: React.FC = () => (
-    <CreatePurchaseModal setOpen={setOpenSpy} validation={validationStub} />
+    <HomeContext.Provider value={mockHomeContextValue(validationStub)}>
+      <CreatePurchaseModal setOpen={setOpenSpy} />
+    </HomeContext.Provider>
   )
 
   const { store, sagaUsecases, renderScreen } = renderWithProvider({ Page })

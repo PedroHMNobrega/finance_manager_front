@@ -7,7 +7,7 @@ import { AddButton, Modal } from '@/presentation/components'
 import CreatePurchaseModal from '@/presentation/pages/purchases/components/create-purchase-modal/create-purchase-modal'
 
 const Purchases: React.FC = () => {
-  const [openPurchaseModal, setOpenPurchaseModal] = useState(false)
+  const [openPurchaseModal, setOpenPurchaseModal] = useState(true)
 
   const purchases: Purchase[] = [
     {
