@@ -22,9 +22,9 @@ export const getInputValue = (testId): string => {
   return input.value
 }
 
-export const clickButton = async (button: HTMLButtonElement): Promise<void> => {
+export const clickButton = async (element: HTMLElement): Promise<void> => {
   await act(() => {
-    fireEvent.click(button)
+    fireEvent.click(element)
   })
 }
 

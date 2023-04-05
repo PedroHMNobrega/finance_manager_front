@@ -1,5 +1,5 @@
 import React from 'react'
-import { fireEvent, screen, waitFor } from '@testing-library/react'
+import { screen, waitFor } from '@testing-library/react'
 import CategoryModal from '@/presentation/pages/purchases/components/category-modal/category-modal'
 import { SagaUseCases } from '@/presentation/store/reducers/root-saga'
 import { mockCategory, mockCategoryList, mockJwt } from '@/tests/domain/mocks'
@@ -78,7 +78,7 @@ describe('CategoryModal Component', () => {
       const deleteButtons = screen.getAllByTestId('delete-button')
       const firstButton = deleteButtons[0]
 
-      fireEvent.click(firstButton)
+      await clickButton(firstButton)
 
       await waitFor(() => {
         expect(deleteCategory).toHaveBeenCalledWith({
@@ -99,7 +99,7 @@ describe('CategoryModal Component', () => {
       const categoriesWrapper = screen.queryByTestId('categories-wrapper')
       expect(categoriesWrapper.childElementCount).toBe(2)
 
-      fireEvent.click(buttonToBeDeleted)
+      await clickButton(buttonToBeDeleted)
 
       await waitFor(() => {
         expect(categoriesWrapper.childElementCount).toBe(1)
@@ -138,7 +138,7 @@ describe('CategoryModal Component', () => {
       renderScreen()
 
       const deleteButton = screen.queryAllByTestId('delete-button')[0]
-      fireEvent.click(deleteButton)
+      await clickButton(deleteButton)
 
       await waitFor(() => {
         testMessage(MessageType.ERROR)

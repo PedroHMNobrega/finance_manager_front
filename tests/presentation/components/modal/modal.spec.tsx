@@ -1,6 +1,7 @@
 import React from 'react'
-import { fireEvent, render, screen } from '@testing-library/react'
+import { render, screen } from '@testing-library/react'
 import { Modal } from '@/presentation/components'
+import { clickButton } from '@/tests/presentation/helpers/form-helper'
 
 type SutTypes = {
   title: string
@@ -37,10 +38,10 @@ describe('Modal Component', () => {
     expect(titleContainer.textContent).toBe(title)
   })
 
-  it('should call callback when click at close button', () => {
+  it('should call callback when click at close button', async () => {
     const { callback } = makeSut()
     const closeButton = screen.queryByTestId('modal-close') as HTMLButtonElement
-    fireEvent.click(closeButton)
+    await clickButton(closeButton)
     expect(callback).toBeCalledTimes(1)
   })
 })

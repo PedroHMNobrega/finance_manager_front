@@ -5,7 +5,7 @@ import Login from '@/presentation/pages/login/login'
 import { AuthenticationSpy, renderWithHistory, ValidationStub } from '@/tests/presentation/mocks'
 import { InvalidCredentialsError } from '@/domain/errors'
 import { createMemoryHistory } from 'history'
-import { populateField } from '@/tests/presentation/helpers/form-helper'
+import { clickButton, populateField } from '@/tests/presentation/helpers/form-helper'
 
 type SutTypes = {
   authenticationSpy: AuthenticationSpy
@@ -197,10 +197,10 @@ describe('Login Component', () => {
     })
   })
 
-  it('should go to signup page', () => {
+  it('should go to signup page', async () => {
     makeSut()
-    const signup = screen.getByTestId('signup')
-    fireEvent.click(signup)
+    const signup = screen.getByTestId('signup') as HTMLButtonElement
+    await clickButton(signup)
 
     expect(history.location.pathname).toBe('/signup')
   })
