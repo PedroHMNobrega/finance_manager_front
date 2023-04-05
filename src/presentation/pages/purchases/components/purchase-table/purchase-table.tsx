@@ -10,7 +10,7 @@ const PurchaseTable: React.FC<Props> = ({ purchases }: Props) => {
   const renderTable = (): JSX.Element => {
     if (purchases.length === 0) {
       return (
-        <h2 className={Styles.no_purchase_message}>Nenhuma Compra</h2>
+        <h2 className={Styles.no_purchase_message} data-testid="no-purchases">Nenhuma Compra</h2>
       )
     } else {
       return (
@@ -23,7 +23,7 @@ const PurchaseTable: React.FC<Props> = ({ purchases }: Props) => {
             <h3>Valor</h3>
           </div>
           {purchases.map(purchase => (
-            <div key={purchase.id} className={Styles.row}>
+            <div key={purchase.id} className={Styles.row} data-testid="purchase">
               <h3>{purchase.name}</h3>
               <h3>{purchase.category}</h3>
               <h3>{purchase.installmentsNumber}</h3>
@@ -37,7 +37,7 @@ const PurchaseTable: React.FC<Props> = ({ purchases }: Props) => {
   }
 
   return (
-    <div className={Styles.purchases}>
+    <div className={Styles.purchases} data-testid="purchase-table">
       {renderTable()}
     </div>
   )

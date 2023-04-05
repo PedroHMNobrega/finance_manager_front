@@ -119,7 +119,7 @@ const CreatePurchaseModal: React.FC<Props> = ({ setOpen }: Props) => {
 
   return (
     <>
-      <Modal title={'Adicionar Compra'} setOpen={setOpen}>
+      <Modal title={'Adicionar Compra'} setOpen={setOpen} name='create-purchase-modal'>
         { displayMessage() }
         <FormContext.Provider value={{ state, setState }}>
           <form className={Styles.form} data-testid="create-purchase-form" onSubmit={handleSubmit}>
