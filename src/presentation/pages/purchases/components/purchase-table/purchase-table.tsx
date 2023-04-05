@@ -25,7 +25,7 @@ const PurchaseTable: React.FC<Props> = ({ purchases }: Props) => {
           {purchases.map(purchase => (
             <div key={purchase.id} className={Styles.row} data-testid="purchase">
               <h3>{purchase.name}</h3>
-              <h3>{purchase.category}</h3>
+              <h3>{purchase.category ? purchase.category : '-'}</h3>
               <h3>{purchase.installmentsNumber}</h3>
               <h3>{purchase.firstInstallmentDate}</h3>
               <h3>R$ {purchase.value}</h3>

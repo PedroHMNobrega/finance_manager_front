@@ -7,7 +7,7 @@ import { screen } from '@testing-library/react'
 import { clickButton, testMessage } from '@/tests/presentation/helpers/form-helper'
 import { HomeContext } from '@/main/factories/pages/home/home-fatory'
 import { mockHomeContextValue } from '@/tests/main/mocks/context/mock-home-context-value'
-import { mockPurchaseList } from '@/tests/domain/mocks'
+import { mockPurchase, mockPurchaseList } from '@/tests/domain/mocks'
 import { Purchase } from '@/domain/models'
 import { mockError, mockLoading } from '@/tests/presentation/helpers/saga-helper'
 import { MessageType } from '@/presentation/components/message/message'
@@ -110,5 +110,21 @@ describe('Purchases Component', () => {
 
     const spinner = screen.queryByTestId('spinner')
     expect(spinner).toBeTruthy()
+  })
+
+  it('should show dash if the purchase does not have a category', () => {
+    const purchase = mockPurchase(1)
+    purchase.category = null
+
+    const { renderScreen } = makeSut([purchase])
+    renderScreen()
+
+    const purchaseElement = screen.queryByTestId('purchase')
+
+    expect(purchaseElement.children[0].textContent).toBe(`${purchase.name}`)
+    expect(purchaseElement.children[1].textContent).toBe('-')
+    expect(purchaseElement.children[2].textContent).toBe(`${purchase.installmentsNumber}`)
+    expect(purchaseElement.children[3].textContent).toBe(`${purchase.firstInstallmentDate}`)
+    expect(purchaseElement.children[4].textContent).toBe(`R$ ${purchase.value}`)
   })
 })
