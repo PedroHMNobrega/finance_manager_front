@@ -18,5 +18,6 @@ module.exports = {
     '@/tests/(.*)': '<rootDir>/tests/$1',
     '@/(.*)': '<rootDir>/src/$1',
     '\\.scss$': 'identity-obj-proxy' // Generate a dummy of scss objects found
-  }
+  },
+  setupFilesAfterEnv: ['<rootDir>/jest.setup.ts']
 }
