@@ -1,9 +1,12 @@
 import React from 'react'
+import 'reflect-metadata'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import NotFound from '@/presentation/pages/not-found/not-found'
 import { Provider } from 'react-redux'
+import { Provider as DependencyProvider } from 'inversify-react'
 import { PrivateRoute } from '@/main/proxies'
 import { ToolkitStore } from '@reduxjs/toolkit/dist/configureStore'
+import { container } from '@/main/dependency-injection/container'
 
 export type RouterFactories = {
   makeLogin: () => JSX.Element
@@ -21,15 +24,17 @@ const Router: React.FC<Props> = ({ factories }: Props) => {
   const store = factories.makeStore()
 
   return (
-    <Provider store={store}>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<PrivateRoute>{homeComponent}</PrivateRoute>}></Route>
-          <Route path="/login" element={loginComponent} />
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </BrowserRouter>
-    </Provider>
+    <DependencyProvider container={container}>
+      <Provider store={store}>
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<PrivateRoute>{homeComponent}</PrivateRoute>}></Route>
+            <Route path="/login" element={loginComponent} />
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </BrowserRouter>
+      </Provider>
+    </DependencyProvider>
   )
 }
 

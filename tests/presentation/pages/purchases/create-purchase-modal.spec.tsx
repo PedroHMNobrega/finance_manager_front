@@ -18,8 +18,7 @@ import {
 import { Category } from '@/domain/models'
 import { mockError, mockLoading } from '@/tests/presentation/helpers/saga-helper'
 import { MessageType } from '@/presentation/components/message/message'
-import { HomeContext } from '@/main/factories/pages/home/home-fatory'
-import { mockHomeContextValue } from '@/tests/main/mocks/context/mock-home-context-value'
+import { mockContainer } from '@/tests/main/mocks/mock-dependency-injection-container'
 
 type SutType = {
   renderScreen: Function
@@ -37,12 +36,13 @@ const makeSut = (validationError = null): SutType => {
 
   const setOpenSpy = jest.fn()
   const Page: React.FC = () => (
-    <HomeContext.Provider value={mockHomeContextValue(validationStub)}>
-      <CreatePurchaseModal setOpen={setOpenSpy} />
-    </HomeContext.Provider>
+    <CreatePurchaseModal setOpen={setOpenSpy} />
   )
 
-  const { store, sagaUsecases, renderScreen } = renderWithProvider({ Page })
+  const { store, sagaUsecases, renderScreen } = renderWithProvider({
+    Page,
+    container: mockContainer(validationStub)
+  })
 
   const loadCategories = sagaUsecases.loadCategoriesUsecase.loadAll as jest.Mock
   loadCategories.mockReturnValue(categories)

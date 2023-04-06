@@ -1,14 +1,16 @@
-import React, { useContext } from 'react'
+import React from 'react'
 import Styles from './purchase-table-styles.scss'
 import { Purchase } from '@/domain/models'
-import { HomeContext } from '@/main/factories/pages/home/home-fatory'
+import { useInjection } from 'inversify-react'
+import { DateFormatter } from '@/domain/usecases/date'
+import { Dependencies } from '@/presentation/dependencies'
 
 type Props = {
   purchases: Purchase[]
 }
 
 const PurchaseTable: React.FC<Props> = ({ purchases }: Props) => {
-  const { dateFormatter } = useContext(HomeContext)
+  const dateFormatter = useInjection<DateFormatter>(Dependencies.DateFormatter)
 
   const renderTable = (): JSX.Element => {
     if (purchases.length === 0) {

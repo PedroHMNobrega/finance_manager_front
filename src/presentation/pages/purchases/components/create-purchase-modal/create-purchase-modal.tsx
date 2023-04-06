@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Styles from './create-purchase-modal-styles.scss'
 import { AddButton, Input, Modal, Select, Space, SubmitButton, WithLoading } from '@/presentation/components'
 import { FormContext } from '@/presentation/contexts'
@@ -10,7 +10,8 @@ import Message, { MessageType } from '@/presentation/components/message/message'
 import { Validation } from '@/presentation/protocols/validation'
 import { Purchase } from '@/domain/models'
 import { createPurchaseRequest } from '@/presentation/store/reducers/purchase/reducer'
-import { HomeContext } from '@/main/factories/pages/home/home-fatory'
+import { useInjection } from 'inversify-react'
+import { Dependencies } from '@/presentation/dependencies'
 
 type Props = {
   setOpen: Function
@@ -18,7 +19,7 @@ type Props = {
 }
 
 const CreatePurchaseModal: React.FC<Props> = ({ setOpen }: Props) => {
-  const { validation } = useContext(HomeContext)
+  const validation = useInjection<Validation>(Dependencies.CreatePurchaseValidation)
   const dispatch = useAppDispatch()
   const purchaseState = useAppSelector(state => state.purchase)
   const { categories, loading, error } = useAppSelector(state => state.category)

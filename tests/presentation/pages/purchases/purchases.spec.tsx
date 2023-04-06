@@ -5,30 +5,27 @@ import { Purchases } from '@/presentation/pages'
 import { renderWithProvider } from '@/tests/presentation/mocks'
 import { screen } from '@testing-library/react'
 import { clickButton, testMessage } from '@/tests/presentation/helpers/form-helper'
-import { HomeContext, HomeDeps } from '@/main/factories/pages/home/home-fatory'
-import { mockHomeContextValue } from '@/tests/main/mocks/context/mock-home-context-value'
 import { mockPurchase, mockPurchaseList } from '@/tests/domain/mocks'
 import { Purchase } from '@/domain/models'
 import { mockError, mockLoading } from '@/tests/presentation/helpers/saga-helper'
 import { MessageType } from '@/presentation/components/message/message'
+import { DateFormatter } from '@/domain/usecases/date'
+import { Dependencies } from '@/presentation/dependencies'
 
 type SutType = {
   renderScreen: Function
   sagaUsecases: SagaUseCases
   store: ToolkitStore
   purchases: Purchase[]
-  contextValue: HomeDeps
+  dateFormatter: DateFormatter
 }
 
 const makeSut = (purchases = mockPurchaseList()): SutType => {
-  const contextValue = mockHomeContextValue()
   const Page: React.FC = () => (
-    <HomeContext.Provider value={contextValue}>
-      <Purchases />
-    </HomeContext.Provider>
+    <Purchases />
   )
 
-  const { store, sagaUsecases, renderScreen } = renderWithProvider({ Page })
+  const { store, sagaUsecases, renderScreen, diContainer } = renderWithProvider({ Page })
 
   const loadPurchases = sagaUsecases.loadPurchasesUsecase.loadAll as jest.Mock
   loadPurchases.mockReturnValue(purchases)
@@ -38,7 +35,7 @@ const makeSut = (purchases = mockPurchaseList()): SutType => {
     sagaUsecases,
     store,
     purchases,
-    contextValue
+    dateFormatter: diContainer.get<DateFormatter>(Dependencies.DateFormatter)
   }
 }
 
@@ -58,10 +55,10 @@ describe('Purchases Component', () => {
   })
 
   it('should list correct purchases on start', () => {
-    const { renderScreen, purchases, contextValue } = makeSut()
+    const { renderScreen, purchases, dateFormatter } = makeSut()
 
-    const dateFormatter = contextValue.dateFormatter.format as jest.Mock
-    dateFormatter
+    const format = dateFormatter.format as jest.Mock
+    format
       .mockReturnValueOnce(purchases[0].firstInstallmentDate)
       .mockReturnValueOnce(purchases[1].firstInstallmentDate)
 
@@ -137,16 +134,17 @@ describe('Purchases Component', () => {
     const purchase = mockPurchase(1)
     purchase.firstInstallmentDate = '2022-10-5'
 
-    const { renderScreen, contextValue } = makeSut([purchase])
-    const dateFormatter = contextValue.dateFormatter.format as jest.Mock
-    dateFormatter.mockReturnValueOnce('05/10/2022')
+    const { renderScreen, dateFormatter } = makeSut([purchase])
+
+    const format = dateFormatter.format as jest.Mock
+    format.mockReturnValueOnce('05/10/2022')
 
     renderScreen()
 
     const purchaseElement = screen.queryByTestId('purchase')
 
     expect(purchaseElement.children[3].textContent).toBe('05/10/2022')
-    expect(dateFormatter).toHaveBeenCalledTimes(1)
-    expect(dateFormatter).toHaveBeenCalledWith(purchase.firstInstallmentDate)
+    expect(format).toHaveBeenCalledTimes(1)
+    expect(format).toHaveBeenCalledWith(purchase.firstInstallmentDate)
   })
 })

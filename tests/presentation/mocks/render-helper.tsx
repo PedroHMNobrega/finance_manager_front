@@ -10,6 +10,10 @@ import { makeStore } from '@/main/factories/store/redux-store-factory'
 import { SagaUseCases } from '@/presentation/store/reducers/root-saga'
 import { mockMakeStore } from '@/tests/main/mocks/mock-redux-store-factory'
 import { ToolkitStore } from '@reduxjs/toolkit/dist/configureStore'
+import { Provider as DependencyProvider } from 'inversify-react'
+import { mockContainer } from '@/tests/main/mocks/mock-dependency-injection-container'
+import { Validation } from '@/presentation/protocols/validation'
+import { Container } from 'inversify'
 
 type RenderWithHistoryParams = {
   Page: React.FC
@@ -22,26 +26,36 @@ export const renderWithHistory = ({ Page, history, account = mockAccountModel() 
   if (account) {
     store.dispatch(setUser(account.accessToken))
   }
+
+  const container = mockContainer()
+
   render(
-    <Provider store={store}>
-      <Router location={history.location} navigator={history}>
-        <Page />
-      </Router>
-    </Provider>
+    <DependencyProvider container={container}>
+      <Provider store={store}>
+        <Router location={history.location} navigator={history}>
+          <Page />
+        </Router>
+      </Provider>
+    </DependencyProvider>
   )
 }
 
 type RenderWithProviderParams = {
   Page: React.FC
+  container?: Container
 }
 
 type RenderWithProviderReturn = {
   sagaUsecases: SagaUseCases
   renderScreen: Function
   store: ToolkitStore
+  diContainer: Container
 }
 
-export const renderWithProvider = ({ Page }: RenderWithProviderParams): RenderWithProviderReturn => {
+export const renderWithProvider = ({
+  Page,
+  container = mockContainer()
+}: RenderWithProviderParams): RenderWithProviderReturn => {
   const {
     store,
     sagaUsecases
@@ -49,15 +63,18 @@ export const renderWithProvider = ({ Page }: RenderWithProviderParams): RenderWi
 
   const renderScreen = (): void => {
     render(
-      <Provider store={store}>
-        <Page />
-      </Provider>
+      <DependencyProvider container={container}>
+        <Provider store={store}>
+          <Page />
+        </Provider>
+      </DependencyProvider>
     )
   }
 
   return {
     sagaUsecases,
     renderScreen,
-    store
+    store,
+    diContainer: container
   }
 }
