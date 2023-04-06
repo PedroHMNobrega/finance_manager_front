@@ -2,19 +2,18 @@ import React, { useEffect, useState } from 'react'
 import Styles from './login-styles.scss'
 import { Footer, FormStatus, Input, LoginHeader, PageContainer, SubmitButton } from '@/presentation/components'
 import { FormContext } from '@/presentation/contexts'
-import { Validation } from '@/presentation/protocols/validation'
-import { Authentication } from '@/domain/usecases'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAppDispatch } from '@/presentation/store/hooks'
 import Container from '@/presentation/components/container/container'
 import { setUser } from '@/presentation/store/reducers/user/reducer'
+import { useInjection } from 'inversify-react'
+import { Validation } from '@/presentation/protocols/validation'
+import { Dependencies } from '@/presentation/dependencies'
+import { Authentication } from '@/domain/usecases'
 
-type Props = {
-  validation: Validation
-  authentication: Authentication
-}
-
-const Login: React.FC<Props> = ({ validation, authentication }: Props) => {
+const Login: React.FC = () => {
+  const validation = useInjection<Validation>(Dependencies.LoginValidation)
+  const authentication = useInjection<Authentication>(Dependencies.Authentication)
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
 

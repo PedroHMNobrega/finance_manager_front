@@ -2,13 +2,17 @@ import React from 'react'
 import 'jest-localstorage-mock'
 import { act, cleanup, fireEvent, screen, waitFor } from '@testing-library/react'
 import Login from '@/presentation/pages/login/login'
-import { AuthenticationSpy, renderWithHistory, ValidationStub } from '@/tests/presentation/mocks'
+import { AuthenticationSpy, renderWithProvider, ValidationStub } from '@/tests/presentation/mocks'
 import { InvalidCredentialsError } from '@/domain/errors'
 import { createMemoryHistory } from 'history'
 import { clickButton, populateField } from '@/tests/presentation/helpers/form-helper'
+import { mockContainer } from '@/tests/main/mocks/mock-dependency-injection-container'
+import { Dependencies } from '@/presentation/dependencies'
+import { SagaUseCases } from '@/presentation/store/reducers/root-saga'
 
 type SutTypes = {
   authenticationSpy: AuthenticationSpy
+  sagaUsecases: SagaUseCases
 }
 
 type SutParams = {
@@ -19,20 +23,23 @@ const history = createMemoryHistory({ initialEntries: ['/login'] })
 
 const makeSut = (params?: SutParams): SutTypes => {
   const validationStub = new ValidationStub()
-  const authenticationSpy = new AuthenticationSpy()
   validationStub.errorMessage = params?.validationError
   const Page: React.FC = () => (
-    <Login validation={validationStub} authentication={authenticationSpy} />
+    <Login />
   )
 
-  renderWithHistory({
+  const { renderScreen, diContainer, sagaUsecases } = renderWithProvider({
     Page,
     history,
-    account: null
+    account: null,
+    container: mockContainer(validationStub)
   })
 
+  renderScreen()
+
   return {
-    authenticationSpy
+    authenticationSpy: diContainer.get<AuthenticationSpy>(Dependencies.Authentication),
+    sagaUsecases
   }
 }
 
@@ -186,13 +193,15 @@ describe('Login Component', () => {
     expect(spinner).toBeNull()
   })
 
-  it('should add accessToken to localstorage on success', async () => {
-    const { authenticationSpy } = makeSut()
+  it('should call set jwt usecase with correct values on success', async () => {
+    const { authenticationSpy, sagaUsecases } = makeSut()
+
+    const setJwt = sagaUsecases.jwtUsecase.set as jest.Mock
 
     await simulateValidSubmit()
 
     await waitFor(() => {
-      expect(localStorage.setItem).toHaveBeenCalledWith('access-token', authenticationSpy.account.accessToken)
+      expect(setJwt).toHaveBeenCalledWith(authenticationSpy.account.accessToken)
       expect(history.location.pathname).toBe('/')
     })
   })

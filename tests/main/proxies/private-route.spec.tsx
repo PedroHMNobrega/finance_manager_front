@@ -4,7 +4,7 @@ import { PrivateRoute } from '@/main/proxies'
 import { mockAccountModel } from '@/tests/domain/mocks'
 
 import { screen } from '@testing-library/react'
-import { renderWithHistory } from '@/tests/presentation/mocks'
+import { renderWithProvider } from '@/tests/presentation/mocks'
 
 type SutTypes = {
   history: MemoryHistory
@@ -18,11 +18,13 @@ const makeSut = (account = mockAccountModel()): SutTypes => {
     </PrivateRoute>
   )
 
-  renderWithHistory({
+  const { renderScreen } = renderWithProvider({
     Page,
     history,
     account
   })
+
+  renderScreen()
 
   return {
     history

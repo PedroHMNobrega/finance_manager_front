@@ -6,43 +6,18 @@ import { Provider } from 'react-redux'
 import { Router } from 'react-router-dom'
 import React from 'react'
 import { setUser } from '@/presentation/store/reducers/user/reducer'
-import { makeStore } from '@/main/factories/store/redux-store-factory'
 import { SagaUseCases } from '@/presentation/store/reducers/root-saga'
 import { mockMakeStore } from '@/tests/main/mocks/mock-redux-store-factory'
 import { ToolkitStore } from '@reduxjs/toolkit/dist/configureStore'
 import { Provider as DependencyProvider } from 'inversify-react'
 import { mockContainer } from '@/tests/main/mocks/mock-dependency-injection-container'
-import { Validation } from '@/presentation/protocols/validation'
 import { Container } from 'inversify'
-
-type RenderWithHistoryParams = {
-  Page: React.FC
-  history: MemoryHistory
-  account?: AccountModel
-}
-
-export const renderWithHistory = ({ Page, history, account = mockAccountModel() }: RenderWithHistoryParams): void => {
-  const store = makeStore()
-  if (account) {
-    store.dispatch(setUser(account.accessToken))
-  }
-
-  const container = mockContainer()
-
-  render(
-    <DependencyProvider container={container}>
-      <Provider store={store}>
-        <Router location={history.location} navigator={history}>
-          <Page />
-        </Router>
-      </Provider>
-    </DependencyProvider>
-  )
-}
 
 type RenderWithProviderParams = {
   Page: React.FC
   container?: Container
+  history?: MemoryHistory
+  account?: AccountModel
 }
 
 type RenderWithProviderReturn = {
@@ -54,18 +29,31 @@ type RenderWithProviderReturn = {
 
 export const renderWithProvider = ({
   Page,
-  container = mockContainer()
+  history,
+  container = mockContainer(),
+  account = mockAccountModel()
 }: RenderWithProviderParams): RenderWithProviderReturn => {
   const {
     store,
     sagaUsecases
   } = mockMakeStore()
 
+  if (account) {
+    store.dispatch(setUser(account.accessToken))
+  }
+
   const renderScreen = (): void => {
     render(
       <DependencyProvider container={container}>
         <Provider store={store}>
-          <Page />
+          {history && (
+            <Router location={history.location} navigator={history}>
+              <Page />
+            </Router>
+          )}
+          {!history && (
+            <Page />
+          )}
         </Provider>
       </DependencyProvider>
     )

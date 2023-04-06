@@ -19,6 +19,8 @@ import { Category } from '@/domain/models'
 import { mockError, mockLoading } from '@/tests/presentation/helpers/saga-helper'
 import { MessageType } from '@/presentation/components/message/message'
 import { mockContainer } from '@/tests/main/mocks/mock-dependency-injection-container'
+import { MoneyConverter } from '@/domain/usecases/conversion'
+import { Dependencies } from '@/presentation/dependencies'
 
 type SutType = {
   renderScreen: Function
@@ -26,6 +28,7 @@ type SutType = {
   sagaUsecases: SagaUseCases
   store: ToolkitStore
   categories: Category[]
+  moneyConverter: MoneyConverter
 }
 
 const makeSut = (validationError = null): SutType => {
@@ -39,7 +42,7 @@ const makeSut = (validationError = null): SutType => {
     <CreatePurchaseModal setOpen={setOpenSpy} />
   )
 
-  const { store, sagaUsecases, renderScreen } = renderWithProvider({
+  const { store, sagaUsecases, renderScreen, diContainer } = renderWithProvider({
     Page,
     container: mockContainer(validationStub)
   })
@@ -52,7 +55,8 @@ const makeSut = (validationError = null): SutType => {
     setOpenSpy,
     sagaUsecases,
     store,
-    categories
+    categories,
+    moneyConverter: diContainer.get<MoneyConverter>(Dependencies.MoneyConverter)
   }
 }
 
@@ -208,15 +212,18 @@ describe('CreatePurchaseModal Component', () => {
     })
 
     it('should call create usecase with correct values on submit', async () => {
-      const { renderScreen, sagaUsecases, categories } = makeSut()
-
-      renderScreen()
+      const { renderScreen, sagaUsecases, categories, moneyConverter } = makeSut()
 
       const name = 'any-name'
       const value = 'R$ 11.32'
       const installmentsNumber = '10'
       const firstInstallmentDate = '1999-01-03'
       const category = categories[0].id.toString()
+
+      const toMoney = moneyConverter.toMoney as jest.Mock
+      toMoney.mockReturnValueOnce(value)
+
+      renderScreen()
 
       await simulateValidSubmit({
         name,

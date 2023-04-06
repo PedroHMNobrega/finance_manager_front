@@ -2,7 +2,7 @@ import React from 'react'
 import { screen } from '@testing-library/react'
 import { createMemoryHistory } from 'history'
 import NotFound from '@/presentation/pages/not-found/not-found'
-import { renderWithHistory } from '@/tests/presentation/mocks'
+import { renderWithProvider } from '@/tests/presentation/mocks'
 import { mockAccountModel } from '@/tests/domain/mocks'
 import { clickButton } from '@/tests/presentation/helpers/form-helper'
 
@@ -12,11 +12,13 @@ const makeSut = (account = mockAccountModel()): void => {
   const Page: React.FC = () => (
     <NotFound />
   )
-  renderWithHistory({
+  const { renderScreen } = renderWithProvider({
     Page,
     history,
     account: account
   })
+
+  renderScreen()
 }
 
 describe('NotFound', () => {

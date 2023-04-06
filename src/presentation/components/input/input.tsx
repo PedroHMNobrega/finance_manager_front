@@ -1,7 +1,10 @@
 import React, { useContext } from 'react'
 import Styles from './input-styles.scss'
+import { useInjection } from 'inversify-react'
 import { FormContext } from '@/presentation/contexts'
 import { InputStatus } from '@/presentation/components'
+import { Dependencies } from '@/presentation/dependencies'
+import { MoneyConverter } from '@/domain/usecases/conversion'
 
 type Props = React.DetailedHTMLProps<React.InputHTMLAttributes<HTMLInputElement>, HTMLInputElement> & {
   name: string
@@ -12,6 +15,7 @@ type Props = React.DetailedHTMLProps<React.InputHTMLAttributes<HTMLInputElement>
 }
 
 const Input: React.FC<Props> = (props: Props) => {
+  const moneyConverter = useInjection<MoneyConverter>(Dependencies.MoneyConverter)
   const { withMargin, ...inputProps } = props
   const { state, setState } = useContext(FormContext)
   const error = state[`${inputProps.name}Error`]
@@ -36,22 +40,10 @@ const Input: React.FC<Props> = (props: Props) => {
     })
   }
 
-  // TODO: Use dependency injection with moneyConverter
   const handleMoneyChange = (event: React.FocusEvent<HTMLInputElement>): void => {
-    let chars: string[] = (event.target.value).split('')
-    chars = chars.filter(char => /[0-9]/.test(char))
-
-    while (chars[0] === '0') chars.shift()
-
-    let value = chars.join('')
-
-    while (value.length < 3) value = '0' + value
-
-    value = `R$ ${value.substring(0, value.length - 2)}.${value.substring(value.length - 2)}`
-
     setState({
       ...state,
-      [event.target.name]: value
+      [event.target.name]: moneyConverter.toMoney(event.target.value)
     })
   }
 

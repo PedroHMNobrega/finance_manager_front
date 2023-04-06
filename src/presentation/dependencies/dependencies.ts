@@ -1,4 +1,7 @@
 export enum Dependencies {
+  CreatePurchaseValidation = 'CreatePurchaseValidation',
+  LoginValidation = 'LoginValidation',
   DateFormatter = 'DateFormatter',
-  CreatePurchaseValidation = 'CreatePurchaseValidation'
+  MoneyConverter = 'MoneyConverter',
+  Authentication = 'Authentication'
 }
