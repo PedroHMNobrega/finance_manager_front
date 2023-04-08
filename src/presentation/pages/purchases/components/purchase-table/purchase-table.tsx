@@ -1,16 +1,23 @@
 import React from 'react'
 import Styles from './purchase-table-styles.scss'
-import { Purchase } from '@/domain/models'
+import { Category, Purchase } from '@/domain/models'
 import { useInjection } from 'inversify-react'
 import { DateFormatter } from '@/domain/usecases/date'
 import { Dependencies } from '@/presentation/dependencies'
 
 type Props = {
   purchases: Purchase[]
+  categories: Category[]
 }
 
-const PurchaseTable: React.FC<Props> = ({ purchases }: Props) => {
+const PurchaseTable: React.FC<Props> = ({ purchases, categories }: Props) => {
   const dateFormatter = useInjection<DateFormatter>(Dependencies.DateFormatter)
+
+  const getCategoryName = (purchase): string => {
+    const category = categories.find(c => c.id === purchase.category)
+    if (!purchase.category || !category) return '-'
+    return category.name
+  }
 
   const renderTable = (): JSX.Element => {
     if (purchases.length === 0) {
@@ -30,7 +37,7 @@ const PurchaseTable: React.FC<Props> = ({ purchases }: Props) => {
           {purchases.map(purchase => (
             <div key={purchase.id} className={Styles.row} data-testid="purchase">
               <h3>{purchase.name}</h3>
-              <h3>{purchase.category ? purchase.category : '-'}</h3>
+              <h3>{getCategoryName(purchase)}</h3>
               <h3>{purchase.installmentsNumber}</h3>
               <h3>{dateFormatter.format(purchase.firstInstallmentDate)}</h3>
               <h3>R$ {purchase.value}</h3>
