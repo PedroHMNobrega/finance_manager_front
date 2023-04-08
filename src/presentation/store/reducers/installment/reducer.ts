@@ -33,18 +33,23 @@ const loadInstallmentsReducers = {
   }
 }
 
-const uploadInstallmentReducers = {
-  uploadInstallmentRequest: (state, { payload }) => {
+const updateInstallmentReducers = {
+  updateInstallmentRequest: (state, { payload }) => {
     state.loading = true
     state.loadingId = payload
     state.error = null
   },
-  uploadInstallmentSuccess: (state, { payload }) => {
+  updateInstallmentSuccess: (state, { payload }) => {
     state.loading = false
     state.loadingId = null
-    // TODO: success
+    state.installments = state.installments.map(installment => {
+      if (installment.id === payload.id) {
+        return payload
+      }
+      return installment
+    })
   },
-  uploadInstallmentFail: (state, { payload }) => {
+  updateInstallmentFail: (state, { payload }) => {
     state.loading = false
     state.loadingId = null
     state.error = payload
@@ -56,7 +61,7 @@ const installmentSlice = createSlice({
   initialState,
   reducers: {
     ...loadInstallmentsReducers,
-    ...uploadInstallmentReducers
+    ...updateInstallmentReducers
   }
 })
 
@@ -64,9 +69,9 @@ export const {
   loadInstallmentsRequest,
   loadInstallmentsSuccess,
   loadInstallmentsFail,
-  uploadInstallmentSuccess,
-  uploadInstallmentFail,
-  uploadInstallmentRequest
+  updateInstallmentSuccess,
+  updateInstallmentFail,
+  updateInstallmentRequest
 } = installmentSlice.actions
 
 export default installmentSlice.reducer

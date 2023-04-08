@@ -5,13 +5,17 @@ import { all, call, put, takeLatest } from 'redux-saga/effects'
 import {
   loadInstallmentsFail,
   loadInstallmentsRequest,
-  loadInstallmentsSuccess
+  loadInstallmentsSuccess, updateInstallmentFail, updateInstallmentRequest, updateInstallmentSuccess
 } from '@/presentation/store/reducers/installment/reducer'
+import { Update } from '@/domain/usecases/update'
+import { UpdateInstallmentParams } from '@/domain/usecases/installment/update-installment'
+import { ReduxAction } from '@/presentation/store/reducers/root-reducer'
 
 class InstallmentSaga implements SagaInterface {
   constructor (
     private readonly getJwt: GetJwt,
-    private readonly loadInstallmentUsecase: Load<LoadInstallmentListParams, Installment[]>
+    private readonly loadInstallmentUsecase: Load<LoadInstallmentListParams, Installment[]>,
+    private readonly updateInstallmentUsecase: Update<UpdateInstallmentParams, Installment>
   ) {}
 
   loadInstallments (): () => Generator<any> {
@@ -30,9 +34,32 @@ class InstallmentSaga implements SagaInterface {
     }
   }
 
+  updateInstallment (): (ReduxAction) => Generator<any> {
+    const { updateInstallmentUsecase, getJwt } = this
+    return function * (action: ReduxAction) {
+      try {
+        const token = getJwt.get()
+        const installment = action.payload.body
+        const installmentId = action.payload.id
+        const response = yield call(updateInstallmentUsecase.update, {
+          token,
+          body: installment,
+          id: installmentId
+        })
+        yield put(updateInstallmentSuccess(response))
+      } catch (e) {
+        yield put(updateInstallmentFail({
+          name: e.name,
+          message: e.message
+        }))
+      }
+    }
+  }
+
   * register (): Iterable<any> {
     yield all([
-      takeLatest(loadInstallmentsRequest.type, this.loadInstallments())
+      takeLatest(loadInstallmentsRequest.type, this.loadInstallments()),
+      takeLatest(updateInstallmentRequest.type, this.updateInstallment())
     ])
   }
 }

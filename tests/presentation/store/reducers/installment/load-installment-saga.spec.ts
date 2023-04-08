@@ -14,7 +14,7 @@ type SutTypes = {
 const makeSut = (): SutTypes => {
   const loadInstallmentSpy = loadSpy()
   const jwtSpy = getJwtSpy()
-  const sut = new InstallmentSaga(jwtSpy, loadInstallmentSpy)
+  const sut = new InstallmentSaga(jwtSpy, loadInstallmentSpy, null)
 
   return {
     sut,
