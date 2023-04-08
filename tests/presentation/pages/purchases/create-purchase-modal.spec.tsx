@@ -21,6 +21,7 @@ import { MessageType } from '@/presentation/components/message/message'
 import { mockContainer } from '@/tests/main/mocks/mock-dependency-injection-container'
 import { MoneyConverter } from '@/domain/usecases/conversion'
 import { Dependencies } from '@/presentation/dependencies'
+import { loadCategoryRequest } from '@/presentation/store/reducers/category/reducer'
 
 type SutType = {
   renderScreen: Function
@@ -49,6 +50,7 @@ const makeSut = (validationError = null): SutType => {
 
   const loadCategories = sagaUsecases.loadCategoriesUsecase.loadAll as jest.Mock
   loadCategories.mockReturnValue(categories)
+  store.dispatch(loadCategoryRequest())
 
   return {
     renderScreen,
@@ -90,10 +92,11 @@ describe('CreatePurchaseModal Component', () => {
     })
 
     it('should show spinner on category load loading', () => {
-      const { renderScreen, sagaUsecases } = makeSut()
+      const { renderScreen, sagaUsecases, store } = makeSut()
 
       const loadCategories = sagaUsecases.loadCategoriesUsecase.loadAll as jest.Mock
       mockLoading(loadCategories)
+      store.dispatch(loadCategoryRequest())
 
       renderScreen()
 
@@ -105,10 +108,11 @@ describe('CreatePurchaseModal Component', () => {
     })
 
     it('should display error message on category load error', () => {
-      const { renderScreen, sagaUsecases } = makeSut()
+      const { renderScreen, sagaUsecases, store } = makeSut()
 
       const loadCategories = sagaUsecases.loadCategoriesUsecase.loadAll as jest.Mock
       mockError(loadCategories)
+      store.dispatch(loadCategoryRequest())
 
       renderScreen()
 

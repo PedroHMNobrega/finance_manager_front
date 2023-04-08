@@ -4,7 +4,6 @@ import { AddButton, Input, Modal, Select, Space, SubmitButton, WithLoading } fro
 import { FormContext } from '@/presentation/contexts'
 import CategoryModal from '@/presentation/pages/purchases/components/category-modal/category-modal'
 import { useAppDispatch, useAppSelector } from '@/presentation/store/hooks'
-import { loadCategoryRequest } from '@/presentation/store/reducers/category/reducer'
 import { SpinnerSize } from '@/presentation/components/spinner/spinner'
 import Message, { MessageType } from '@/presentation/components/message/message'
 import { Validation } from '@/presentation/protocols/validation'
@@ -48,10 +47,6 @@ const CreatePurchaseModal: React.FC<Props> = ({ setOpen }: Props) => {
       firstInstallmentDateError: validation.validate('firstInstallmentDate', state.firstInstallmentDate)
     })
   }, [state.name, state.category, state.value, state.installmentsNumber, state.firstInstallmentDate])
-
-  useEffect(() => {
-    dispatch(loadCategoryRequest())
-  }, [dispatch])
 
   useEffect(() => {
     if (purchaseState.success) {
