@@ -1,15 +1,16 @@
 import { LoadInstallmentListParams } from '@/domain/usecases'
 import { Installment } from '@/domain/models'
 import { UpdateInstallmentParams } from '@/domain/usecases/installment/update-installment'
+import { UpdateParams } from '@/domain/usecases/update'
 
 export const mockLoadInstallmentListParams = (): LoadInstallmentListParams => ({
   token: 'any-token'
 })
 
-export const mockUpdateInstallmentParams = (): UpdateInstallmentParams => ({
+export const mockUpdateInstallmentParams = (): UpdateParams<UpdateInstallmentParams> => ({
   token: 'any-token',
   id: 1,
-  installment: mockUpdateInstallment()
+  body: mockUpdateInstallment()
 })
 
 export const mockInstallment = (id): Installment => ({

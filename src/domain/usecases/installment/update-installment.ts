@@ -1,8 +1,4 @@
-import { UpdateParams } from '@/domain/usecases/update'
-
-export type UpdateInstallmentParams = UpdateParams & {
-  installment: {
-    value_paid: number
-    paid: boolean
-  }
+export type UpdateInstallmentParams = {
+  value_paid: number
+  paid: boolean
 }
