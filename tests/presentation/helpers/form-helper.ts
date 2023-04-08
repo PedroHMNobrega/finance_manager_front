@@ -40,10 +40,13 @@ export const testInputSuccess = (name: string): void => {
   expect(inputStatus.textContent).toBe('🟢')
 }
 
-export const testMessage = (type: MessageType): void => {
+export const testMessage = (type: MessageType, errorMessage = null): void => {
   const message = screen.queryByTestId('message')
   expect(message).toBeTruthy()
   expect(message.className).toBe(`message ${type}`)
+  if (errorMessage) {
+    expect(message.textContent).toBe(errorMessage)
+  }
 }
 
 export const testIfInputsAreEmpty = (testIds: string[]): void => {

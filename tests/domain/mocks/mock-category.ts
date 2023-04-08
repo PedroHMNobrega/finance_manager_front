@@ -15,9 +15,9 @@ export const mockDeleteCategoryParams = (): DeleteCategoryParams => ({
   token: 'any-token'
 })
 
-export const mockCategory = (id): Category => ({
+export const mockCategory = (id, name = 'any-name'): Category => ({
   id: id,
-  name: 'any-name'
+  name: name
 })
 
 export const mockCategoryList = (): Category[] => ([

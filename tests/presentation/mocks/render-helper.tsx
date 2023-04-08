@@ -1,7 +1,7 @@
 import { MemoryHistory } from 'history'
 import { AccountModel } from '@/domain/models'
 import { mockAccountModel } from '@/tests/domain/mocks'
-import { render } from '@testing-library/react'
+import { act, render } from '@testing-library/react'
 import { Provider } from 'react-redux'
 import { Router } from 'react-router-dom'
 import React from 'react'
@@ -42,21 +42,23 @@ export const renderWithProvider = ({
     store.dispatch(setUser(account.accessToken))
   }
 
-  const renderScreen = (): void => {
-    render(
-      <DependencyProvider container={container}>
-        <Provider store={store}>
-          {history && (
-            <Router location={history.location} navigator={history}>
+  const renderScreen = async (): Promise<void> => {
+    await act(() => {
+      render(
+        <DependencyProvider container={container}>
+          <Provider store={store}>
+            {history && (
+              <Router location={history.location} navigator={history}>
+                <Page />
+              </Router>
+            )}
+            {!history && (
               <Page />
-            </Router>
-          )}
-          {!history && (
-            <Page />
-          )}
-        </Provider>
-      </DependencyProvider>
-    )
+            )}
+          </Provider>
+        </DependencyProvider>
+      )
+    })
   }
 
   return {

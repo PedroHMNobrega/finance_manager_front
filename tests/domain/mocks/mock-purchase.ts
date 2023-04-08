@@ -15,12 +15,12 @@ export const mockDeletePurchaseParams = (): DeletePurchaseParams => ({
   token: 'any-token'
 })
 
-export const mockPurchase = (id): Purchase => ({
+export const mockPurchase = (id, categoryId = 1): Purchase => ({
   id: id,
   name: 'any-name',
   installmentsNumber: 10,
   value: 100,
-  category: 1,
+  category: categoryId,
   firstInstallmentDate: '2023-02-19'
 })
 
