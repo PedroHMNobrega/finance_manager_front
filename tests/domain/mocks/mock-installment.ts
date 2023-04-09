@@ -2,6 +2,8 @@ import { LoadInstallmentListParams } from '@/domain/usecases'
 import { Installment } from '@/domain/models'
 import { UpdateInstallmentParams } from '@/domain/usecases/installment/update-installment'
 import { UpdateParams } from '@/domain/usecases/update'
+import { mockPurchase } from '@/tests/domain/mocks/mock-purchase'
+import { mockCategory } from '@/tests/domain/mocks/mock-category'
 
 export const mockLoadInstallmentListParams = (): LoadInstallmentListParams => ({
   token: 'any-token'
@@ -15,11 +17,12 @@ export const mockUpdateInstallmentParams = (): UpdateParams<UpdateInstallmentPar
 
 export const mockInstallment = (id): Installment => ({
   id: id,
-  purchase: 1,
+  purchase: mockPurchase(1),
   number: 1,
   value_paid: 100.00,
   date: '2023-02-20',
-  paid: true
+  paid: true,
+  category: mockCategory(1).name
 })
 
 export const mockUpdateInstallment = (): any => ({

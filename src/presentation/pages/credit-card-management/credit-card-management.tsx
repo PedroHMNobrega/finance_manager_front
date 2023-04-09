@@ -1,13 +1,16 @@
 import React from 'react'
 import Container from '@/presentation/components/container/container'
-import { CREDIT_CARD_MANAGEMENT_INSTALLMENTS_LINK, HOME_LINK } from '@/presentation/util/links'
+import {
+  CREDIT_CARD_MANAGEMENT_INSTALLMENTS_LINK,
+  CREDIT_CARD_MANAGEMENT_PURCHASES_LINK
+} from '@/presentation/util/links'
 import { Subheader } from '@/presentation/components'
 import { Outlet } from 'react-router-dom'
 
 const headerLinks = [
   {
     name: 'Compras',
-    url: HOME_LINK.full()
+    url: CREDIT_CARD_MANAGEMENT_PURCHASES_LINK.full()
   },
   {
     name: 'Parcelas',
