@@ -140,8 +140,8 @@ describe('Purchases Component', () => {
 
       await renderScreen()
 
-      const addButton = screen.queryByTestId('purchase-table')
-      expect(addButton).toBeNull()
+      const purchaseTable = screen.queryByTestId('purchase-table')
+      expect(purchaseTable).toBeNull()
 
       const spinner = screen.queryByTestId('spinner')
       expect(spinner).toBeTruthy()

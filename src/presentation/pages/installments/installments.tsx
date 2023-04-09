@@ -1,52 +1,30 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import Styles from './installments-styles.scss'
 import Container from '@/presentation/components/container/container'
 import InstallmentTable from '@/presentation/pages/installments/components/installment-table/installment-table'
+import { useAppDispatch, useAppSelector } from '@/presentation/store/hooks'
+import { loadInstallmentsRequest } from '@/presentation/store/reducers/installment/reducer'
+import Message, { MessageType } from '@/presentation/components/message/message'
+import { WithLoading } from '@/presentation/components'
 
 const Installments: React.FC = () => {
-  const installments = [
-    {
-      id: 1,
-      purchase: {
-        id: 1,
-        name: 'any-name',
-        installmentsNumber: 10,
-        value: 100,
-        category: 3,
-        firstInstallmentDate: '2023-02-19'
-      },
-      number: 1,
-      value_paid: 100.00,
-      date: '2023-02-20',
-      paid: true,
-      category: 'any-category'
-    },
-    {
-      id: 1,
-      purchase: {
-        id: 1,
-        name: 'any-name',
-        installmentsNumber: 10,
-        value: 100,
-        category: 3,
-        firstInstallmentDate: '2023-02-19'
-      },
-      number: 1,
-      value_paid: 100.00,
-      date: '2023-02-20',
-      paid: false,
-      category: 'any-category2'
-    }
-  ]
-  // const installments = []
+  const dispatch = useAppDispatch()
+  const { installments, loading, error } = useAppSelector(state => state.installment)
+
+  useEffect(() => {
+    dispatch(loadInstallmentsRequest())
+  }, [dispatch])
 
   return (
     <Container className={Styles.container}>
+      <Message message={error ? error.message : ''} type={MessageType.ERROR} />
       <div className={Styles.installments_container}>
         <div className={Styles.header}>
           <h1>Parcelas</h1>
         </div>
-        <InstallmentTable installments={installments} />
+        <WithLoading loading={loading} loadingClass={Styles.loading}>
+          <InstallmentTable installments={installments} />
+        </WithLoading>
       </div>
     </Container>
   )
