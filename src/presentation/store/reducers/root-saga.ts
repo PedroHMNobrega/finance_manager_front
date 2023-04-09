@@ -1,16 +1,18 @@
 import { fork } from 'redux-saga/effects'
-import { CategorySaga, PurchaseSaga, UserSaga } from '@/presentation/store/reducers/'
+import { CategorySaga, InstallmentSaga, PurchaseSaga, UserSaga } from '@/presentation/store/reducers/'
 import {
   Create,
   CreateCategoryParams, CreatePurchaseParams,
   Delete,
   DeleteCategoryParams, DeletePurchaseParams,
   Load,
-  LoadCategoryListParams, LoadPurchaseListParams
+  LoadCategoryListParams, LoadInstallmentListParams, LoadPurchaseListParams
 } from '@/domain/usecases'
-import { Category, Purchase } from '@/domain/models'
+import { Category, Installment, Purchase } from '@/domain/models'
 import SagaContainer from '@/presentation/store/reducers/saga-container'
 import { LocalStorageJwt } from '@/data/usecases/authentication'
+import { Update } from '@/domain/usecases/update'
+import { UpdateInstallmentParams } from '@/domain/usecases/installment/update-installment'
 
 export function * rootSaga (usecases: SagaUseCases): Generator<any> {
   const sagaContainer = new SagaContainer()
@@ -34,6 +36,14 @@ export function * rootSaga (usecases: SagaUseCases): Generator<any> {
   )
 
   sagaContainer.addSaga(
+    new InstallmentSaga(
+      usecases.jwtUsecase,
+      usecases.loadInstallmentsUsecase,
+      usecases.updateInstallmentUsecase
+    )
+  )
+
+  sagaContainer.addSaga(
     new UserSaga(usecases.jwtUsecase)
   )
 
@@ -48,4 +58,6 @@ export type SagaUseCases = {
   loadPurchasesUsecase: Load<LoadPurchaseListParams, Purchase[]>
   deletePurchaseUsecase: Delete<DeletePurchaseParams, void>
   createPurchaseUsecase: Create<CreatePurchaseParams, Purchase>
+  loadInstallmentsUsecase: Load<LoadInstallmentListParams, Installment[]>
+  updateInstallmentUsecase: Update<UpdateInstallmentParams, Installment>
 }
