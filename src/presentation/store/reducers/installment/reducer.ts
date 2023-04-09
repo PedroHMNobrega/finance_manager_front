@@ -19,7 +19,7 @@ const initialState: InstallmentState = {
 }
 
 const loadInstallmentsReducers = {
-  loadInstallmentsRequest: (state) => {
+  loadInstallmentsRequest: (state, { payload }) => {
     state.loading = true
     state.error = null
   },

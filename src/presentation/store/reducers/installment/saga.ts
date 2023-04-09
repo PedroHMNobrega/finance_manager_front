@@ -18,12 +18,12 @@ class InstallmentSaga implements SagaInterface {
     private readonly updateInstallmentUsecase: Update<UpdateInstallmentParams, Installment>
   ) {}
 
-  loadInstallments (): () => Generator<any> {
+  loadInstallments (): (ReduxAction) => Generator<any> {
     const { loadInstallmentUsecase, getJwt } = this
-    return function * () {
+    return function * (action: ReduxAction) {
       try {
         const token = getJwt.get()
-        const response = yield call(loadInstallmentUsecase.loadAll, { token: token })
+        const response = yield call(loadInstallmentUsecase.loadAll, { token: token, params: action.payload })
         yield put(loadInstallmentsSuccess(response))
       } catch (e) {
         yield put(loadInstallmentsFail({

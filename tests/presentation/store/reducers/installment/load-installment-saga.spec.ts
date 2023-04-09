@@ -35,7 +35,19 @@ describe('LoadInstallmentSaga', () => {
     await sagaExec(sut.loadInstallments())
     expect(loadInstallmentSpy.loadAll).toHaveBeenCalledTimes(1)
     expect(loadInstallmentSpy.loadAll).toHaveBeenCalledWith({
-      token: mockJwt()
+      token: mockJwt(),
+      params: null
+    })
+  })
+
+  it('should call loadInstallments with correct value', async () => {
+    const { sut, loadInstallmentSpy } = makeSut()
+    const params = { any: 'params ' }
+    await sagaExec(sut.loadInstallments(), params)
+    expect(loadInstallmentSpy.loadAll).toHaveBeenCalledTimes(1)
+    expect(loadInstallmentSpy.loadAll).toHaveBeenCalledWith({
+      token: mockJwt(),
+      params: params
     })
   })
 
