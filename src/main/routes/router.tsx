@@ -7,10 +7,10 @@ import { Provider as DependencyProvider } from 'inversify-react'
 import { PrivateRoute } from '@/main/proxies'
 import { ToolkitStore } from '@reduxjs/toolkit/dist/configureStore'
 import { container } from '@/main/dependency-injection/container'
+import { HOME_LINK, LOGIN_LINK } from '@/presentation/util/links'
+import { Home, Login } from '@/presentation/pages'
 
 export type RouterFactories = {
-  makeLogin: () => JSX.Element
-  makeHome: () => JSX.Element
   makeStore: () => ToolkitStore
 }
 
@@ -19,8 +19,6 @@ type Props = {
 }
 
 const Router: React.FC<Props> = ({ factories }: Props) => {
-  const loginComponent = factories.makeLogin()
-  const homeComponent = factories.makeHome()
   const store = factories.makeStore()
 
   return (
@@ -28,8 +26,8 @@ const Router: React.FC<Props> = ({ factories }: Props) => {
       <Provider store={store}>
         <BrowserRouter>
           <Routes>
-            <Route path="/" element={<PrivateRoute>{homeComponent}</PrivateRoute>}></Route>
-            <Route path="/login" element={loginComponent} />
+            <Route path={HOME_LINK} element={<PrivateRoute><Home /></PrivateRoute>}></Route>
+            <Route path={LOGIN_LINK} element={<Login />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>

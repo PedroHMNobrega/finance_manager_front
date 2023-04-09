@@ -1,6 +1,5 @@
 export { makeAxiosHttpAdapter } from './http/axios-http-adapter-factory'
 export { makeApiUrl } from './http/api-url-factory'
-export { makeLogin, makeHome } from './pages'
 export { makeStore } from './store/redux-store-factory'
 export { makeDateFormatter } from './usecases/date-formatter-factory'
 export { makeMoneyConverter } from './usecases/money-converter-factory'
