@@ -3,6 +3,7 @@ export type HttpMethod = 'post' | 'get' | 'put' | 'delete'
 export type HttpRequest = {
   url: string
   method: HttpMethod
+  params?: Record<string, string>
   body?: any
   headers?: any
 }

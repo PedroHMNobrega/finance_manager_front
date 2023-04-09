@@ -32,6 +32,24 @@ describe('AxiosHttpClient', () => {
     })
   })
 
+  it('should call axios with correct values if params is passed', async () => {
+    const request = mockHttpRequest()
+
+    const params = { any: 'param' }
+    request.params = params
+
+    const { sut, mockedAxios } = makeSut()
+    await sut.request(request)
+
+    expect(mockedAxios.request).toHaveBeenCalledWith({
+      url: `${request.url}/`,
+      params: params,
+      data: request.body,
+      headers: request.headers,
+      method: request.method
+    })
+  })
+
   it('should return the correct statusCode and body', async () => {
     const { sut } = makeSut()
     const httpResponse = await sut.request(mockHttpRequest())

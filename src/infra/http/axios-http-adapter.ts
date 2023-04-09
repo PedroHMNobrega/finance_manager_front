@@ -8,6 +8,7 @@ export class AxiosHttpAdapter implements HttpClient {
     try {
       axiosResponse = await axios.request({
         url: `${data.url}/`,
+        params: data.params,
         method: data.method,
         data: data.body,
         headers: data.headers
