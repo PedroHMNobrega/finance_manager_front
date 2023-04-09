@@ -21,7 +21,7 @@ const makeSut = (): SutTypes => {
 
 describe('AxiosHttpClient', () => {
   it('should call axios with correct values', async () => {
-    const request = mockHttpRequest
+    const request = mockHttpRequest()
     const { sut, mockedAxios } = makeSut()
     await sut.request(request)
     expect(mockedAxios.request).toHaveBeenCalledWith({
@@ -34,7 +34,7 @@ describe('AxiosHttpClient', () => {
 
   it('should return the correct statusCode and body', async () => {
     const { sut } = makeSut()
-    const httpResponse = await sut.request(mockHttpRequest)
+    const httpResponse = await sut.request(mockHttpRequest())
     expect(httpResponse).toEqual({
       statusCode: mockHttpResponse.status,
       body: mockHttpResponse.data
@@ -46,7 +46,7 @@ describe('AxiosHttpClient', () => {
     mockedAxios.post.mockRejectedValueOnce({
       response: mockHttpResponse
     })
-    const httpResponse = await sut.request(mockHttpRequest)
+    const httpResponse = await sut.request(mockHttpRequest())
     expect(httpResponse).toEqual({
       statusCode: mockHttpResponse.status,
       body: mockHttpResponse.data
@@ -58,7 +58,7 @@ describe('AxiosHttpClient', () => {
     mockedAxios.request.mockRejectedValueOnce({
       response: null
     })
-    const httpResponse = await sut.request(mockHttpRequest)
+    const httpResponse = await sut.request(mockHttpRequest())
     expect(httpResponse).toEqual({
       statusCode: 500,
       body: 'Server Error'
