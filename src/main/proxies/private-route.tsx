@@ -13,7 +13,7 @@ const PrivateRoute: React.FC<Props> = (props: Props) => {
 
   return user.accessToken
     ? props.children
-    : <Navigate to={LOGIN_LINK} />
+    : <Navigate to={LOGIN_LINK.full()} />
 }
 
 export default PrivateRoute

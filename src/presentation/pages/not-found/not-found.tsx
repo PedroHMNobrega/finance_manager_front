@@ -11,7 +11,7 @@ const NotFound: React.FC = () => {
       <div className={Styles.notFound}>
         <h1>
           Essa página não existe, <br />
-          ir para <Link data-testid='homeLink' to={HOME_LINK} className={Styles.link}>página principal</Link>
+          ir para <Link data-testid='homeLink' to={HOME_LINK.full()} className={Styles.link}>página principal</Link>
         </h1>
       </div>
       <Footer />
