@@ -33,6 +33,23 @@ describe('RemoteLoadInstallmentList', () => {
     expect(httpClientSpy.headers).toEqual({
       Authorization: `Bearer ${params.token}`
     })
+    expect(httpClientSpy.params).toBeUndefined()
+  })
+
+  it('should call HttpClient with correct values if params is passed', async () => {
+    const { sut, httpClientSpy } = makeSut()
+    const params = mockLoadInstallmentListParams()
+    const queryParams = { any: 'param' }
+    params.params = queryParams
+
+    await sut.loadAll(params)
+
+    expect(httpClientSpy.url).toBe(url)
+    expect(httpClientSpy.method).toBe('get')
+    expect(httpClientSpy.headers).toEqual({
+      Authorization: `Bearer ${params.token}`
+    })
+    expect(httpClientSpy.params).toStrictEqual(queryParams)
   })
 
   it('should throw InvalidCredientialsError if HttpClient returns 401', async () => {

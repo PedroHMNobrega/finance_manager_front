@@ -11,6 +11,7 @@ export class RemoteLoad<P extends LoadParams, R> implements Load<P, R> {
   loadAll = async (params: P): Promise<R> => {
     const httpResponse = await this.httpClient.request({
       url: this.url,
+      params: params.params,
       method: 'get',
       headers: {
         Authorization: `Bearer ${params.token}`
