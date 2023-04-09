@@ -1,12 +1,12 @@
 import React from 'react'
 import { Footer, MainHeader, PageContainer } from '@/presentation/components'
-import { CreditCardManagement } from '@/presentation/pages'
+import { Outlet } from 'react-router-dom'
 
 const Home: React.FC = () => {
   return (
     <PageContainer>
       <MainHeader />
-      <CreditCardManagement />
+      <Outlet />
       <Footer />
     </PageContainer>
   )

@@ -1,6 +1,7 @@
 import React from 'react'
 import { Navigate } from 'react-router-dom'
 import { useAppSelector } from '@/presentation/store/hooks'
+import { LOGIN_LINK } from '@/presentation/util/links'
 
 type Props = {
   children: JSX.Element
@@ -12,7 +13,7 @@ const PrivateRoute: React.FC<Props> = (props: Props) => {
 
   return user.accessToken
     ? props.children
-    : <Navigate to='/login' />
+    : <Navigate to={LOGIN_LINK} />
 }
 
 export default PrivateRoute
