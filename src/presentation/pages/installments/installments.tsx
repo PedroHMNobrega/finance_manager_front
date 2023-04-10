@@ -1,24 +1,23 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import Styles from './installments-styles.scss'
 import Container from '@/presentation/components/container/container'
 import InstallmentTable from '@/presentation/pages/installments/components/installment-table/installment-table'
 import { useAppDispatch, useAppSelector } from '@/presentation/store/hooks'
 import { loadInstallmentsRequest } from '@/presentation/store/reducers/installment/reducer'
 import Message, { MessageType } from '@/presentation/components/message/message'
-import { WithLoading } from '@/presentation/components'
+import { MonthPicker, WithLoading } from '@/presentation/components'
 
 const Installments: React.FC = () => {
   const dispatch = useAppDispatch()
   const { installments, loading, error } = useAppSelector(state => state.installment)
-  const month = new Date().getMonth() + 1
-  const year = new Date().getFullYear()
+  const [date, setDate] = useState(new Date())
 
   useEffect(() => {
     dispatch(loadInstallmentsRequest({
-      month: month,
-      year: year
+      month: date.getMonth() + 1,
+      year: date.getFullYear()
     }))
-  }, [dispatch])
+  }, [dispatch, date])
 
   return (
     <Container className={Styles.container}>
@@ -26,6 +25,7 @@ const Installments: React.FC = () => {
       <div className={Styles.installments_container}>
         <div className={Styles.header}>
           <h1>Parcelas</h1>
+          <MonthPicker date={date} setDate={setDate} className={Styles.month_picker} />
         </div>
         <WithLoading loading={loading} loadingClass={Styles.loading}>
           <InstallmentTable installments={installments} />

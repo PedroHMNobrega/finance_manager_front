@@ -7,7 +7,7 @@ import { mockInstallment, mockInstallmentList, mockJwt } from '@/tests/domain/mo
 import { Installments } from '@/presentation/pages'
 import { renderWithProvider } from '@/tests/presentation/mocks'
 import { mockError, mockLoading } from '@/tests/presentation/helpers/saga-helper'
-import { testMessage } from '@/tests/presentation/helpers/form-helper'
+import { clickButton, testMessage } from '@/tests/presentation/helpers/form-helper'
 import { MessageType } from '@/presentation/components/message/message'
 
 type SutType = {
@@ -43,6 +43,7 @@ describe('Installments Component', () => {
   it('should call load installments with today date on start', async () => {
     const { renderScreen, sagaUsecases } = makeSut()
     const todayMonth = 0
+    const oneBasedMonth = todayMonth + 1
     const todayYear = 2020
     jest.useFakeTimers().setSystemTime(new Date(todayYear, todayMonth, 2))
 
@@ -52,8 +53,53 @@ describe('Installments Component', () => {
     expect(loadAll).toHaveBeenCalledWith({
       token: mockJwt(),
       params: {
-        month: todayMonth + 1,
+        month: oneBasedMonth,
         year: todayYear
+      }
+    })
+    jest.useRealTimers()
+  })
+
+  it('should call load installments with today date + one month on monthPicker right button click', async () => {
+    const { renderScreen, sagaUsecases } = makeSut()
+    const todayMonth = 0
+    const oneBasedMonth = todayMonth + 1
+    const todayYear = 2020
+    jest.useFakeTimers().setSystemTime(new Date(todayYear, todayMonth, 2))
+
+    const loadAll = sagaUsecases.loadInstallmentsUsecase.loadAll as jest.Mock
+    await renderScreen()
+
+    const rightArrow = screen.queryByTestId('arrow-right')
+    await clickButton(rightArrow)
+
+    expect(loadAll).toHaveBeenCalledWith({
+      token: mockJwt(),
+      params: {
+        month: oneBasedMonth + 1,
+        year: todayYear
+      }
+    })
+    jest.useRealTimers()
+  })
+
+  it('should call load installments with today date - one month on monthPicker left button click', async () => {
+    const { renderScreen, sagaUsecases } = makeSut()
+    const todayMonth = 0
+    const todayYear = 2020
+    jest.useFakeTimers().setSystemTime(new Date(todayYear, todayMonth, 2))
+
+    const loadAll = sagaUsecases.loadInstallmentsUsecase.loadAll as jest.Mock
+    await renderScreen()
+
+    const leftArrow = screen.queryByTestId('arrow-left')
+    await clickButton(leftArrow)
+
+    expect(loadAll).toHaveBeenCalledWith({
+      token: mockJwt(),
+      params: {
+        month: 12,
+        year: todayYear - 1
       }
     })
     jest.useRealTimers()
