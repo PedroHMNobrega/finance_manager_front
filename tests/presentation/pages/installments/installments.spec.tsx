@@ -3,7 +3,7 @@ import { screen } from '@testing-library/react'
 import { SagaUseCases } from '@/presentation/store/reducers/root-saga'
 import { ToolkitStore } from '@reduxjs/toolkit/dist/configureStore'
 import { Installment } from '@/domain/models'
-import { mockInstallment, mockInstallmentList } from '@/tests/domain/mocks'
+import { mockInstallment, mockInstallmentList, mockJwt } from '@/tests/domain/mocks'
 import { Installments } from '@/presentation/pages'
 import { renderWithProvider } from '@/tests/presentation/mocks'
 import { mockError, mockLoading } from '@/tests/presentation/helpers/saga-helper'
@@ -40,6 +40,25 @@ const makeSut = (installments = mockInstallmentList()): SutType => {
 }
 
 describe('Installments Component', () => {
+  it('should call load installments with today date on start', async () => {
+    const { renderScreen, sagaUsecases } = makeSut()
+    const todayMonth = 0
+    const todayYear = 2020
+    jest.useFakeTimers().setSystemTime(new Date(todayYear, todayMonth, 2))
+
+    const loadAll = sagaUsecases.loadInstallmentsUsecase.loadAll as jest.Mock
+    await renderScreen()
+
+    expect(loadAll).toHaveBeenCalledWith({
+      token: mockJwt(),
+      params: {
+        month: todayMonth + 1,
+        year: todayYear
+      }
+    })
+    jest.useRealTimers()
+  })
+
   it('should list correct installments on start', async () => {
     const { renderScreen, installments } = makeSut()
     await renderScreen()

@@ -10,9 +10,14 @@ import { WithLoading } from '@/presentation/components'
 const Installments: React.FC = () => {
   const dispatch = useAppDispatch()
   const { installments, loading, error } = useAppSelector(state => state.installment)
+  const month = new Date().getMonth() + 1
+  const year = new Date().getFullYear()
 
   useEffect(() => {
-    dispatch(loadInstallmentsRequest())
+    dispatch(loadInstallmentsRequest({
+      month: month,
+      year: year
+    }))
   }, [dispatch])
 
   return (
