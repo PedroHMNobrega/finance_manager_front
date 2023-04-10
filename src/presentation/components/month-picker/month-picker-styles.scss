@@ -1,0 +1,21 @@
+@import "../../styles/colors.scss";
+
+.container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: 350px;
+  justify-content: space-between;
+
+  h1 {
+    font-size: 28px;
+    color: $primaryDark;
+  }
+
+  .icon {
+    font-size: 28px;
+    cursor: pointer;
+    margin: 0 10px;
+    color: $primaryDark;
+  }
+}
