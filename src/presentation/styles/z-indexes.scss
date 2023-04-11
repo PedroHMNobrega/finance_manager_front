@@ -1,0 +1,4 @@
+$base: 1000;
+$above: 10;
+$idx-modal: $base;
+$idx-alert_message: $above + $idx-modal;
