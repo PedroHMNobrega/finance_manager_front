@@ -14,7 +14,6 @@ import { Dependencies } from '@/presentation/dependencies'
 
 type Props = {
   setOpen: Function
-  validation?: Validation
 }
 
 const CreatePurchaseModal: React.FC<Props> = ({ setOpen }: Props) => {
