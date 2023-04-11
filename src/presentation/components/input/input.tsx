@@ -24,13 +24,18 @@ const Input: React.FC<Props> = (props: Props) => {
     switch (inputProps.type) {
       case 'money':
         return (
-          <input {...inputProps} data-testid={inputProps.name} value={state[inputProps.name]} onChange={handleMoneyChange} type='text' />
+          <input {...inputProps} data-testid={inputProps.name} value={getMoneyValue(state[inputProps.name])} onChange={handleMoneyChange} type='text' />
         )
       default:
         return (
           <input {...inputProps} data-testid={inputProps.name} value={state[inputProps.name]} onChange={handleChange} />
         )
     }
+  }
+
+  const getMoneyValue = (value): string => {
+    if (!value) return ''
+    return moneyConverter.toMoney(value)
   }
 
   const handleChange = (event: React.FocusEvent<HTMLInputElement>): void => {
