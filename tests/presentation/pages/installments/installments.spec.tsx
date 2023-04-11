@@ -106,7 +106,11 @@ describe('Installments Component', () => {
   })
 
   it('should list correct installments on start', async () => {
-    const { renderScreen, installments } = makeSut()
+    const installments = mockInstallmentList()
+    installments[0].paid = false
+    installments[1].paid = true
+
+    const { renderScreen } = makeSut(installments)
     await renderScreen()
 
     const installmentsElements = screen.queryAllByTestId('installment')
@@ -116,13 +120,15 @@ describe('Installments Component', () => {
     expect(installmentsElements[0].children[1].textContent).toBe(`${installments[0].category}`)
     expect(installmentsElements[0].children[2].textContent).toBe(`${installments[0].number}/${installments[0].purchase.installmentsNumber}`)
     expect(installmentsElements[0].children[3].textContent).toBe(`R$ ${installments[0].value_paid}`)
-    expect(installmentsElements[0].children[4].textContent).toBe(`${installments[0].paid.toString()}`)
+    expect(installmentsElements[0].children[4].textContent).toBe('Pendente')
+    expect(installmentsElements[0].className).toBe('row')
 
     expect(installmentsElements[1].children[0].textContent).toBe(`${installments[1].purchase.name}`)
     expect(installmentsElements[1].children[1].textContent).toBe(`${installments[1].category}`)
     expect(installmentsElements[1].children[2].textContent).toBe(`${installments[1].number}/${installments[1].purchase.installmentsNumber}`)
     expect(installmentsElements[1].children[3].textContent).toBe(`R$ ${installments[1].value_paid}`)
-    expect(installmentsElements[1].children[4].textContent).toBe(`${installments[1].paid.toString()}`)
+    expect(installmentsElements[1].children[4].textContent).toBe('Pago')
+    expect(installmentsElements[1].className).toBe('row paid_row')
   })
 
   it('should show no installment message if there is no installment', async () => {
