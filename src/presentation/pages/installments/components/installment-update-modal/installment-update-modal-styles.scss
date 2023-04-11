@@ -1,0 +1,37 @@
+.info_container {
+  margin-bottom: 20px;
+  text-align: center;
+  font-weight: lighter;
+
+  span {
+    font-size: 24px;
+  }
+
+  b {
+    font-size: 24px;
+    font-weight: normal;
+  }
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+
+
+  .input_container {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+  }
+
+  .button_container {
+    display: flex;
+    justify-content: center;
+
+    .button {
+      width: 150px;
+    }
+  }
+}
+
