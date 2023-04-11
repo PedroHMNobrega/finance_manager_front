@@ -20,7 +20,7 @@ const InstallmentUpdateModal: React.FC<Props> = ({ setOpen, selected, setSelecte
   return (
     <Modal title={'Pagar Parcela'} setOpen={setOpen} name='update-installment-modal'>
       <div className={Styles.info_container}>
-        <span><b>Compra:</b> {selected.purchase.name} - {selected.number}/{selected.purchase.installmentsNumber}</span>
+        <span data-testid="selected-installment"><b>Compra:</b> {selected.purchase.name} - {selected.number}/{selected.purchase.installmentsNumber}</span>
       </div>
       <FormContext.Provider value={{ state, setState }}>
         <form className={Styles.form}>
