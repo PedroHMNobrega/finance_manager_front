@@ -71,7 +71,7 @@ const CreatePurchaseModal: React.FC<Props> = ({ setOpen }: Props) => {
     const purchase: Purchase = {
       name: state.name,
       installmentsNumber: parseInt(state.installmentsNumber),
-      value: parseFloat(state.value.split(' ')[1]),
+      value: parseFloat(state.value),
       category: parseInt(state.category),
       firstInstallmentDate: state.firstInstallmentDate
     }
