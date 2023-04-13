@@ -69,9 +69,9 @@ const Input: React.FC<Props> = (props: Props) => {
   return (
     <div className={Styles.input_container}>
       {inputProps.label && (
-        <label>{inputProps.label}</label>
+        <label data-testid="input-label">{inputProps.label}</label>
       )}
-      <div className={`${Styles.inputWrap} ${inputProps.className}`} style={getStyle()}>
+      <div className={`${Styles.inputWrap} ${inputProps.className}`} style={getStyle()} data-testid="input-wrap">
         {getInput()}
         <InputStatus name={inputProps.name} error={error} className={Styles.status}/>
       </div>
