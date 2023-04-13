@@ -1,15 +1,22 @@
-import React from 'react'
+import React, { MouseEventHandler } from 'react'
 import Styles from './submit-button-styles.scss'
 
 type Props = {
   title: string
   disabled: boolean
   className?: string
+  onClick?: MouseEventHandler
 }
 
-const SubmitButton: React.FC<Props> = ({ title, disabled, className = '' }: Props) => {
+const SubmitButton: React.FC<Props> = ({ title, disabled, onClick, className = '' }: Props) => {
   return (
-    <button data-testid="submit" disabled={disabled} className={`${Styles.submit} ${className}`} type="submit" >{title}</button>
+    <button
+      disabled={disabled}
+      className={`${Styles.submit} ${className}`}
+      type="submit"
+      onClick={onClick}
+      data-testid="submit"
+    >{title}</button>
   )
 }
 
