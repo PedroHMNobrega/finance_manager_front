@@ -44,7 +44,8 @@ const updateInstallmentReducers = {
     state.loadingId = null
     state.installments = state.installments.map(installment => {
       if (installment.id === payload.id) {
-        return payload
+        installment.paid = payload.paid
+        installment.value_paid = payload.value_paid
       }
       return installment
     })
