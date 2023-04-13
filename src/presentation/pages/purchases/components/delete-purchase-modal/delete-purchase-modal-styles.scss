@@ -1,0 +1,27 @@
+@import "/src/presentation/styles/colors.scss";
+@import "/src/presentation/styles/z-indexes";
+
+.info_container {
+  margin-bottom: 20px;
+  text-align: center;
+  font-weight: lighter;
+
+  span {
+    font-size: 24px;
+  }
+
+  b {
+    font-size: 24px;
+    font-weight: normal;
+  }
+}
+
+.button_container {
+  display: flex;
+  justify-content: center;
+
+  .button {
+    width: 180px;
+    background-color: $red;
+  }
+}

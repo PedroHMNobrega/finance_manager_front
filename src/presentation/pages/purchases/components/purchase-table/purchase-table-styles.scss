@@ -21,6 +21,7 @@ $border: 1px solid $borderColor;
     justify-content: space-between;
     width: 100%;
     border-bottom: $border;
+    cursor: pointer;
 
     &:last-child {
       border-bottom: none;
