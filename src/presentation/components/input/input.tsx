@@ -46,7 +46,7 @@ const Input: React.FC<Props> = (props: Props) => {
   }
 
   const handleMoneyChange = (event: React.FocusEvent<HTMLInputElement>): void => {
-    const splitedValue = event.target.value.split(' ')
+    const splitedValue = getMoneyValue(event.target.value).split(' ')
     let value
     if (splitedValue.length === 2) {
       value = splitedValue[1]
