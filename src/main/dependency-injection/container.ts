@@ -5,7 +5,9 @@ import {
   makeCreatePurchaseValidation,
   makeDateFormatter,
   makeLoginValidation,
-  makeMoneyConverter, makeRemoteAuthentication
+  makeMoneyConverter,
+  makeRemoteAuthentication,
+  makeUpdateInstallmentValidation
 } from '@/main/factories'
 import { Dependencies } from '@/presentation/dependencies'
 import { MoneyConverter } from '@/domain/usecases/conversion'
@@ -14,6 +16,7 @@ import { Authentication } from '@/domain/usecases'
 const container = new Container()
 
 container.bind<Validation>(Dependencies.CreatePurchaseValidation).toConstantValue(makeCreatePurchaseValidation())
+container.bind<Validation>(Dependencies.UpdateInstallmentValidation).toConstantValue(makeUpdateInstallmentValidation())
 container.bind<Validation>(Dependencies.LoginValidation).toConstantValue(makeLoginValidation())
 container.bind<DateFormatter>(Dependencies.DateFormatter).toConstantValue(makeDateFormatter())
 container.bind<MoneyConverter>(Dependencies.MoneyConverter).toConstantValue(makeMoneyConverter())

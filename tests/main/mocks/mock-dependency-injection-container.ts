@@ -14,6 +14,7 @@ export const mockContainer = (
   const container = new Container()
 
   container.bind<Validation>(Dependencies.CreatePurchaseValidation).toConstantValue(validationStub)
+  container.bind<Validation>(Dependencies.UpdateInstallmentValidation).toConstantValue(validationStub)
   container.bind<Validation>(Dependencies.LoginValidation).toConstantValue(validationStub)
   container.bind<DateFormatter>(Dependencies.DateFormatter).toConstantValue(dateFormatterSpy())
   container.bind<MoneyConverter>(Dependencies.MoneyConverter).toConstantValue(moneyConverterSpy())
