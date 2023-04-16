@@ -53,4 +53,10 @@ describe('LocalstorageJwt', () => {
     const response = sut.get()
     expect(response).toBe(token)
   })
+
+  it('remove should call localstorage remove', () => {
+    const { sut, key } = makeSut()
+    sut.remove()
+    expect(localStorage.removeItem).toHaveBeenCalledTimes(1)
+  })
 })

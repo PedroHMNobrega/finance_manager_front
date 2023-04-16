@@ -1,7 +1,7 @@
-import { GetJwt, SetJwt } from '@/domain/usecases'
+import { GetJwt, RemoveJwt, SetJwt } from '@/domain/usecases'
 import { Jwt } from '@/domain/models'
 
-export class LocalStorageJwt implements GetJwt, SetJwt {
+export class LocalStorageJwt implements GetJwt, SetJwt, RemoveJwt {
   constructor (
     private readonly key
   ) {}
@@ -12,5 +12,9 @@ export class LocalStorageJwt implements GetJwt, SetJwt {
 
   set = (token: Jwt): void => {
     localStorage.setItem(this.key, token)
+  }
+
+  remove = (): void => {
+    localStorage.removeItem(this.key)
   }
 }
