@@ -8,13 +8,13 @@ type SutTypes = {
   callback: Function
 }
 
-const makeSut = (): SutTypes => {
+const makeSut = (name = null): SutTypes => {
   const title = 'Any Title'
 
   const callback = jest.fn()
 
   render(
-    <Modal title={title} setOpen={callback}>
+    <Modal title={title} setOpen={callback} name={name}>
       <div data-testid="child">Any Content</div>
     </Modal>
   )
@@ -42,6 +42,25 @@ describe('Modal Component', () => {
     const { callback } = makeSut()
     const closeButton = screen.queryByTestId('modal-close') as HTMLButtonElement
     await clickButton(closeButton)
-    expect(callback).toBeCalledTimes(1)
+    expect(callback).toHaveBeenCalled()
+  })
+
+  it('should call callback when click outside', async () => {
+    const { callback } = makeSut()
+
+    const mask = screen.queryByTestId('modal-mask')
+    await clickButton(mask)
+
+    expect(callback).toHaveBeenCalled()
+  })
+
+  it('should not call callback when click inside', async () => {
+    const name = 'any-name'
+    const { callback } = makeSut(name)
+
+    const modal = screen.queryByTestId(name)
+    await clickButton(modal)
+
+    expect(callback).not.toHaveBeenCalled()
   })
 })

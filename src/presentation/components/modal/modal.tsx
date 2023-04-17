@@ -14,8 +14,8 @@ const Modal: React.FC<Props> = ({ children, title, setOpen, name }: Props) => {
   }
 
   return (
-    <div className={Styles.mask}>
-      <div className={Styles.modal} data-testid={name}>
+    <div className={Styles.mask} onClick={handleClick} data-testid="modal-mask">
+      <div className={Styles.modal} data-testid={name} onClick={e => e.stopPropagation()}>
         <div className={Styles.title_container}>
           <h2 data-testid="modal-title">{title}</h2>
           <div className={Styles.close} data-testid="modal-close" onClick={handleClick}>X</div>
