@@ -21,7 +21,9 @@ export const mockPurchase = (id, categoryId = 1): Purchase => ({
   installmentsNumber: 10,
   value: 100,
   category: categoryId,
-  firstInstallmentDate: '2023-02-19'
+  firstInstallmentDate: '2023-02-19',
+  installments_paid: 3,
+  value_paid: 10
 })
 
 export const mockPurchaseList = (): Purchase[] => ([

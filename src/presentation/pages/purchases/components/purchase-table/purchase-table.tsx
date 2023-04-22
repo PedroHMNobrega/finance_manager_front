@@ -41,6 +41,7 @@ const PurchaseTable: React.FC<Props> = ({ purchases, categories }: Props) => {
             <h3>Parcelas</h3>
             <h3>Primeira Parcela</h3>
             <h3>Valor</h3>
+            <h3>Valor Pendente</h3>
           </div>
           {purchases.map(purchase => (
             <div
@@ -51,9 +52,10 @@ const PurchaseTable: React.FC<Props> = ({ purchases, categories }: Props) => {
             >
               <h3>{purchase.name}</h3>
               <h3>{getCategoryName(purchase)}</h3>
-              <h3>{purchase.installmentsNumber}</h3>
+              <h3>{purchase.installments_paid}/{purchase.installmentsNumber}</h3>
               <h3>{dateFormatter.format(purchase.firstInstallmentDate)}</h3>
               <h3>R$ {purchase.value}</h3>
+              <h3>R$ {(purchase.value - purchase.value_paid).toFixed(2)}</h3>
             </div>
           ))}
         </>

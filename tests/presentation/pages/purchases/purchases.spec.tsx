@@ -93,15 +93,17 @@ describe('Purchases Component', () => {
 
       expect(purchasesElements[0].children[0].textContent).toBe(`${purchases[0].name}`)
       expect(purchasesElements[0].children[1].textContent).toBe(`${categories[0].name}`)
-      expect(purchasesElements[0].children[2].textContent).toBe(`${purchases[0].installmentsNumber}`)
+      expect(purchasesElements[0].children[2].textContent).toBe(`${purchases[0].installments_paid}/${purchases[0].installmentsNumber}`)
       expect(purchasesElements[0].children[3].textContent).toBe(`${purchases[0].firstInstallmentDate}`)
       expect(purchasesElements[0].children[4].textContent).toBe(`R$ ${purchases[0].value}`)
+      expect(purchasesElements[0].children[5].textContent).toBe(`R$ ${(purchases[0].value - purchases[0].value_paid).toFixed(2)}`)
 
       expect(purchasesElements[1].children[0].textContent).toBe(`${purchases[1].name}`)
       expect(purchasesElements[1].children[1].textContent).toBe(`${categories[1].name}`)
-      expect(purchasesElements[1].children[2].textContent).toBe(`${purchases[1].installmentsNumber}`)
+      expect(purchasesElements[1].children[2].textContent).toBe(`${purchases[1].installments_paid}/${purchases[1].installmentsNumber}`)
       expect(purchasesElements[1].children[3].textContent).toBe(`${purchases[1].firstInstallmentDate}`)
       expect(purchasesElements[1].children[4].textContent).toBe(`R$ ${purchases[1].value}`)
+      expect(purchasesElements[0].children[5].textContent).toBe(`R$ ${(purchases[1].value - purchases[1].value_paid).toFixed(2)}`)
     })
 
     it('should show no purchase message if there is no purchase', async () => {
