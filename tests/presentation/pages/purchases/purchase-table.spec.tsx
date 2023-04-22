@@ -52,4 +52,20 @@ describe('PurchaseTable Component', () => {
     const selectedComponent = screen.queryByTestId('selected-purchase-info')
     expect(selectedComponent.textContent).toMatch(purchases[selectedIdx].name)
   })
+
+  it('should add paid className when all installments are paid', async () => {
+    const purchases = mockPurchaseList()
+    purchases[0].installments_paid = 1
+    purchases[0].installmentsNumber = 5
+    purchases[1].installments_paid = 10
+    purchases[1].installmentsNumber = 10
+
+    const { renderScreen } = makeSut(purchases)
+    await renderScreen()
+
+    const purchaseComponents = screen.queryAllByTestId('purchase')
+
+    expect(purchaseComponents[0].className).toBe('row')
+    expect(purchaseComponents[1].className).toBe('row paid')
+  })
 })

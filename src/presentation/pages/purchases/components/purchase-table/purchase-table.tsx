@@ -16,10 +16,18 @@ const PurchaseTable: React.FC<Props> = ({ purchases, categories }: Props) => {
   const [openDeletePurchaseModal, setOpenDeletePurchaseModal] = useState(false)
   const [selectedPurchase, setSelectedPurchase] = useState(null)
 
-  const getCategoryName = (purchase): string => {
+  const getCategoryName = (purchase: Purchase): string => {
     const category = categories.find(c => c.id === purchase.category)
     if (!purchase.category || !category) return '-'
     return category.name
+  }
+
+  const getRowClass = (purchase: Purchase): string => {
+    const classNames = [Styles.row]
+    if (purchase.installmentsNumber === purchase.installments_paid) {
+      classNames.push(Styles.paid)
+    }
+    return classNames.join(' ')
   }
 
   const handleSelectPurchase = (purchase): void => {
@@ -46,7 +54,7 @@ const PurchaseTable: React.FC<Props> = ({ purchases, categories }: Props) => {
           {purchases.map(purchase => (
             <div
               key={purchase.id}
-              className={Styles.row}
+              className={getRowClass(purchase)}
               onClick={() => { handleSelectPurchase(purchase) }}
               data-testid="purchase"
             >
